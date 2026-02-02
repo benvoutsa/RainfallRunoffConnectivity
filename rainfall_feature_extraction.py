@@ -64,6 +64,8 @@ def find_keys_by_value(dictionary, target_value):
 flume_raingauges_data = pd.read_csv(FLUME_RAINGAUGES_FILE)
 df_flume_watersheds = pd.read_csv(FLUME_WATERSHEDS_FILE)
 
+flume_raingauges_data['Rain_Gauge_Num'] = [int(''.join(filter(str.isdigit, s))) for s in flume_raingauges_data['Rain_gauge_name'].values if any(char.isdigit() for char in s)]
+
 # Map flumes to gauges
 flume_raingauges_dict = {
     flume: flume_raingauges_data.loc[flume_raingauges_data['Flume'] == flume, 'Rain_Gauge_Num'].tolist()
@@ -112,3 +114,4 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
