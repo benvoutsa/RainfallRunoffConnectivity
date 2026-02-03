@@ -6,7 +6,9 @@ Helper functions to separate rainfall events based on time windows of runoff eve
 """
 import os
 import glob
+import numpy as np
 import pandas as pd
+import xarray as xr
 
 
 def load_rainfall_csvs(base_directory, rainfall_subdir="rainfall_data", pattern="rainfall_*.csv"):
@@ -42,7 +44,7 @@ def prepare_rainfall_dataframe(dfs_rainfall):
     return df[["Gage", "Rainfall_Rate (mm/hr)", "Depth (mm)", "Real_Time"]]
 
 
-def downsample_rainfall_events(ds_event, timestep=4):
+def downsample_rainfall_events(ds_event, timestep):
     """Downsample xarray Dataset along all dimensions."""
     return xr.Dataset(
         {var: ds_event[var].isel({dim: slice(None, None, timestep) for dim in ds_event.dims})
@@ -72,7 +74,7 @@ def find_keys_by_value(dictionary, target_value):
     return [key for key, values in dictionary.items() if target_value in values]
 
 
-def build_rainfall_windows(runoff_dates, buffer_hours=2):
+def build_rainfall_windows(runoff_dates, buffer_hours):
     """Expand runoff events to rainfall windows."""
     rainfall_dates = runoff_dates.copy()
 
@@ -134,7 +136,7 @@ def trim_zero_rainfall(ds, threshold=1):
     return xr.Dataset({v: (["time"], trimmed[v].values) for v in trimmed.columns}, coords={"time": trimmed.index})
 
 
-def build_rainfall_features(runoff_trees, rainfall_df, runoff_dates, flume_raingauges):
+def build_rainfall_events(runoff_trees, rainfall_df, runoff_dates, flume_raingauges):
     rainfall_events = {}
 
     runoff_dates = runoff_dates.set_index("event_label")
