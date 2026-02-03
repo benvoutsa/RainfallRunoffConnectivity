@@ -24,6 +24,7 @@ import yaml
 # -------------------------------
 # Configurable paths
 # -------------------------------
+DATA_FOLDER = "data"
 RAINFALL_FOLDER = "data/rainfall"
 FLUME_RAINGAUGES_FILE = "data/flume_raingauges.csv"
 FLUME_WATERSHEDS_FILE = "data/flume_watersheds.csv"
@@ -66,7 +67,7 @@ rainfall_dates = build_rainfall_windows(runoff_dates, RAINFALL_BUFFER_HOURS)
 runoff_trees = load_runoff_trees(RUNOFF_EVENT_FILES)
 tree_keys = get_all_event_labels(runoff_trees)
 
-dfs_rainfall = load_rainfall_csvs(RAINFALL_FOLDER)
+dfs_rainfall = load_rainfall_csvs(DATA_FOLDER)
 
 # Clean & merge
 df_rainfall = prepare_rainfall_dataframe(dfs_rainfall)
@@ -115,6 +116,7 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
 
