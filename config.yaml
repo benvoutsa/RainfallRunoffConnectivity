@@ -1,5 +1,10 @@
 project:
   root: "."  
+
+downsample_timestep: 4
+rain_event_padding_hours: 2
+rainfall_time_step: "15s"
+  
 rainfall:
   data_dir: "data/rainfall"
   results_dir: "results/rainfall"
@@ -26,6 +31,7 @@ runoff:
     - "data/runoff/runoff_data_2014_2024.csv"
 
   min_runoff_cfs: 1.0
+  
 
 plotting:
   cluster_labels:
