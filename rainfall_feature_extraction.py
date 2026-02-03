@@ -19,6 +19,8 @@ import os
 from rainfall_functions import *
 from runoff_functions import load_runoff_trees, load_runoff_dates, get_all_event_labels
 
+import yaml
+
 # -------------------------------
 # Configurable paths
 # -------------------------------
@@ -29,6 +31,18 @@ OUTPUT_FEATURES_FILE = "data/df_rainfall_features.csv"
 
 RUNOFF_EVENT_FILES = ["data/runoff_events_2000_2006.nc", "data/runoff_events_2007_2013.nc", "data/runoff_events_2014_2024.nc"]
 RUNOFF_DATES_FILES = ["data/dates_of_runoff_events_2000_2006.csv", "data/dates_of_runoff_events_2007_2013.csv", "data/dates_of_runoff_events_2014_2024.csv"]
+
+# -------------------------------
+#  config variables
+#--------------------------------
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+# Extract constants
+buffer_hours = config["rain_event_padding_hours"]
+time_step = config["rainfall_time_step"]
+downsample_factor = config["downsample_timestep"]
 
 # -------------------------------
 # Load data
@@ -100,6 +114,7 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
 
