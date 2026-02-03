@@ -40,7 +40,7 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 # Extract constants
-buffer_hours = config["rain_event_padding_hours"]
+RAINFALL_BUFFER_HOURS = config["rain_event_padding_hours"]
 time_step = config["rainfall_time_step"]
 downsample_factor = config["downsample_timestep"]
 
@@ -55,7 +55,7 @@ flume_raingauges_data['Rain_Gauge_Num'] = [int(''.join(filter(str.isdigit, s))) 
 
 # Map flumes to gauges
 flume_raingauges_dict = {
-    flume: flume_raingauges_data.loc[flume_raingauges_data['Flume'] == flume, 'Rain_Gauge_Num'].tolist(),
+    flume: flume_raingauges_data.loc[flume_raingauges_data['Flume'] == flume, 'Rain_Gauge_Num'].tolist()
     for flume in df_flume_watersheds['Flume'].unique()
 }
 
@@ -63,14 +63,15 @@ runoff_trees = load_runoff_trees(RUNOFF_EVENT_FILES)
 runoff_dates = load_runoff_dates(RUNOFF_DATES_FILES)
 rainfall_dates = build_rainfall_windows(runoff_dates, RAINFALL_BUFFER_HOURS)
 
-tree_keys = load_runoff_trees(RUNOFF_FILES)
+runoff_trees = load_runoff_trees(RUNOFF_EVENT_FILES)
+tree_keys = get_all_event_labels(runoff_trees)
 
 dfs_rainfall = load_rainfall_csvs(RAINFALL_FOLDER)
 
 # Clean & merge
 df_rainfall = prepare_rainfall_dataframe(dfs_rainfall)
 
-ds_rainfall_events = build_rainfall_features, runoff_trees, df_rainfall, rainfall_dates, flume_raingauges, downsample_func=downsample_rainfall_events)
+ds_rainfall_events = build_rainfall_events(runoff_trees, df_rainfall, rainfall_dates, flume_raingauges_data)
 
 # -------------------------------
 # Feature extraction
@@ -114,6 +115,7 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
 
