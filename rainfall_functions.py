@@ -74,6 +74,12 @@ def select_time_window_size(df_rainfall_event):
 def max_average_intensity_within_time_window(df_rainfall_event, time_window):
     """Compute maximum average intensity across rolling windows of given size."""
     duration = df_rainfall_event.shape[0]
+    n_windows = int(duration / time_window) - 1
+
+    if n_windows < 1:
+        # Event too short for rolling window
+        return 0
+        
     window_intensities = [
         df_rainfall_event.iloc[i*time_window:(i+1)*time_window].mean().mean()
         for i in range(int(duration/time_window)-1)
