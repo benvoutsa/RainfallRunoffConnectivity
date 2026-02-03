@@ -8,15 +8,16 @@ rainfall_time_step: "15s"
 rainfall:
   data_dir: "data/rainfall"
   results_dir: "results/rainfall"
-  csv_pattern: "data/rainfall/rainfall_data/rainfall_*.csv"
+  csv_pattern: "data/rainfall/rainfall_*.csv"
   runoff_dates:
-    "2000_2006": "data/rainfall/dates_of_runoff_events_2000_2006.csv"
-    "2007_2014": "data/rainfall/dates_of_runoff_events_2007_2014.csv"
-    "2015_2024": "data/rainfall/dates_of_runoff_events_2015_2024.csv"
+    "2000_2006": "data/dates_of_runoff_events_2000_2006.csv"
+    "2007_2014": "data/dates_of_runoff_events_2007_2014.csv"
+    "2015_2024": "data/dates_of_runoff_events_2015_2024.csv"
   runoff_events_nc:
-    "2000_2006": "data/rainfall/runoff_events_2000_2006.nc"
-    "2007_2014": "data/rainfall/runoff_events_2007_2014.nc"
-    "2015_2024": "data/rainfall/runoff_events_2015_2024.nc"
+    "2000_2006": "data/runoff_events_2000_2006.nc"
+    "2007_2014": "data/runoff_events_2007_2014.nc"
+    "2015_2024": "data/runoff_events_2015_2024.nc"
+  
   flume_raingauges_file: "data/rainfall/newdata/flume_raingauges.csv"
   downsample_timestep: 4
   rain_event_padding_hours: 2
