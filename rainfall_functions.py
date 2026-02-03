@@ -78,9 +78,6 @@ def max_average_intensity_within_time_window(df_rainfall_event, time_window):
         df_rainfall_event.iloc[i*time_window:(i+1)*time_window].mean().mean()
         for i in range(int(duration/time_window)-1)
     ]
-    print(f"Event {event_label}, duration: {df_event.shape[0]}, time_window: {time_window}")
-    print("Rolling window slices:", [df_event.iloc[i*time_window:(i+1)*time_window].mean().mean() for i in range(int(df_event.shape[0]/time_window)-1)])
-
     return round(max(window_intensities), 2).item()
 
 def find_keys_by_value(dictionary, target_value):
