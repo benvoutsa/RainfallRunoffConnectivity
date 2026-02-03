@@ -9,6 +9,7 @@ import glob
 import numpy as np
 import pandas as pd
 import xarray as xr
+from datetime import timedelta
 
 
 def load_rainfall_csvs(base_directory, rainfall_subdir="rainfall_data", pattern="rainfall_*.csv"):
