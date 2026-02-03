@@ -11,6 +11,16 @@ import pandas as pd
 import xarray as xr
 from datetime import timedelta
 
+import yaml
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+# Extract constants
+RAINFALL_BUFFER_HOURS = config["rain_event_padding_hours"]
+time_step = config["rainfall_time_step"]
+downsample_factor = config["downsample_timestep"]
+
 
 def load_rainfall_csvs(base_directory, rainfall_subdir="rainfall", pattern="rainfall_*.csv"):
     
@@ -117,7 +127,7 @@ def extract_event_rainfall(df_rainfall, event_row, gauges):
     time_index = pd.date_range(
         df.Real_Time.min(),
         df.Real_Time.max(),
-        freq=rainfall_time_step
+        freq=time_step
     )
 
     rainfall = {f"gauge_{int(g)}": (["time"], df[df.Gage == g].set_index("Real_Time").reindex(time_index)["Rainfall_Rate (mm/hr)"].fillna(0).values)
@@ -161,7 +171,7 @@ def build_rainfall_events(runoff_trees, rainfall_df, runoff_dates, flume_raingau
             if ds is None:
                 continue
 
-            ds = downsample_rainfall_events(ds, timestep=downsample_timestep)
+            ds = downsample_rainfall_events(ds, timestep=downsample_factor)
             rainfall_events[event_label] = ds
 
     return rainfall_events
