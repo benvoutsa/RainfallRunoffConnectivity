@@ -12,7 +12,7 @@ import xarray as xr
 from datetime import timedelta
 
 
-def load_rainfall_csvs(base_directory, rainfall_subdir="rainfall_data", pattern="rainfall_*.csv"):
+def load_rainfall_csvs(base_directory, rainfall_subdir="rainfall", pattern="rainfall_*.csv"):
     
     path_pattern = os.path.join(base_directory, rainfall_subdir, pattern)
     path_pattern = os.path.normpath(path_pattern)
