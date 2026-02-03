@@ -94,6 +94,11 @@ average_intensities = []
 max_average_window_intensities = []
 
 for key in tree_keys: 
+
+    if key not in ds_rainfall_events:
+        print(f"Skipping {key}, no rainfall data")
+        continue
+        
     ds_event = ds_rainfall_events[key]
     df_event = ds_event.to_dataframe()
     
@@ -122,6 +127,7 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
 
