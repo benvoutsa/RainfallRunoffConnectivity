@@ -72,6 +72,15 @@ flume_raingauges_dict = {
     for flume in df_flume_watersheds['Flume'].unique()
 }
 
+runoff_trees = load_runoff_trees(RUNOFF_EVENT_FILES)
+runoff_dates = load_runoff_dates(RUNOFF_DATES_FILES)
+rainfall_dates = build_rainfall_windows(runoff_dates, RAINFALL_BUFFER_HOURS)
+
+dfs_rainfall = load_rainfall_csvs(base_directory)
+
+# Clean & merge
+df_rainfall = prepare_rainfall_dataframe(dfs_rainfall)
+
 # -------------------------------
 # Feature extraction
 # -------------------------------
@@ -114,4 +123,5 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
