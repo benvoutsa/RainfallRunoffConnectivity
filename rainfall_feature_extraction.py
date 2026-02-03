@@ -16,6 +16,8 @@ import xarray as xr
 import glob
 import os
 
+from rainfall_functions import *
+
 # -------------------------------
 # Configurable paths
 # -------------------------------
@@ -24,38 +26,8 @@ FLUME_RAINGAUGES_FILE = "data/flume_raingauges.csv"
 FLUME_WATERSHEDS_FILE = "data/flume_watersheds.csv"
 OUTPUT_FEATURES_FILE = "data/df_rainfall_features.csv"
 
-# -------------------------------
-# Helper functions
-# -------------------------------
-
-def downsample_rainfall_events(ds_event, timestep=4):
-    """Downsample xarray Dataset along all dimensions."""
-    return xr.Dataset(
-        {var: ds_event[var].isel({dim: slice(None, None, timestep) for dim in ds_event.dims})
-         for var in ds_event.data_vars},
-        coords={dim: ds_event.coords[dim][::timestep] for dim in ds_event.dims}
-    )
-
-def select_time_window_size(df_rainfall_event):
-    """Select appropriate time window based on event duration."""
-    time_windows_dict = {15: (0, 90), 30: (90, 270), 60: (271, 360), 120: (360, 5000)}
-    duration = df_rainfall_event.shape[0]
-    for window, (min_dur, max_dur) in time_windows_dict.items():
-        if min_dur <= duration <= max_dur:
-            return window
-
-def max_average_intensity_within_time_window(df_rainfall_event, time_window):
-    """Compute maximum average intensity across rolling windows of given size."""
-    duration = df_rainfall_event.shape[0]
-    window_intensities = [
-        df_rainfall_event.iloc[i*time_window:(i+1)*time_window].mean().mean()
-        for i in range(int(duration/time_window)-1)
-    ]
-    return round(max(window_intensities), 2).item()
-
-def find_keys_by_value(dictionary, target_value):
-    """Return dictionary keys whose values contain target_value."""
-    return [key for key, values in dictionary.items() if target_value in values]
+RUNOFF_EVENT_FILES = ["data/runoff_events_2000_2006.nc", "data/runoff_events_2007_2013.nc", "data/runoff_events_2014_2024.nc"]
+RUNOFF_DATES_FILES = ["data/dates_of_runoff_events_2000_2006.csv", "data/dates_of_runoff_events_2007_2013.csv", "data/dates_of_runoff_events_2014_2024.csv"]
 
 # -------------------------------
 # Load data
@@ -68,7 +40,7 @@ flume_raingauges_data['Rain_Gauge_Num'] = [int(''.join(filter(str.isdigit, s))) 
 
 # Map flumes to gauges
 flume_raingauges_dict = {
-    flume: flume_raingauges_data.loc[flume_raingauges_data['Flume'] == flume, 'Rain_Gauge_Num'].tolist()
+    flume: flume_raingauges_data.loc[flume_raingauges_data['Flume'] == flume, 'Rain_Gauge_Num'].tolist(),
     for flume in df_flume_watersheds['Flume'].unique()
 }
 
@@ -76,10 +48,14 @@ runoff_trees = load_runoff_trees(RUNOFF_EVENT_FILES)
 runoff_dates = load_runoff_dates(RUNOFF_DATES_FILES)
 rainfall_dates = build_rainfall_windows(runoff_dates, RAINFALL_BUFFER_HOURS)
 
-dfs_rainfall = load_rainfall_csvs(base_directory)
+tree_keys = load_runoff_trees(RUNOFF_FILES)
+
+dfs_rainfall = load_rainfall_csvs(RAINFALL_FOLDER)
 
 # Clean & merge
 df_rainfall = prepare_rainfall_dataframe(dfs_rainfall)
+
+ds_rainfall_events = build_rainfall_features, runoff_trees, df_rainfall, rainfall_dates, flume_raingauges, downsample_func=downsample_rainfall_events)
 
 # -------------------------------
 # Feature extraction
@@ -94,7 +70,7 @@ event_durations = []
 average_intensities = []
 max_average_window_intensities = []
 
-for key in tree_keys:  # `tree_keys` and `ds_rainfall_events` should already be defined
+for key in tree_keys: 
     ds_event = ds_rainfall_events[key]
     df_event = ds_event.to_dataframe()
     
@@ -123,5 +99,6 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
