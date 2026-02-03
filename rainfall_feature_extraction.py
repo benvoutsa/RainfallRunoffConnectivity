@@ -24,7 +24,7 @@ import yaml
 # -------------------------------
 # Configurable paths
 # -------------------------------
-RAINFALL_FOLDER = "data/rainfall_files"
+RAINFALL_FOLDER = "data/rainfall"
 FLUME_RAINGAUGES_FILE = "data/flume_raingauges.csv"
 FLUME_WATERSHEDS_FILE = "data/flume_watersheds.csv"
 OUTPUT_FEATURES_FILE = "data/df_rainfall_features.csv"
@@ -115,6 +115,7 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
 
