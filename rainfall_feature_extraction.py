@@ -108,7 +108,7 @@ for key in tree_keys:
     avg_intensity = df_event.mean().mean()
     time_window = select_time_window_size(df_event)
     
-    print(f"Event {event_label}, duration: {df_event.shape[0]}, time_window: {time_window}")
+    print(f"Event {key}, duration: {df_event.shape[0]}, time_window: {time_window}")
     print("Rolling window slices:", [df_event.iloc[i*time_window:(i+1)*time_window].mean().mean() for i in range(int(df_event.shape[0]/time_window)-1)])
 
     max_window_intensity = max_average_intensity_within_time_window(df_event, time_window)
@@ -131,6 +131,7 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
 
