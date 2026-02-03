@@ -82,6 +82,12 @@ df_rainfall_features = pd.DataFrame(columns=[
     'number of gauges', 'duration', 'average intensity (mm/hr)', 'max window intensity (mm/hr)'
 ])
 
+print("Rainfall events available:")
+print(list(ds_rainfall_events.keys()))
+
+missing_keys = [k for k in tree_keys if k not in ds_rainfall_events]
+print(f"Events in tree_keys but missing rainfall data: {missing_keys}")
+
 number_of_gauges = []
 event_durations = []
 average_intensities = []
@@ -116,6 +122,7 @@ df_rainfall_features['number of gauges'] = number_of_gauges
 # Save to CSV
 df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
 print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+
 
 
 
