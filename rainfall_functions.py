@@ -117,7 +117,7 @@ def extract_event_rainfall(df_rainfall, event_row, gauges):
     time_index = pd.date_range(
         df.Real_Time.min(),
         df.Real_Time.max(),
-        freq=RAINFALL_TIME_STEP
+        freq=rainfall_time_step
     )
 
     rainfall = {f"gauge_{int(g)}": (["time"], df[df.Gage == g].set_index("Real_Time").reindex(time_index)["Rainfall_Rate (mm/hr)"].fillna(0).values)
@@ -161,7 +161,7 @@ def build_rainfall_events(runoff_trees, rainfall_df, runoff_dates, flume_raingau
             if ds is None:
                 continue
 
-            ds = downsample_rainfall_events(ds, timestep=DOWNSAMPLE_FACTOR)
+            ds = downsample_rainfall_events(ds, timestep=downsample_timestep)
             rainfall_events[event_label] = ds
 
     return rainfall_events
