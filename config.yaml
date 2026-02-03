@@ -15,7 +15,7 @@ rainfall:
   flume_raingauges_file: "data/rainfall/newdata/flume_raingauges.csv"
   downsample_timestep: 4
   rain_event_padding_hours: 2
-  rainfall_freq: "15s"
+  rainfall_time_step: "15s"
 
 runoff:
   data_dir: "data/runoff"
@@ -24,8 +24,7 @@ runoff:
     - "data/runoff/runoff_data_2000_2006.csv"
     - "data/runoff/runoff_data_2007_2013.csv"
     - "data/runoff/runoff_data_2014_2024.csv"
-  downsample_timestep: 4
-  merge_threshold_min: 120
+
   min_runoff_cfs: 1.0
 
 plotting:
