@@ -56,7 +56,7 @@ def plot_scfc_timeseries(df):
 
     # Define events to highlight with vertical lines
     #highlight_events = ["event_8", "event_9", "event_14", "event_17", "event_56", "event_112"]
-    highlight_indices = ["8", "9", "14", "17", "56", "112"]
+    highlight_indices = [8, 9, 14, 17, 56, 112]
     #[event_indices[event_labels.index(ev)] for ev in highlight_events]
 
     for i in range(3):
@@ -117,6 +117,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
