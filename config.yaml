@@ -5,8 +5,8 @@ downsample_timestep: 4
 rain_event_padding_hours: 2
 rainfall_time_step: "15s"
 
-DATA_DIR = "data/"
-RESULTS_DIR = "results"
+DATA_DIR: "data"
+RESULTS_DIR: "results"
   
 rainfall:
   data_dir: "data/rainfall"
