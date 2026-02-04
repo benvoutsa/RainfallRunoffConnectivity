@@ -12,7 +12,7 @@ from matplotlib.cm import ScalarMappable
 # -------------------------------
 # Paths and settings
 # -------------------------------
-DATA_FILE = "data/rainfall_features.csv"  # adjust path
+DATA_FILE = "data/rainfall/rainfall_features.csv"  # adjust path
 OUTPUT_DIR = "results"
 FEATURE_COLS = ['numberofgauges', 'durationmin', 'averageintensity', 
                 'maxrollingintensity', 'dayswithoutrain']
