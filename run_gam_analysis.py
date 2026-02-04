@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 from pygam import LinearGAM, s, te
 #from config import DATA_DIR, RESULTS_DIR
+import yaml
 from pathlib import Path
 
 with open("config.yaml", "r") as f:
@@ -108,5 +109,6 @@ plt.tight_layout()
 output_file = RESULTS_DIR / "GAM_plots.pdf"
 plt.savefig(output_file, format='pdf', bbox_inches='tight')
 plt.show()
+
 
 
