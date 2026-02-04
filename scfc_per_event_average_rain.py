@@ -31,8 +31,8 @@ OUTPUT_FIG = FIG_DIR / "scfcs_scatter_plot_average_rain.pdf"
 # Columns
 # ---------------------------------------------------------------------
 
-COL_EVENT_LABEL = "event label"
-COL_SCFC_SYNC = "scfc_sync"   # was scfc_sim
+#COL_EVENT_LABEL = "event label"
+COL_SCFC_SYNC = "scfc_sync"   
 COL_SCFC_SEQ = "scfc_seq"
 COL_AVG_RAIN = "average_rainfall"
 
@@ -41,9 +41,10 @@ COL_AVG_RAIN = "average_rainfall"
 # ---------------------------------------------------------------------
 
 def plot_scfc_timeseries(df):
-    event_labels = df[COL_EVENT_LABEL].tolist()
-    event_indices = np.arange(len(event_labels))
-
+    #event_labels = df[COL_EVENT_LABEL].tolist()
+    event_indices = df["event_index"].tolist() #np.arange(len(event_labels))
+    event_labels = event_indices
+    
     # Split into 3 equal periods
     n_events = len(event_labels)
     thirds = [0, n_events // 3, 2 * n_events // 3, n_events]
@@ -54,8 +55,9 @@ def plot_scfc_timeseries(df):
     labels = ["SC/FC$_{sync}$", "SC/FC$_{seq}$"]
 
     # Define events to highlight with vertical lines
-    highlight_events = ["event_8", "event_9", "event_14", "event_17", "event_56", "event_112"]
-    highlight_indices = [event_indices[event_labels.index(ev)] for ev in highlight_events]
+    #highlight_events = ["event_8", "event_9", "event_14", "event_17", "event_56", "event_112"]
+    highlight_indices = ["8", "9", "14", "17", "56", "112"]
+    #[event_indices[event_labels.index(ev)] for ev in highlight_events]
 
     for i in range(3):
         start, mid, end = thirds[i], thirds[i+1], thirds[i+2] if i < 2 else thirds[3]
@@ -115,4 +117,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
