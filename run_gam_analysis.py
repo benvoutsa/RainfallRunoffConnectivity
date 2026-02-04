@@ -13,7 +13,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 from pygam import LinearGAM, s, te
-from scfc.config import DATA_DIR, RESULTS_DIR
+from config import DATA_DIR, RESULTS_DIR
 
 # --- Load SC–FC results ---
 df_scfcs_file = DATA_DIR / "df_scfcs_all.csv"
@@ -101,3 +101,4 @@ plt.tight_layout()
 output_file = RESULTS_DIR / "GAM_plots.pdf"
 plt.savefig(output_file, format='pdf', bbox_inches='tight')
 plt.show()
+
