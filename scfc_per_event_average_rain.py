@@ -12,12 +12,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from pathlib import Path
 
 # ---------------------------------------------------------------------
 # Project paths (portable)
 # ---------------------------------------------------------------------
 
-PROJECT_ROOT = "."
+PROJECT_ROOT = Path(".")
 
 DATA_DIR = PROJECT_ROOT / "data"
 FIG_DIR = PROJECT_ROOT / "results"
@@ -114,3 +115,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
