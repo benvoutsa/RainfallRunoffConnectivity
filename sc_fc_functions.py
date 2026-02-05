@@ -3,6 +3,14 @@ import pandas as pd
 import datatree as dtree
 from itertools import permutations
 
+PROJECT_ROOT = Path(".")
+DATA_DIR = PROJECT_ROOT / "data"
+
+FLUME_COORDS_FILE = DATA_DIR / "flume_coordinates.csv"
+FLUME_AREA_FILE = DATA_DIR / "Flume_watersheds.csv"
+EDGE_LIST_FILE = DATA_DIR / "edgelist.csv"
+SC_SEQ_FILE = DATA_DIR / "adj_seq.csv"
+
 
 # ------------------ load data ------------------------------------
 
