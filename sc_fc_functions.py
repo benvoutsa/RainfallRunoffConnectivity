@@ -38,8 +38,8 @@ def load_runoff_events(file_path):
 # ------------------  SC matrix functions  -------------------------
 
 def euclidean_distance(flume_pair, df_flume_coordinates):
-    flume1 = df_flume_coordinates[df_flume_coordinates[Flume] == flume_pair[0]]
-    flume2 = df_flume_coordinates[df_flume_coordinates[Flume] == flume_pair[1]]
+    flume1 = df_flume_coordinates[df_flume_coordinates["Flume"] == flume_pair[0]]
+    flume2 = df_flume_coordinates[df_flume_coordinates["Flume"] == flume_pair[1]]
     distance = np.sqrt((flume1['East'].values - flume2['East'].values)**2 +
                        (flume1['North'].values - flume2['North'].values)**2)
     return np.round(distance[0], 2).item()
@@ -49,7 +49,7 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     """
     Compute the SC simulated adjacency matrix (weighted by distance and contributing area)
     """
-    edges_eucl_distance = list(permutations(df_flume_coordinates[Flume], 2))
+    edges_eucl_distance = list(permutations(df_flume_coordinates["Flume"], 2))
     df_sc_sim = pd.DataFrame(edges_eucl_distance, columns=['flume_1', 'flume_2'])
 
     # Distance weights
@@ -59,8 +59,8 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     # Contributing area weights
     contr_area_weights = []
     for i, row in df_sc_sim.iterrows():
-        area1 = df_contributing_area[df_contributing_area[Flume] == row['flume_1']][Contributing_area_km2].iloc[0]
-        area2 = df_contributing_area[df_contributing_area[Flume] == row['flume_2']][Contributing_area_km2].iloc[0]
+        area1 = df_contributing_area[df_contributing_area["Flume"] == row['flume_1']]["Contributing_area_km2"].iloc[0]
+        area2 = df_contributing_area[df_contributing_area["Flume"] == row['flume_2']]["Contributing_area_km2"].iloc[0]
         contr_area_weights.append(min(area1, area2) / max(area1, area2))
     df_sc_sim['weight_contr_area'] = contr_area_weights
 
