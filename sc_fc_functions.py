@@ -12,6 +12,7 @@ FLUME_AREA_FILE = DATA_DIR / "Flume_watersheds.csv"
 EDGE_LIST_FILE = DATA_DIR / "edgelist.csv"
 SC_SEQ_FILE = DATA_DIR / "adj_seq.csv"
 
+DISTANCE_SCALE_KM = 1000
 
 # ------------------ load data ------------------------------------
 
@@ -65,8 +66,8 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     df_sc_sim['weight_contr_area'] = contr_area_weights
 
     # Combined weight
-    df_sc_sim['weight'] = SC_WEIGHT_DISTANCE * df_sc_sim['weight_dist'] + \
-                          SC_WEIGHT_AREA * df_sc_sim['weight_contr_area']
+    df_sc_sim['weight'] = 0.5 * df_sc_sim['weight_dist'] + \
+                          0.5 * df_sc_sim['weight_contr_area']
 
     # Create adjacency matrix
     flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
