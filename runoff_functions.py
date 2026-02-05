@@ -11,6 +11,7 @@ with open("config.yaml", "r") as f:
     
 MIN_RUNOFF_CFS = config["min_runoff_cfs"]
 DOWNSAMPLE_TIMESTEP = config["downsample_timestep"]
+MERGE_THRESHOLD_MIN = config["merge_threshold_min"]
 
 # ------------------ Load runoff unprocessed data -------------------------
 
