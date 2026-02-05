@@ -4,6 +4,7 @@ project:
 downsample_timestep: 4
 rain_event_padding_hours: 2
 rainfall_time_step: "15s"
+MERGE_THRESHOLD_MIN: 120
 
 DATA_DIR: "data"
 RESULTS_DIR: "results"
