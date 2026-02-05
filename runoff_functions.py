@@ -4,6 +4,8 @@ runoff helper functions
 
 import pandas as pd
 import datatree as dtree
+from datetime import timedelta
+
 import yaml
 
 with open("config.yaml", "r") as f:
