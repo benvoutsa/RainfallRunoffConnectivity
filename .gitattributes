@@ -1,1 +1,2 @@
 data/runoff/*.csv filter=lfs diff=lfs merge=lfs -text
+data/runoff/runoff_data_2000_2006.csv filter=lfs diff=lfs merge=lfs -text
