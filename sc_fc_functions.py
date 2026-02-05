@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import datatree as dtree
 from itertools import permutations
+from pathlib import Path
 
 PROJECT_ROOT = Path(".")
 DATA_DIR = PROJECT_ROOT / "data"
