@@ -16,10 +16,6 @@ PROJECT_ROOT = Path(".")
 DATA_DIR = PROJECT_ROOT / "data"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
-FLUME_COORDS_FILE = DATA_DIR / "flume_coordinates.csv"
-FLUME_AREA_FILE = DATA_DIR / "Flume_watersheds.csv"
-EDGE_LIST_FILE = DATA_DIR / "edgelist.csv"
-SC_SEQ_FILE = DATA_DIR / "adj_seq.csv"
 
 RUNOFF_FILES = [
     DATA_DIR / "runoff_2000_2006.nc",
