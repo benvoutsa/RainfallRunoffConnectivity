@@ -8,8 +8,8 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(".")
 
-DATA_DIR = PROJECT_ROOT / "data" #/ "runoff"
-RESULTS_DIR = PROJECT_ROOT / "results" #/ "runoff"
+DATA_DIR = PROJECT_ROOT / "data" / "runoff"
+RESULTS_DIR = PROJECT_ROOT / "data" / "runoff"
 
 # Runoff files (ordered chronologically)
 RUNOFF_FILES = [
