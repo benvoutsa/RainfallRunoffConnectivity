@@ -34,7 +34,7 @@ runoff:
     - "data/runoff/runoff_data_2007_2013.csv"
     - "data/runoff/runoff_data_2014_2024.csv"
 
-  min_runoff_cfs: 1.0
+min_runoff_cfs: 1.0
   
 
 plotting:
