@@ -22,9 +22,9 @@ def load_sc_seq() -> pd.DataFrame:
     """Load sequential structural connectivity data."""
     return pd.read_csv(SC_SEQ_FILE, index_col=0)
 
-def load_runoff_events() -> dtree.DataTree:
-    """Load runoff events as a DataTree object."""
-    return dtree.open_datatree(RUNOFF_FILE, format="NETCDF4")
+def load_runoff_events(file_path):
+    """Load runoff events as a DataTree object from a given file"""
+    return dtree.open_datatree(file_path, format="NETCDF4")
 
 # ------------------  SC matrix functions  -------------------------
 
@@ -115,15 +115,15 @@ def scfc_correlation(adj_matrix, fc_matrix):
     fc_flat = remove_diagonal(np.array(fc_matrix)).flatten()
     return np.corrcoef(adj_flat, fc_flat)[0, 1]
 
-def run_scfc_analysis():
+def run_scfc_analysis(runoff_file: Path):
     """
-    Run SC–FC analysis for all events and return DataFrame
+    Run SC–FC analysis for all events in a single NetCDF file
     """
     df_coords = load_flume_coordinates()
     df_areas = load_contributing_areas()
     df_edges_seq = load_edge_list()
     df_sc_seq = load_sc_seq()
-    runoff_tree = load_runoff_events()
+    runoff_tree = load_runoff_events(runoff_file)
 
     # Structural adjacency
     adj_sim, flume_labels = compute_sc_sim(df_coords, df_areas)
@@ -151,4 +151,3 @@ def run_scfc_analysis():
         scfc_results["scfc_seq"].append(scfc_seq_val)
 
     return pd.DataFrame(scfc_results).fillna(0)
-
