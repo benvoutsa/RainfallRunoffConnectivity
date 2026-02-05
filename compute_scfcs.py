@@ -18,9 +18,9 @@ RESULTS_DIR = PROJECT_ROOT / "results"
 
 
 RUNOFF_FILES = [
-    DATA_DIR / "runoff_2000_2006.nc",
-    DATA_DIR / "runoff_2007_2013.nc",
-    DATA_DIR / "runoff_2014_2024.nc"
+    DATA_DIR / "runoff/runoff_2000_2006.nc",
+    DATA_DIR / "runoff/runoff_2007_2013.nc",
+    DATA_DIR / "runoff/runoff_2014_2024.nc"
 ]
 
 OUTPUT_FILE = RESULTS_DIR / "scfc_results.csv"
