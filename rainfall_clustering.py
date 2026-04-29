@@ -110,6 +110,9 @@ print(manova.mv_test())
 # -------------------------------
 df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
 
+print(len(df_scaled), len(df_scfcs))
+print(df_scaled.index.equals(df_scfcs.index))
+
 # df2 contais 'cluster', 'scfc_sync', 'scfc_seq'
 df2 = pd.DataFrame({
     'cluster': df_scaled['cluster'],
