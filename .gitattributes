@@ -5,3 +5,4 @@ data/runoff/runoff_data_2014_2024.csv filter=lfs diff=lfs merge=lfs -text
 data/flume_coordinates.csv filter=lfs diff=lfs merge=lfs -text
 data/adj_seq.csv filter=lfs diff=lfs merge=lfs -text
 data/edgelist.csv filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
