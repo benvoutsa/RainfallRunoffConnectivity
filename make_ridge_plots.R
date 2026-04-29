@@ -68,7 +68,7 @@ long_filtered <- merge_contributing_area(long_filtered, ca_df)
 # Generate Q ridges
 # -------------------------------
 Q_plot <- plot_Q_ridges(long_filtered, cluster_labels, flume_order)
-ggsave(Q_plot, file = "Q_ridges_yaml.pdf", width = 25, height = 20, units = "cm")
+ggsave(Q_plot, file = "results/Q_ridges.pdf", width = 25, height = 20, units = "cm")
 
 # -------------------------------
 # Pivot SC/FC correlation
@@ -84,4 +84,4 @@ long_fc <- data %>%
 # Generate correlation ridges
 # -------------------------------
 corr_plot <- plot_corr_ridges(long_fc, cluster_labels)
-ggsave(corr_plot, file = "corr_ridges_yaml.pdf", width = 25, height = 5, units = "cm")
+ggsave(corr_plot, file = "results/corr_ridges.pdf", width = 25, height = 5, units = "cm")
