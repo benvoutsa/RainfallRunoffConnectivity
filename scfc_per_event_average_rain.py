@@ -31,8 +31,8 @@ OUTPUT_FIG = FIG_DIR / "scfcs_scatter_plot_average_rain.pdf"
 # Columns
 # ---------------------------------------------------------------------
 
-#COL_EVENT_LABEL = "event label"
-COL_SCFC_SYNC = "scfc_sim"   
+COL_EVENT_LABEL = "event_label"
+COL_SCFC_SYNC = "scfc_sync"   
 COL_SCFC_SEQ = "scfc_seq"
 COL_AVG_RAIN = "average_rainfall"
 
