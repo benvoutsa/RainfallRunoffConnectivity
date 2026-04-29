@@ -57,7 +57,7 @@ data <- data %>%
 # -------------------------------
 # Pivot flume columns
 # -------------------------------
-long_filtered <- pivot_flumes(data, flume_prefix = "X")
+long_filtered <- pivot_flumes(data, flume_prefix = "flume")
 
 # -------------------------------
 # Merge contributing area
