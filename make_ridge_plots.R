@@ -15,7 +15,7 @@ source("ridge_plots_lib.R")  # load functions
 # -------------------------------
 # Define relative paths
 # -------------------------------
-data_path <- file.path("data", df_scfcs_all.csv")
+data_path <- file.path("data", "df_scfcs_all.csv")
                        #"df_scfcs_clusters_and_runoff.csv")
 config_path <- "config.yaml"
 
@@ -68,7 +68,7 @@ long_filtered <- merge_contributing_area(long_filtered, ca_df)
 # Generate Q ridges
 # -------------------------------
 Q_plot <- plot_Q_ridges(long_filtered, cluster_labels, flume_order)
-ggsave(Q_plot, file = "results/Q_ridges.pdf", width = 25, height = 20, units = "cm")
+ggsave(filename = "results/corr_ridges.pdf", plot = Q_plot, width = 25, height = 20, units = "cm")
 
 # -------------------------------
 # Pivot SC/FC correlation
@@ -84,4 +84,4 @@ long_fc <- data %>%
 # Generate correlation ridges
 # -------------------------------
 corr_plot <- plot_corr_ridges(long_fc, cluster_labels)
-ggsave(corr_plot, file = "results/corr_ridges.pdf", width = 25, height = 5, units = "cm")
+ggsave(filename = "results/Q_ridges.pdf", plot = corr_plot, width = 25, height = 5, units = "cm")
