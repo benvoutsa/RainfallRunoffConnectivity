@@ -15,7 +15,8 @@ source("ridge_plots_lib.R")  # load functions
 # -------------------------------
 # Define relative paths
 # -------------------------------
-data_path <- file.path("data", "df_scfcs_clusters_and_runoff.csv")
+data_path <- file.path("data", df_scfcs_all.csv")
+                       #"df_scfcs_clusters_and_runoff.csv")
 config_path <- "config.yaml"
 
 # -------------------------------
