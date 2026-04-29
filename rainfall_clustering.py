@@ -14,6 +14,7 @@ from matplotlib.cm import ScalarMappable
 # Paths and settings
 # -------------------------------
 DATA_FILE = "data/rainfall/rainfall_features.csv"  # adjust path
+SCFCS_FILE = "data/df_scfcs_all.csv"
 OUTPUT_DIR = "results"
 FEATURE_COLS = ['numberofgauges', 'durationmin', 'averageintensity', 
                 'maxrollingintensity', 'dayswithoutrain']
@@ -107,11 +108,13 @@ print(manova.mv_test())
 # -------------------------------
 #  SC/FC Scatter Plots by Cluster
 # -------------------------------
-# Example with df2 containing 'cluster', 'scfc_sync', 'scfc_seq'
+df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
+
+# df2 contais 'cluster', 'scfc_sync', 'scfc_seq'
 df2 = pd.DataFrame({
     'cluster': df_scaled['cluster'],
-    'scfc_sync': np.random.rand(len(df_scaled)),  # replace with real SC/FC_sync
-    'scfc_seq': np.random.rand(len(df_scaled))
+    'scfc_sync': df_scfcs["scfc_sync"],
+    'scfc_seq': df_scfcs["scfc_seq"]
 })
 
 clusters = sorted(df2['cluster'].unique())
