@@ -106,7 +106,7 @@ plot_corr_ridges <- function(df_long, cluster_labels) {
     geom_density_ridges(panel_scaling = TRUE, quantile_lines = TRUE, quantiles = 2) +
     facet_wrap(~cluster, nrow = 1, labeller = labeller(cluster = cluster_labels)) +
     scale_fill_manual(values = c("scfc_seq" = "red", "scfc_sim" = "royalblue")) +
-    labs(y = "", x = "SC/FC correlation") +
+    labs(y = "", x = "SC-FC correlation") +
     theme_minimal(base_size = 15)
   
   return(corr_plot)
