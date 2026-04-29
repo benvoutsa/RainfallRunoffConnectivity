@@ -1,7 +1,7 @@
 """
-SC/FC timeseries scatter plot across events, split into 3 periods.
+SCFC timeseries scatter plot across events, split into 3 periods.
 
-- Plots SC/FC_sync and SC/FC_seq for each event as markers
+- Plots SC-FC_sync and SC-FC_seq for each event as markers
 - Bars for average rainfall on secondary y-axis
 - Vertical lines highlight specific events
 """
@@ -52,7 +52,7 @@ def plot_scfc_timeseries(df):
     fig, axes = plt.subplots(3, 1, figsize=(28, 15), sharex=False)
 
     colors = ["lightblue", "lightcoral"]
-    labels = ["SC/FC$_{sync}$", "SC/FC$_{seq}$"]
+    labels = ["(SC-FC)$_{sync}$", "(SC-FC)$_{seq}$"]
 
     # Define events to highlight with vertical lines
     #highlight_events = ["event_8", "event_9", "event_14", "event_17", "event_56", "event_112"]
@@ -74,7 +74,7 @@ def plot_scfc_timeseries(df):
         ax.plot(x, scfc_seq, color=colors[1], marker='s', markersize=10,
                 markeredgecolor='black', linestyle='', label=labels[1])
 
-        ax.set_ylabel("SC/FC", fontsize=25)
+        ax.set_ylabel("SC-FC", fontsize=25)
         ax.set_ylim(-0.5, 1.0)
         ax.tick_params(axis='y', labelsize=16)
         ax.axhline(0, color='black', linestyle='--', linewidth=1)
