@@ -124,6 +124,8 @@ clusters = sorted(df2['cluster'].unique())
 n_clusters = len(clusters)
 cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 
+print(n_clusters)
+
 fig, axes = plt.subplots(1, n_clusters, figsize=(14,2), sharex=True, sharey=True)
 if n_clusters==1: axes=[axes]
 
