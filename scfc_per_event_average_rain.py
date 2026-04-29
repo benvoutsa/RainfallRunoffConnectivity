@@ -41,9 +41,9 @@ COL_AVG_RAIN = "average_rainfall"
 # ---------------------------------------------------------------------
 
 def plot_scfc_timeseries(df):
-    #event_labels = df[COL_EVENT_LABEL].tolist()
-    event_indices = df["event_index"].tolist() #np.arange(len(event_labels))
-    event_labels = event_indices
+    event_labels = df[COL_EVENT_LABEL].tolist()
+    event_indices = np.arange(len(event_labels))
+    #event_labels = event_indices
     
     # Split into 3 equal periods
     n_events = len(event_labels)
