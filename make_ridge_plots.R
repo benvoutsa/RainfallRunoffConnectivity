@@ -75,7 +75,7 @@ ggsave(filename = "results/corr_ridges.pdf", plot = Q_plot, width = 25, height =
 # -------------------------------
 long_fc <- data %>%
   pivot_longer(
-    cols = c(scfc_seq, scfc_sim),
+    cols = c(scfc_seq, scfc_sync),
     names_to = "corr",
     values_to = "value"
   )
