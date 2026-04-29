@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import silhouette_score
@@ -123,17 +124,46 @@ if n_clusters==1: axes=[axes]
 all_vals = pd.concat([df2['scfc_sync'], df2['scfc_seq']])
 min_val, max_val = all_vals.min()-0.05, all_vals.max()+0.05
 
+# for i, cl in enumerate(clusters):
+#     ax = axes[i]
+#     data = df2[df2['cluster']==cl]
+#     ax.scatter(data['scfc_sync'], data['scfc_seq'], color=cluster_map[cl], edgecolor='black', s=80)
+#     ax.plot([min_val,max_val],[min_val,max_val],'--',color='black')
+#     ax.set_xlim(min_val,max_val)
+#     ax.set_ylim(min_val,max_val)
+#     if i==0: ax.set_ylabel('SC/FC_seq')
+#     ax.set_xlabel('SC/FC_sync')
+#     ax.grid(True)
+
 for i, cl in enumerate(clusters):
     ax = axes[i]
-    data = df2[df2['cluster']==cl]
-    ax.scatter(data['scfc_sync'], data['scfc_seq'], color=cluster_map[cl], edgecolor='black', s=80)
-    ax.plot([min_val,max_val],[min_val,max_val],'--',color='black')
-    ax.set_xlim(min_val,max_val)
-    ax.set_ylim(min_val,max_val)
-    if i==0: ax.set_ylabel('SC/FC_seq')
-    ax.set_xlabel('SC/FC_sync')
+    data = df2[df2['cluster'] == cl]
+
+    ax.scatter(data['scfc_sync'], data['scfc_seq'], color=CUSTOM_COLORS[i],
+               alpha=0.7, edgecolors='black',s=80)
+
+    ax.plot([min_val, max_val], [min_val, max_val], 'k--', linewidth=1)
+
+    ax.set_xlim(min_val, max_val)
+    ax.set_ylim(min_val, max_val)
+
+    ax.set_xlabel(r'(SC-FC)$_{sync}$', fontsize=14)
+    if i == 0:
+        ax.set_ylabel(r'(SC-FC)$_{seq}$', fontsize=14)
     ax.grid(True)
 
-plt.tight_layout()
+# add colorbar
+cmap = mpl.colors.ListedColormap(CUSTOM_COLORS[:n_clusters])
+norm = mpl.colors.BoundaryNorm(range(len(clusters) + 1),cmap.N)
+
+sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+# ---- Colorbar axis ----
+cax = fig.add_axes([0.91, 0.30, 0.012, 0.62])
+
+cbar = fig.colorbar(sm, cax=cax, ticks=[i + 0.5 for i in range(len(clusters))])
+cbar.set_ticklabels([f"Cluster {c}" for c in clusters])
+  
+plt.tight_layout(rect=[0, 0, 0.9, 1])
 plt.savefig("results/scfc_scatter_in_clusters.pdf")
 plt.show()
