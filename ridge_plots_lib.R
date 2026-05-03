@@ -20,7 +20,7 @@ read_main_dataset <- function(path) {
 # -------------------------------
 # Pivot flume columns (X-prefixed numeric columns)
 # -------------------------------
-pivot_flumes <- function(df, flume_prefix = "X") {
+pivot_flumes <- function(df, flume_prefix = "flume_") {
   flume_cols <- grep(paste0("^", flume_prefix, "\\d+"), colnames(df), value = TRUE)
   
   df_long <- df %>%
@@ -64,34 +64,51 @@ fancy_scientific <- function(l) {
 # Plot Q ridges
 # -------------------------------
 plot_Q_ridges <- function(df_long, cluster_labels, flume_order, ca_fill = TRUE) {
-  
+
   df_long <- df_long %>%
     mutate(
       cluster = factor(cluster, levels = names(cluster_labels)),
       flume_name_f = factor(flume_name, levels = flume_order)
     )
-  
+
+  # ---- decide once if CA exists
+  use_ca <- ca_fill && "ca_km2" %in% colnames(df_long)
+
+  # ---- base plot (NO conditional logic inside aes)
   Q_plot <- ggplot(df_long, aes(
     x = value,
     y = flume_name_f,
-    group = flume_name_f,
-    fill = if(ca_fill & "ca_km2" %in% colnames(df_long)) ca_km2 else NA
-  )) +
+    group = flume_name_f
+  ))
+
+  # ---- add fill only if available
+  if (use_ca) {
+    Q_plot <- Q_plot + aes(fill = ca_km2)
+  }
+
+  Q_plot <- Q_plot +
     geom_density_ridges(quantile_lines = TRUE, quantiles = 2) +
     facet_wrap(~cluster, nrow = 1, labeller = labeller(cluster = cluster_labels)) +
     scale_x_log10(oob = scales::squish_infinite, labels = fancy_scientific) +
-    labs(y = "flume", x = expression("accumulated discharge (m"^3*")")) +
+    labs(
+      y = "flume",
+      x = expression("accumulated discharge (m"^3 * ")")
+    ) +
     theme_minimal() +
     theme(
       plot.title = element_text(hjust = 0.5),
       legend.position = "right"
     )
-  
-  if(ca_fill & "ca_km2" %in% colnames(df_long)) {
+
+  # ---- color scale only if needed
+  if (use_ca) {
     Q_plot <- Q_plot +
-      scale_fill_viridis(option = "A", trans = pseudo_log_trans(sigma = 0.0001))
+      scale_fill_viridis(
+        option = "A",
+        trans = scales::pseudo_log_trans(sigma = 0.0001)
+      )
   }
-  
+
   return(Q_plot)
 }
 
@@ -105,7 +122,7 @@ plot_corr_ridges <- function(df_long, cluster_labels) {
   corr_plot <- ggplot(df_long, aes(x = abs(value), y = corr, group = corr, fill = corr)) +
     geom_density_ridges(panel_scaling = TRUE, quantile_lines = TRUE, quantiles = 2) +
     facet_wrap(~cluster, nrow = 1, labeller = labeller(cluster = cluster_labels)) +
-    scale_fill_manual(values = c("scfc_seq" = "red", "scfc_sim" = "royalblue")) +
+    scale_fill_manual(values = c("scfc_seq" = "red", "scfc_sync" = "royalblue")) +
     labs(y = "", x = "SC-FC correlation") +
     theme_minimal(base_size = 15)
   

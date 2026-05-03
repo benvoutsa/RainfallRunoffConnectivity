@@ -83,6 +83,6 @@ long_fc <- data %>%
 # -------------------------------
 # Generate correlation ridges
 # -------------------------------
-corr_plot <- plot_corr_ridges(long_fc, cluster_labels) + scale_fill_manual(values = 
-	c("scfc_seq"  = "red", "scfc_sync" = "blue"))
+corr_plot <- plot_corr_ridges(long_fc, cluster_labels) #+ scale_fill_manual(values = 
+#	c("scfc_seq"  = "red", "scfc_sync" = "blue"))
 ggsave(filename = "results/corr_ridges.pdf", plot = corr_plot, width = 25, height = 5, units = "cm")
