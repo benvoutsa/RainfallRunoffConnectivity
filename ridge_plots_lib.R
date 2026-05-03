@@ -118,20 +118,11 @@ plot_Q_ridges <- function(df_long, cluster_labels, flume_order, ca_fill = TRUE) 
       legend.position = "right"
     )
 
-  # ---- color scale only if needed
-  if (use_ca) {
-    Q_plot <- Q_plot +
-      scale_fill_viridis(
-        option = "A",
-        trans = scales::pseudo_log_trans(sigma = 0.0001)
-      )
-  }
-
   return(Q_plot)
-}
 
+}
 # -------------------------------
-# Plot SC/FC correlation ridges
+# Plot SC-FC correlation ridges
 # -------------------------------
 plot_corr_ridges <- function(df_long, cluster_labels) {
   df_long <- df_long %>%
