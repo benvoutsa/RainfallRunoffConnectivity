@@ -82,9 +82,23 @@ plot_Q_ridges <- function(df_long, cluster_labels, flume_order, ca_fill = TRUE) 
   ))
 
   # ---- add fill only if available
+
   if (use_ca) {
-    Q_plot <- Q_plot + aes(fill = ca_km2)
-  }
+  Q_plot <- Q_plot +
+    scale_fill_viridis(
+      option = "A",
+      trans = scales::pseudo_log_trans(sigma = 0.0001),
+      name = expression("Contributing area (km"^2*")"),
+      breaks = scales::pretty_breaks(n = 8)
+    ) +
+    guides(
+      fill = guide_colorbar(
+        barheight = grid::unit(10, "cm"),
+        title.position = "left",
+        title.theme = element_text(angle = 90)
+      )
+    )
+}
 
   Q_plot <- Q_plot +
     geom_density_ridges(quantile_lines = TRUE, quantiles = 2) +
