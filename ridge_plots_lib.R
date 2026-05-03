@@ -90,18 +90,23 @@ plot_Q_ridges <- function(df_long, cluster_labels, flume_order, ca_fill = TRUE) 
   if (use_ca) {
   Q_plot <- Q_plot +
     scale_fill_viridis(
-      option = "A",
-      trans = scales::pseudo_log_trans(sigma = 0.0001),
-      name = expression("Contributing area (km"^2*")"),
-      breaks = scales::pretty_breaks(n = 8)
-    ) +
-    guides(
-      fill = guide_colorbar(
-        barheight = grid::unit(10, "cm"),
-        title.position = "left",
-        title.theme = element_text(angle = 90)
-      )
+  option = "A",
+  trans = scales::pseudo_log_trans(sigma = 0.0001),
+  limits = c(0.005, 100),
+  breaks = c(0.005, 0.01, 0.05, 0.1, 1, 10, 100),
+  name = "contributing area (km^2)"
+) +
+guides(
+  fill = guide_colorbar(
+    barheight = grid::unit(10, "cm"),
+    title.position = "left",
+    title.theme = element_text(
+      angle = 90,
+      vjust = 0.5,
+      hjust = 0.5
     )
+  )
+)
 }
 
   Q_plot <- Q_plot +
