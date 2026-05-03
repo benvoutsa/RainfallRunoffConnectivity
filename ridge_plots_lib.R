@@ -84,6 +84,10 @@ plot_Q_ridges <- function(df_long, cluster_labels, flume_order, ca_fill = TRUE) 
   # ---- add fill only if available
 
   if (use_ca) {
+  Q_plot <- Q_plot + aes(fill = ca_km2)
+}
+  
+  if (use_ca) {
   Q_plot <- Q_plot +
     scale_fill_viridis(
       option = "A",
