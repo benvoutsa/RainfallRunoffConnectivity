@@ -94,7 +94,8 @@ plot_Q_ridges <- function(df_long, cluster_labels, flume_order, ca_fill = TRUE) 
   trans = scales::pseudo_log_trans(sigma = 0.0001),
   limits = c(0.005, 100),
   breaks = c(0.005, 0.01, 0.05, 0.1, 1, 10, 100),
-  name = "contributing area (km^2)"
+  labels = scales::label_number(),
+  name = expression("contributing area (" * km^2 * ")")
 ) +
 guides(
   fill = guide_colorbar(
