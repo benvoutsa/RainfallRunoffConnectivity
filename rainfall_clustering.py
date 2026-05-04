@@ -94,7 +94,7 @@ sns.boxplot(data=df_melted, x='cluster', y='value', hue='feature', palette=color
 plt.ylabel('Scaled Rainfall Features')
 plt.xlabel('Cluster')
 plt.legend(title='Feature')
-plt.savefig("results/scfc_boxplots_in_clusters.pdf")
+plt.savefig("results/rainfall_boxplots_in_clusters.pdf")
 plt.show()
 
 # -------------------------------
