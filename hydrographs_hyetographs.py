@@ -36,9 +36,9 @@ figure_names = [
 # ---------------------------------------------------
 # LOAD RUNOFF DATA
 # ---------------------------------------------------
-tree_00_06 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff/runoff_events_2000_2006.nc"))
-tree_07_13 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff/runoff_events_2007_2013.nc"))
-tree_14_24 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff/runoff_events_2014_2024.nc"))
+tree_00_06 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff", "runoff_events_2000_2006.nc"))
+tree_07_13 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff", "runoff_events_2007_2013.nc"))
+tree_14_24 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff", "runoff_events_2014_2024.nc"))
 
 tree_keys = {
     "00_06": list(tree_00_06.descendants),
