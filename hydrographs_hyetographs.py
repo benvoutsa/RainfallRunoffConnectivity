@@ -133,9 +133,9 @@ def build_rainfall_events(runoff_dates, df_rainfall):
         if ds is None:
             continue
 
-        ds = trim_zero_rainfall(ds)
-        if ds is None:
-            continue
+        trimmed = trim_zero_rainfall(ds)
+        if trimmed is not None:
+            ds = trimmed
 
         ds = downsample_rainfall_events(ds, timestep=4)
 
@@ -389,7 +389,7 @@ for i, (e1, e2) in enumerate(event_pairs):
     # ============================================================
     # layout
     # ============================================================
-    plt.tight_layout(rect=[0, 0.18, 1, 1])
+    plt.tight_layout(rect=[0, 0.24, 1, 1])
 
     # ============================================================
     # colorbar under subplot 1
