@@ -226,16 +226,24 @@ os.makedirs(output_dir, exist_ok=True)
 
 for i, (e1, e2) in enumerate(event_pairs):
 
-    fig, axes = plt.subplots(2, 1, figsize=(10, 6), sharex=False)
+    # ============================================================
+    # figure: 1 row, 2 columns
+    # ============================================================
+    fig, axes = plt.subplots(
+        1,
+        2,
+        figsize=(14, 5),
+        sharey=False
+    )
 
     ax1, ax2 = axes
 
     ax1_rain = ax1.twinx()
     ax2_rain = ax2.twinx()
 
-    # ------------------------------------------------------------
-    # event 1
-    # ------------------------------------------------------------
+    # ============================================================
+    # EVENT 1
+    # ============================================================
     runoff1 = get_runoff_event(runoff_trees, e1)
 
     plot_event(
@@ -247,11 +255,53 @@ for i, (e1, e2) in enumerate(event_pairs):
         color_map
     )
 
-    ax1.set_title(e1)
+    ax1.set_title(e1, fontsize=13)
 
     # ------------------------------------------------------------
-    # event 2
+    # runoff ylim
     # ------------------------------------------------------------
+    runoff1_max = 0
+
+    if runoff1 is not None:
+
+        runoff1_max = max([
+            float(cfs_to_m3(data).max().values)
+            for data in runoff1.data_vars.values()
+        ])
+
+    runoff1_padding = runoff1_max * 0.20
+
+    ax1.set_ylim(
+        0,
+        runoff1_max + runoff1_padding
+    )
+
+    ax1.margins(y=0)
+
+    # ------------------------------------------------------------
+    # rainfall ylim
+    # ------------------------------------------------------------
+    if e1 in rainfall_events:
+
+        ds_rain1 = rainfall_events[e1]
+
+        rain1_max = max([
+            float(data.max().values)
+            for data in ds_rain1.data_vars.values()
+        ])
+
+        rain1_padding = rain1_max * 0.40
+
+        ax1_rain.set_ylim(
+            rain1_max + rain1_padding,
+            0
+        )
+
+        ax1_rain.margins(y=0)
+
+    # ============================================================
+    # EVENT 2
+    # ============================================================
     runoff2 = get_runoff_event(runoff_trees, e2)
 
     plot_event(
@@ -263,70 +313,223 @@ for i, (e1, e2) in enumerate(event_pairs):
         color_map
     )
 
-    ax2.set_title(e2)
+    ax2.set_title(e2, fontsize=13)
 
     # ------------------------------------------------------------
+    # runoff ylim
+    # ------------------------------------------------------------
+    runoff2_max = 0
+
+    if runoff2 is not None:
+
+        runoff2_max = max([
+            float(cfs_to_m3(data).max().values)
+            for data in runoff2.data_vars.values()
+        ])
+
+    runoff2_padding = runoff2_max * 0.20
+
+    ax2.set_ylim(
+        0,
+        runoff2_max + runoff2_padding
+    )
+
+    ax2.margins(y=0)
+
+    # ------------------------------------------------------------
+    # rainfall ylim
+    # ------------------------------------------------------------
+    if e2 in rainfall_events:
+
+        ds_rain2 = rainfall_events[e2]
+
+        rain2_max = max([
+            float(data.max().values)
+            for data in ds_rain2.data_vars.values()
+        ])
+
+        rain2_padding = rain2_max * 0.40
+
+        ax2_rain.set_ylim(
+            rain2_max + rain2_padding,
+            0
+        )
+
+        ax2_rain.margins(y=0)
+
+    # ============================================================
     # formatting
-    # ------------------------------------------------------------
+    # ============================================================
     for ax in axes:
-        ax.set_xlabel("Time")
-        ax.tick_params(axis="y")
 
-    # leave space at bottom for colorbar + date
-    plt.tight_layout(rect=[0, 0.12, 1, 1])
+        ax.set_xlabel("Time", fontsize=11)
 
-    # ------------------------------------------------------------
-    # colorbar
-    # ------------------------------------------------------------
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    sm.set_array([])
+        ax.tick_params(
+            axis="both",
+            labelsize=10
+        )
 
-    bbox = ax2.get_position()
+        ax.set_ylabel(
+            "Runoff (m³/s)",
+            fontsize=11
+        )
 
-    colorbar_ax = fig.add_axes([
-        bbox.x0 + 0.05,
-        bbox.y0 - 0.08,
-        bbox.width - 0.10,
+    ax1_rain.set_ylabel(
+        "Rainfall (mm/hr)",
+        color="blue",
+        fontsize=11
+    )
+
+    ax2_rain.set_ylabel(
+        "Rainfall (mm/hr)",
+        color="blue",
+        fontsize=11
+    )
+
+    # ============================================================
+    # layout
+    # ============================================================
+    plt.tight_layout(rect=[0, 0.18, 1, 1])
+
+    # ============================================================
+    # colorbar under subplot 1
+    # ============================================================
+    sm1 = plt.cm.ScalarMappable(
+        cmap=cmap,
+        norm=norm
+    )
+
+    sm1.set_array([])
+
+    bbox1 = ax1.get_position()
+
+    cax1 = fig.add_axes([
+        bbox1.x0 + 0.03,
+        bbox1.y0 - 0.10,
+        bbox1.width - 0.06,
         0.025
     ])
 
-    colorbar = fig.colorbar(
-        sm,
-        cax=colorbar_ax,
-        orientation="horizontal")
+    cb1 = fig.colorbar(
+        sm1,
+        cax=cax1,
+        orientation="horizontal"
+    )
 
-    colorbar.set_label("Contributing area (km$^2$)", fontsize=11)
+    cb1.set_label(
+        "Contributing area (km$^2$)",
+        fontsize=10
+    )
 
-    # optional: show only min/max values
-    tick_positions = [norm.vmin, norm.vmax]
+    cb1.ax.tick_params(labelsize=9)
 
-    colorbar.set_ticks(tick_positions)
-    colorbar.set_ticklabels([f"{v:.2f}" for v in tick_positions])
+    cb1.set_ticks([norm.vmin, norm.vmax])
 
-    colorbar.ax.tick_params(labelsize=10)
+    cb1.set_ticklabels([
+        f"{norm.vmin:.2f}",
+        f"{norm.vmax:.2f}"
+    ])
 
-    # ------------------------------------------------------------
-    # date annotation
-    # ------------------------------------------------------------
-    all_times = []
+    # ============================================================
+    # colorbar under subplot 2
+    # ============================================================
+    sm2 = plt.cm.ScalarMappable(
+        cmap=cmap,
+        norm=norm
+    )
 
+    sm2.set_array([])
+
+    bbox2 = ax2.get_position()
+
+    cax2 = fig.add_axes([
+        bbox2.x0 + 0.03,
+        bbox2.y0 - 0.10,
+        bbox2.width - 0.06,
+        0.025
+    ])
+
+    cb2 = fig.colorbar(
+        sm2,
+        cax=cax2,
+        orientation="horizontal"
+    )
+
+    cb2.set_label(
+        "Contributing area (km$^2$)",
+        fontsize=10
+    )
+
+    cb2.ax.tick_params(labelsize=9)
+
+    cb2.set_ticks([norm.vmin, norm.vmax])
+
+    cb2.set_ticklabels([
+        f"{norm.vmin:.2f}",
+        f"{norm.vmax:.2f}"
+    ])
+
+    # ============================================================
+    # dates under each subplot
+    # ============================================================
     if runoff1 is not None:
+
+        times1 = []
+
         for data in runoff1.data_vars.values():
-            all_times.extend(data.time.values)
+            times1.extend(data.time.values)
+
+        if len(times1) > 0:
+
+            date1 = pd.to_datetime(
+                max(times1)
+            ).strftime("%d-%b-%Y")
+
+            fig.text(
+                bbox1.x1,
+                bbox1.y0 - 0.16,
+                date1,
+                ha="right",
+                va="top",
+                fontsize=10,
+                fontweight="bold"
+            )
 
     if runoff2 is not None:
+
+        times2 = []
+
         for data in runoff2.data_vars.values():
-            all_times.extend(data.time.values)
+            times2.extend(data.time.values)
 
-    if len(all_times) > 0:
-        full_date = pd.to_datetime(max(all_times)).strftime("%d-%b-%Y")
-        fig.text(0.92, 0.02, full_date, ha="right", va="bottom",fontsize=11, fontweight="bold")
+        if len(times2) > 0:
 
-    # ------------------------------------------------------------
+            date2 = pd.to_datetime(
+                max(times2)
+            ).strftime("%d-%b-%Y")
+
+            fig.text(
+                bbox2.x1,
+                bbox2.y0 - 0.16,
+                date2,
+                ha="right",
+                va="top",
+                fontsize=10,
+                fontweight="bold"
+            )
+
+    # ============================================================
     # save
-    # ------------------------------------------------------------
-    outpath = os.path.join(output_dir, f"event_pair_{i+1}.pdf")
-    plt.savefig(outpath, bbox_inches="tight")
+    # ============================================================
+    outpath = os.path.join(
+        output_dir,
+        f"event_pair_{i+1}.pdf"
+    )
+
+    plt.savefig(
+        outpath,
+        bbox_inches="tight"
+    )
 
     plt.close(fig)
 
