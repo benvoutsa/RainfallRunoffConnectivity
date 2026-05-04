@@ -103,7 +103,7 @@ for i in range(len(rainfall_dates)):
 # FLUME / COLOR SETUP
 # ---------------------------------------------------
 flume_data = pd.read_csv(os.path.join(DATA_DIR, "flume_raingauges.csv"))
-flume_data["Rain_Gauge_Num"] = flume_data["Rain_gauge_name"].str.extract("(\d+)").astype(int)
+flume_data["Rain_Gauge_Num"] = flume_data["Rain_gauge_name"].str.extract("(/d+)").astype(int)
 
 float_values = flume_data["Contributing_area_km2"]
 integers = flume_data["Flume"]
