@@ -26,9 +26,9 @@ from runoff_functions import (
 BASE_DIR = "data"
 
 RUNOFF_FILES = [
-    os.path.join(BASE_DIR, "runoff", "runoff_events_2000_2006.nc"),
-    os.path.join(BASE_DIR, "runoff", "runoff_events_2007_2013.nc"),
-    os.path.join(BASE_DIR, "runoff", "runoff_events_2014_2024.nc"),
+    os.path.join(BASE_DIR, "runoff", "runoff_2000_2006.nc"),
+    os.path.join(BASE_DIR, "runoff", "runoff_2007_2013.nc"),
+    os.path.join(BASE_DIR, "runoff", "runoff_2014_2024.nc"),
 ]
 
 RUNOFF_DATE_FILES = [
