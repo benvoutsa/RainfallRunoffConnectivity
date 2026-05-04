@@ -194,6 +194,7 @@ runoff_dates = load_runoff_dates(RUNOFF_DATE_FILES)
 
 dfs_rainfall = load_rainfall_csvs(BASE_DIR)
 df_rainfall = prepare_rainfall_dataframe(dfs_rainfall)
+df_rainfall = df_rainfall.dropna(subset=["Gage"])
 
 # 🔥 FIX: correct flume dataset
 flume_master = load_flume_master()
