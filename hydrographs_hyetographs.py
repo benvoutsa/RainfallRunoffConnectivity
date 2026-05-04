@@ -133,9 +133,11 @@ def build_rainfall_events(runoff_dates, df_rainfall):
         if ds is None:
             continue
 
-        trimmed = trim_zero_rainfall(ds)
-        if trimmed is not None:
-            ds = trimmed
+        ds_trimmed = trim_zero_rainfall(ds)
+
+        if ds_trimmed is not None and len(ds_trimmed.data_vars) > 0:
+            ds = ds_trimmed
+        # else: keep original ds
 
         ds = downsample_rainfall_events(ds, timestep=4)
 
