@@ -14,12 +14,18 @@ import matplotlib.dates as mdates
 from rainfall_functions import *
 from runoff_functions import *
 
+import yaml
+from pathlib import Path
+
 # ---------------------------------------------------
 # SETTINGS
 # ---------------------------------------------------
-BASE_DIR = "data"
-OUTPUT_DIR = "results"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+DATA_DIR = Path(config["DATA_DIR"])
+RESULTS_DIR = Path(config["RESULTS_DIR"])
 
 figure_names = [
     "hydrograph_events_8_9.pdf",
@@ -30,9 +36,9 @@ figure_names = [
 # ---------------------------------------------------
 # LOAD RUNOFF DATA
 # ---------------------------------------------------
-tree_00_06 = dtree.open_datatree(os.path.join(BASE_DIR, "runoff/runoff_events_2000_2006.nc"))
-tree_07_13 = dtree.open_datatree(os.path.join(BASE_DIR, "runoff/runoff_events_2007_2013.nc"))
-tree_14_24 = dtree.open_datatree(os.path.join(BASE_DIR, "runoff/runoff_events_2014_2024.nc"))
+tree_00_06 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff/runoff_events_2000_2006.nc"))
+tree_07_13 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff/runoff_events_2007_2013.nc"))
+tree_14_24 = dtree.open_datatree(os.path.join(DATA_DIR, "runoff/runoff_events_2014_2024.nc"))
 
 tree_keys = {
     "00_06": list(tree_00_06.descendants),
@@ -43,7 +49,7 @@ tree_keys = {
 # ---------------------------------------------------
 # RAINFALL DATA
 # ---------------------------------------------------
-rainfall_files = glob.glob(os.path.join(BASE_DIR, "rainfall", "rainfall_*.csv"))
+rainfall_files = glob.glob(os.path.join(DATA_DIR, "rainfall", "rainfall_*.csv"))
 
 dfs_rainfall = [
     pd.read_csv(f, sep=",", comment="#", skiprows=8, low_memory=False)
@@ -63,7 +69,7 @@ df_rainfall = df_rainfall[
 # EVENT DATES
 # ---------------------------------------------------
 runoff_dates = pd.concat([
-    pd.read_csv(os.path.join(BASE_DIR, f))
+    pd.read_csv(os.path.join(DATA_DIR, f))
     for f in [
         "dates_of_runoff_events_2000_2006.csv",
         "dates_of_runoff_events_2007_2013.csv",
@@ -96,7 +102,7 @@ for i in range(len(rainfall_dates)):
 # ---------------------------------------------------
 # FLUME / COLOR SETUP
 # ---------------------------------------------------
-flume_data = pd.read_csv(os.path.join(BASE_DIR, "flume_raingauges.csv"))
+flume_data = pd.read_csv(os.path.join(DATA_DIR, "flume_raingauges.csv"))
 flume_data["Rain_Gauge_Num"] = flume_data["Rain_gauge_name"].str.extract("(\d+)").astype(int)
 
 float_values = flume_data["Contributing_area_km2"]
@@ -167,7 +173,7 @@ for group, fig_name in zip(event_groups, figure_names):
     plt.tight_layout()
 
     plt.savefig(
-        os.path.join(OUTPUT_DIR, fig_name),
+        os.path.join(RESULTS_DIR, fig_name),
         dpi=300,
         bbox_inches="tight"
     )
