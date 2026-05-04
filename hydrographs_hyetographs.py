@@ -23,6 +23,9 @@ from runoff_functions import (
 )
 
 
+# ------------------------------------------------------------
+# PATHS
+# ------------------------------------------------------------
 BASE_DIR = "data"
 
 RUNOFF_FILES = [
@@ -37,9 +40,13 @@ RUNOFF_DATE_FILES = [
     os.path.join(BASE_DIR, "dates_of_runoff_events_2014_2024.csv"),
 ]
 
-FLUME_MAPPING_PATH = os.path.join(BASE_DIR, "flume_raingauges.csv")
+FLUME_RAINGAUGES_PATH = os.path.join(BASE_DIR, "flume_raingauges.csv")
+FLUME_WATERSHEDS_PATH = os.path.join(BASE_DIR, "flume_watersheds.csv")
 
 
+# ------------------------------------------------------------
+# UTILS
+# ------------------------------------------------------------
 def cfs_to_m3(cfs):
     return cfs * 0.0283168
 
@@ -51,13 +58,22 @@ def get_runoff_event(tree_list, event_label):
     return None
 
 
+# ------------------------------------------------------------
+# FIXED COLOR MAP (uses watersheds, NOT raingauges)
+# ------------------------------------------------------------
+def build_color_map(flume_master_df):
 
-def build_color_map(flume_mapping_df):
+    df = flume_master_df[["Flume", "Contributing_area_km2"]].drop_duplicates()
 
-    values = flume_mapping_df["Contributing_area_km2"].values
-    flumes = flume_mapping_df["Flume"].values
+    df["Contributing_area_km2"] = pd.to_numeric(
+        df["Contributing_area_km2"],
+        errors="coerce"
+    )
 
-    norm = plt.Normalize(values.min(), values.max())
+    values = df["Contributing_area_km2"].values
+    flumes = df["Flume"].values
+
+    norm = plt.Normalize(np.nanmin(values), np.nanmax(values))
     cmap = plt.cm.plasma
 
     colors = cmap(norm(values))
@@ -65,6 +81,41 @@ def build_color_map(flume_mapping_df):
     return dict(zip(flumes, colors)), cmap, norm
 
 
+# ------------------------------------------------------------
+# LOAD + MERGE FLUME DATA (KEY FIX)
+# ------------------------------------------------------------
+def load_flume_master():
+
+    flume_raingauges = pd.read_csv(
+        FLUME_RAINGAUGES_PATH,
+        sep=r"\s+|\t+|,",
+        engine="python"
+    )
+
+    flume_watersheds = pd.read_csv(
+        FLUME_WATERSHEDS_PATH,
+        sep=r"\s+|\t+|,",
+        engine="python"
+    )
+
+    flume_raingauges.columns = flume_raingauges.columns.str.strip()
+    flume_watersheds.columns = flume_watersheds.columns.str.strip()
+
+    flume_master = flume_raingauges.merge(
+        flume_watersheds,
+        on="Flume",
+        how="left"
+    )
+
+    if "Contributing_area_km2" not in flume_master.columns:
+        raise ValueError("Missing Contributing_area_km2 after merge")
+
+    return flume_master
+
+
+# ------------------------------------------------------------
+# RAINFALL EVENTS
+# ------------------------------------------------------------
 def build_rainfall_events(runoff_dates, df_rainfall):
 
     rainfall_windows = build_rainfall_windows(runoff_dates, buffer_hours=2)
@@ -93,6 +144,9 @@ def build_rainfall_events(runoff_dates, df_rainfall):
     return rainfall_events
 
 
+# ------------------------------------------------------------
+# PLOTTING
+# ------------------------------------------------------------
 def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map):
 
     # ---------- rainfall ----------
@@ -131,15 +185,21 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
     ax.set_ylabel("Runoff (m³/s)")
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
 
+
+# ------------------------------------------------------------
+# MAIN SCRIPT
+# ------------------------------------------------------------
 runoff_trees = load_runoff_trees(RUNOFF_FILES)
 runoff_dates = load_runoff_dates(RUNOFF_DATE_FILES)
 
 dfs_rainfall = load_rainfall_csvs(BASE_DIR)
 df_rainfall = prepare_rainfall_dataframe(dfs_rainfall)
 
-flume_mapping = pd.read_csv(FLUME_MAPPING_PATH)
+# 🔥 FIX: correct flume dataset
+flume_master = load_flume_master()
 
-color_map, cmap, norm = build_color_map(flume_mapping)
+# 🔥 FIX: correct color mapping input
+color_map, cmap, norm = build_color_map(flume_master)
 
 rainfall_events = build_rainfall_events(runoff_dates, df_rainfall)
 
