@@ -59,7 +59,7 @@ def get_runoff_event(tree_list, event_label):
 
 
 # ------------------------------------------------------------
-# FIXED COLOR MAP (uses watersheds, NOT raingauges)
+# FIXED COLOR MAP (uses contributing area)
 # ------------------------------------------------------------
 def build_color_map(flume_master_df):
 
@@ -152,13 +152,25 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
     # ---------- rainfall ----------
     if event_label in rainfall_events:
         ds_rain = rainfall_events[event_label]
-
+    
         for _, data in ds_rain.data_vars.items():
             data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5)
-
+    
         ax_rain.invert_yaxis()
+    
+        rain_max = max(
+            float(data.max().values)
+            for data in ds_rain.data_vars.values()
+        )
+    
+        padding = rain_max * 0.1
+    
+        ax_rain.set_ylim(rain_max + padding, 0)
+        ax_rain.margins(y=0)
+    
         ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
         ax_rain.tick_params(axis="y", colors="blue")
+    
 
     # ---------- runoff ----------
     if runoff_tree is None:
@@ -196,10 +208,7 @@ dfs_rainfall = load_rainfall_csvs(BASE_DIR)
 df_rainfall = prepare_rainfall_dataframe(dfs_rainfall)
 df_rainfall = df_rainfall.dropna(subset=["Gage"])
 
-# 🔥 FIX: correct flume dataset
 flume_master = load_flume_master()
-
-# 🔥 FIX: correct color mapping input
 color_map, cmap, norm = build_color_map(flume_master)
 
 rainfall_events = build_rainfall_events(runoff_dates, df_rainfall)
@@ -224,23 +233,98 @@ for i, (e1, e2) in enumerate(event_pairs):
     ax1_rain = ax1.twinx()
     ax2_rain = ax2.twinx()
 
-    # ---- event 1 ----
+    # ------------------------------------------------------------
+    # event 1
+    # ------------------------------------------------------------
     runoff1 = get_runoff_event(runoff_trees, e1)
-    plot_event(ax1, ax1_rain, e1, rainfall_events, runoff1, color_map)
+
+    plot_event(
+        ax1,
+        ax1_rain,
+        e1,
+        rainfall_events,
+        runoff1,
+        color_map
+    )
+
     ax1.set_title(e1)
 
-    # ---- event 2 ----
+    # ------------------------------------------------------------
+    # event 2
+    # ------------------------------------------------------------
     runoff2 = get_runoff_event(runoff_trees, e2)
-    plot_event(ax2, ax2_rain, e2, rainfall_events, runoff2, color_map)
+
+    plot_event(
+        ax2,
+        ax2_rain,
+        e2,
+        rainfall_events,
+        runoff2,
+        color_map
+    )
+
     ax2.set_title(e2)
 
+    # ------------------------------------------------------------
     # formatting
+    # ------------------------------------------------------------
     for ax in axes:
         ax.set_xlabel("Time")
         ax.tick_params(axis="y")
 
-    plt.tight_layout()
+    # leave space at bottom for colorbar + date
+    plt.tight_layout(rect=[0, 0.12, 1, 1])
 
+    # ------------------------------------------------------------
+    # colorbar
+    # ------------------------------------------------------------
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+    sm.set_array([])
+
+    bbox = ax2.get_position()
+
+    colorbar_ax = fig.add_axes([
+        bbox.x0 + 0.05,
+        bbox.y0 - 0.08,
+        bbox.width - 0.10,
+        0.025
+    ])
+
+    colorbar = fig.colorbar(
+        sm,
+        cax=colorbar_ax,
+        orientation="horizontal")
+
+    colorbar.set_label("Contributing area (km$^2$)", fontsize=11)
+
+    # optional: show only min/max values
+    tick_positions = [norm.vmin, norm.vmax]
+
+    colorbar.set_ticks(tick_positions)
+    colorbar.set_ticklabels([f"{v:.2f}" for v in tick_positions])
+
+    colorbar.ax.tick_params(labelsize=10)
+
+    # ------------------------------------------------------------
+    # date annotation
+    # ------------------------------------------------------------
+    all_times = []
+
+    if runoff1 is not None:
+        for data in runoff1.data_vars.values():
+            all_times.extend(data.time.values)
+
+    if runoff2 is not None:
+        for data in runoff2.data_vars.values():
+            all_times.extend(data.time.values)
+
+    if len(all_times) > 0:
+        full_date = pd.to_datetime(max(all_times)).strftime("%d-%b-%Y")
+        fig.text(0.92, 0.02, full_date, ha="right", va="bottom",fontsize=11, fontweight="bold")
+
+    # ------------------------------------------------------------
+    # save
+    # ------------------------------------------------------------
     outpath = os.path.join(output_dir, f"event_pair_{i+1}.pdf")
     plt.savefig(outpath, bbox_inches="tight")
 
