@@ -77,8 +77,8 @@ runoff_dates = pd.concat([
     ]
 ], axis=0).reset_index(drop=True)
 
-runoff_dates["start_time"] = pd.to_datetime(runoff_dates["start_time"])
-runoff_dates["end_time"] = pd.to_datetime(runoff_dates["end_time"])
+runoff_dates["start_time"] = pd.to_datetime(runoff_dates["start_time"], format="mixed")
+runoff_dates["end_time"] = pd.to_datetime(runoff_dates["end_time"], format="mixed")
 
 rainfall_dates = runoff_dates.copy()
 rainfall_dates["start_time"] -= pd.Timedelta(hours=2)
