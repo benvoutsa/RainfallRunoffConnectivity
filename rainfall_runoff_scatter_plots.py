@@ -107,6 +107,11 @@ ax1.set_xlabel("average rainfall (mm)", fontsize=15)
 ax1.set_ylabel(r"Q$_{flume\ 1}$ (m$^3$)", fontsize=15)
 
 ax1.legend(fontsize=12)
+
+cbar1 = fig.colorbar(sc1, ax=ax1)
+cbar1.set_label(r"SC/FC$_{sync}$", fontsize=13)
+cbar1.ax.tick_params(labelsize=11)
+
 ax1.set_title("(a)", loc="left", fontsize=16, fontweight="normal")
 
 # -----------------------------------------------------------------------------
@@ -127,7 +132,6 @@ ax2.set_ylabel(r"Q$_{flume\ 1}$ (m$^3$)", fontsize=15)
 
 ax2.legend(fontsize=12)
 
-# Colorbar ONLY for second subplot
 cbar2 = fig.colorbar(sc2, ax=ax2)
 cbar2.set_label(r"SC/FC$_{seq}$", fontsize=13)
 cbar2.ax.tick_params(labelsize=11)
