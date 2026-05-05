@@ -281,7 +281,6 @@ min_val, max_val = all_vals.min() - buffer, all_vals.max() + buffer
 # Scatter plots per cluster
 # -----------------------------
 for ax, cl in zip(axes, cluster_labels):
-    ax = axes[i]
     data = df2[df2['cluster'] == cl]
 
     ax.scatter(
