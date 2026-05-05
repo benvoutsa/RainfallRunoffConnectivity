@@ -201,11 +201,16 @@ print(manova.mv_test())
 # SC-FC Boxplots by Cluster
 # -------------------------------
 df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
-print(len(df_scaled), len(df_scfcs))
-print(df_scaled.index.equals(df_scfcs.index))
 print(df_scfcs)
 
-df_scfc_melted =  df_scfcs.melt(id_vars=['cluster'], 
+# df2 contais 'cluster', 'scfc_sync', 'scfc_seq'
+df2 = pd.DataFrame({
+    'cluster': df_scaled['cluster'],
+    'scfc_sync': df_scfcs["scfc_sync"],
+    'scfc_seq': df_scfcs["scfc_seq"]
+})
+
+df_scfc_melted =  df2.melt(id_vars=['cluster'], 
                     value_vars=['scfc_sync', 'scfc_seq'],
                     var_name='feature', value_name='value')
 
@@ -247,13 +252,6 @@ plt.show()
 # -------------------------------
 #  SC-FC Scatter Plots by Cluster
 # -------------------------------
-
-# df2 contais 'cluster', 'scfc_sync', 'scfc_seq'
-df2 = pd.DataFrame({
-    'cluster': df_scaled['cluster'],
-    'scfc_sync': df_scfcs["scfc_sync"],
-    'scfc_seq': df_scfcs["scfc_seq"]
-})
 
 
 n_clusters = len(set(clusters))
