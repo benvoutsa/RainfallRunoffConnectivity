@@ -297,7 +297,7 @@ for i, cl in enumerate(cluster_labels):
 
 # add colorbar
 cmap = mpl.colors.ListedColormap(CUSTOM_COLORS[:n_clusters])
-norm = mpl.colors.BoundaryNorm(range(len(clusters) + 1),cmap.N)
+norm = mpl.colors.BoundaryNorm(range(len(cluster_labels) + 1),cmap.N)
 
 sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])
