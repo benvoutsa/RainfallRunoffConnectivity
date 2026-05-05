@@ -332,7 +332,7 @@ sm.set_array([])
 # space for colorbar
 fig.subplots_adjust(right=0.85)
 
-cbar_ax = fig.add_axes([0.92, 0.20, 0.012, 0.65])
+cbar_ax = fig.add_axes([0.92, 0.25, 0.012, 0.65])
 
 cbar = fig.colorbar(sm, cax=cbar_ax, orientation='vertical')
 
