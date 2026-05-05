@@ -177,7 +177,7 @@ for line in ax.lines:
 
 # Labels
 ax.set_ylabel('scaled rainfall features', fontsize=13)
-ax.set_xlabel('rainfall cluster', fontsize=13, labelpad=22)
+ax.set_xlabel('rainfall cluster', fontsize=13, labelpad=28)
 
 # Legend
 ax.legend(title='', fontsize=11, ncol=3, loc='upper center',bbox_to_anchor=(0.5, -0.08))
@@ -332,7 +332,7 @@ sm.set_array([])
 # space for colorbar
 fig.subplots_adjust(right=0.85)
 
-cbar_ax = fig.add_axes([0.88, 0.15, 0.02, 0.7])
+cbar_ax = fig.add_axes([0.92, 0.20, 0.012, 0.65])
 
 cbar = fig.colorbar(sm, cax=cbar_ax, orientation='vertical')
 
