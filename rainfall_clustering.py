@@ -279,10 +279,10 @@ min_val, max_val = all_vals.min()-0.05, all_vals.max()+0.05
 
 cluster_labels = np.sort(np.unique(clusters))
 for i, cl in enumerate(cluster_labels):
-    print(i, cl)
+    #print(i, cl)
     ax = axes[i]
     data = df2[df2['cluster'] == cl]
-
+    print(data)
     ax.scatter(data['scfc_sync'], data['scfc_seq'], color=CUSTOM_COLORS[i],
                alpha=0.7, edgecolors='black',s=80)
 
