@@ -28,7 +28,7 @@ DATA_FOLDER = "data"
 RAINFALL_FOLDER = "data/rainfall"
 FLUME_RAINGAUGES_FILE = "data/flume_raingauges.csv"
 FLUME_WATERSHEDS_FILE = "data/flume_watersheds.csv"
-OUTPUT_FEATURES_FILE = "data/df_rainfall_features.csv"
+OUTPUT_FEATURES_FILE = "data/df_rainfall_features_test.csv"
 
 RUNOFF_EVENT_FILES = ["data/runoff_events_2000_2006.nc", "data/runoff_events_2007_2013.nc", "data/runoff_events_2014_2024.nc"]
 RUNOFF_DATES_FILES = ["data/dates_of_runoff_events_2000_2006.csv", "data/dates_of_runoff_events_2007_2013.csv", "data/dates_of_runoff_events_2014_2024.csv"]
