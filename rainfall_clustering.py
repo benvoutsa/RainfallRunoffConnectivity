@@ -51,37 +51,20 @@ xticklabels = ['number of gauges', 'duration', 'average intensity',
 set_link_color_palette(CUSTOM_COLORS)
 
 # Create clustermap
-g = sns.clustermap(
-    df_scaled[FEATURE_COLS],
-    row_linkage=Z,              # IMPORTANT: reuse same linkage
-    col_cluster=False,
-    cmap='coolwarm',
-    figsize=(12, 12),
-    cbar_pos=(1.4, .3, .02, .4),
-    xticklabels=xticklabels,
-    yticklabels=['Event ' + str(i + 1) for i in range(len(df_scaled))]
-)
+g = sns.clustermap(df_scaled[FEATURE_COLS], row_linkage=Z, col_cluster=False,
+    cmap='coolwarm', figsize=(12, 12), cbar_pos=(1.4, .3, .02, .4),
+    xticklabels=xticklabels, yticklabels=['Event ' + str(i + 1) for i in range(len(df_scaled))])
 
 # -------------------------------
 # Reordered labels
 # -------------------------------
 reordered = g.dendrogram_row.reordered_ind
 
-yticks = [
-    'Event ' + str(i + 1)
-    for i in reordered
-]
+yticks = ['Event ' + str(i + 1) for i in reordered]
 
-yticks_5 = [
-    '' if i % 5 != 0 else yticks[i]
-    for i in range(len(yticks))
-]
+yticks_5 = ['' if i % 5 != 0 else yticks[i] for i in range(len(yticks))]
 
-g.ax_heatmap.set_yticklabels(
-    yticks_5,
-    fontsize=11,
-    rotation=0
-)
+g.ax_heatmap.set_yticklabels(yticks_5, fontsize=11, rotation=0)
 
 # -------------------------------
 # Manual layout adjustments
@@ -95,24 +78,13 @@ g.ax_heatmap.set_position([0.302, 0.1, 0.18, 0.8])
 # -------------------------------
 ax_dendro = g.ax_row_dendrogram
 
-dendrogram(
-    Z,
-    ax=ax_dendro,
-    color_threshold=MAX_D,
-    orientation='left',
-    no_labels=True
-)
-
+dendrogram(Z, ax=ax_dendro, color_threshold=MAX_D, orientation='left', no_labels=True)
 ax_dendro.invert_yaxis()
 
 # -------------------------------
 # X labels formatting
 # -------------------------------
-g.ax_heatmap.set_xticklabels(
-    xticklabels,
-    fontsize=13,
-    rotation=90
-)
+g.ax_heatmap.set_xticklabels(xticklabels, fontsize=13, rotation=90)
 
 # Optional:
 # remove y labels entirely
@@ -205,17 +177,17 @@ df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
 df2 = pd.DataFrame({
     'cluster': df_scaled['cluster'].values,
     'scfc_sync': df_scfcs["scfc_sync"].values,
-    'scfc_seq': df_scfcs["scfc_seq"].values
-})
+    'scfc_seq': df_scfcs["scfc_seq"].values})
 
 df_scfc_melted =  df2.melt(id_vars=['cluster'], 
                     value_vars=['scfc_sync', 'scfc_seq'],
                     var_name='feature', value_name='value')
-print(df_scfc_melted)
+#print(df_scfc_melted)
 df_scfc_melted['feature'] = df_scfc_melted['feature'].astype(str).str.strip()
 hue_order = ['scfc_sync', 'scfc_seq']
 palette = {'scfc_sync': 'royalblue', 'scfc_seq': 'red'}
-print(df_scfc_melted)
+#print(df_scfc_melted)
+
 fig, ax = plt.subplots(figsize=(8, 4))
 
 sns.boxplot(data=df_scfc_melted, x='cluster', y='value', hue='feature', hue_order = hue_order, palette=palette, width=0.5, dodge=True, ax=ax)
@@ -252,16 +224,15 @@ plt.show()
 #  SC-FC Scatter Plots by Cluster
 # -------------------------------
 
-
 n_clusters = len(set(clusters))
 cluster_nums = np.sort(np.unique(clusters))
 cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 
-print(n_clusters)
+#print(n_clusters)
 
 fig, axes = plt.subplots(1, n_clusters, figsize=(12,2), sharex=True, sharey=True)
 cluster_colors = CUSTOM_COLORS
-print(cluster_colors)
+#print(cluster_colors)
 
 if n_clusters == 1:
     axes = [axes]
@@ -285,23 +256,11 @@ for ax, cl in zip(axes, cluster_nums):
     print(cluster_color_map[cl])
     data = df2[df2['cluster'] == cl]
 
-    ax.scatter(
-        data['scfc_sync'],
-        data['scfc_seq'],
-        color=cluster_color_map[cl],
-        edgecolor='black',
-        alpha=0.9,
-        s=100
-    )
+    ax.scatter(data['scfc_sync'], data['scfc_seq'],
+        color=cluster_color_map[cl], edgecolor='black', alpha=0.9,s=100)
 
     # diagonal reference line
-    ax.plot(
-        [min_val, max_val],
-        [min_val, max_val],
-        color='black',
-        linestyle='--',
-        linewidth=2
-    )
+    ax.plot([min_val, max_val], [min_val, max_val],color='black', linestyle='--',linewidth=2)
 
     ax.set_xlim(min_val, max_val)
     ax.set_ylim(min_val, max_val)
