@@ -128,10 +128,10 @@ plt.show()
 # -------------------------------
 # Silhouette Analysis
 # -------------------------------
-scores = []
+silhouette_scores = []
 for k in range(2, 11):
-    cluster_labels = fcluster(linkage(data_scaled, method='ward'), k, criterion='maxclust')
-    scores.append(silhouette_score(data_scaled, cluster_labels))
+    cluster_labels = fcluster(Z, k, criterion='maxclust')
+    silhouette_scores.append(silhouette_score(data_scaled, cluster_labels))
 
 plt.figure(figsize=(8,5))
 plt.plot(range(2, 11), scores, marker='o', linestyle='--')
@@ -140,8 +140,8 @@ plt.ylabel("Silhouette Score")
 plt.title("Silhouette Scores for Different Numbers of Clusters")
 plt.show()
 
-optimal_clusters = np.argmax(scores)
-print("Optimal number of clusters:", optimal_clusters)
+optimal_clusters = range_clusters[np.argmax(silhouette_scores)]
+print(f"Optimal number of clusters based on silhouette score: {optimal_clusters}")
 
 # -------------------------------
 # Boxplots of Scaled Features by Cluster
