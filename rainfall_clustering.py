@@ -297,14 +297,14 @@ for i, cl in enumerate(cluster_labels):
         ax.set_ylabel(r'(SC-FC)$_{seq}$', fontsize=14)
     ax.grid(True)
 
-# # add colorbar
-# cmap = mpl.colors.ListedColormap(CUSTOM_COLORS[:n_clusters])
-# norm = mpl.colors.BoundaryNorm(range(len(cluster_labels) + 1),cmap.N)
+# add colorbar
+cmap = mpl.colors.ListedColormap(CUSTOM_COLORS[:n_clusters])
+norm = mpl.colors.BoundaryNorm(range(len(cluster_labels) + 1),cmap.N)
 
-# sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
-# sm.set_array([])
-# # ---- Colorbar axis ----
-# cax = fig.add_axes([0.91, 0.30, 0.012, 0.62])
+sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+# ---- Colorbar axis ----
+cax = fig.add_axes([0.91, 0.30, 0.012, 0.62])
 
 # cbar = fig.colorbar(sm, cax=cax, ticks=[i + 0.5 for i in range(len(cluster_labels))])
 # cbar.set_ticklabels([f"Cluster {c}" for c in cluster_labels])
