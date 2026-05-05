@@ -33,7 +33,7 @@ df_scaled.head()
 # -------------------------------
 # Hierarchical Clustering
 # -------------------------------
-Z = linkage(data_scaled, method='ward')
+Z = linkage(data_scaled, method='ward', metric="euclidean")
 clusters = fcluster(Z, MAX_D, criterion='distance')
 df_scaled['cluster'] = clusters
 
@@ -43,24 +43,86 @@ df_scaled['cluster'] = clusters
 xticklabels = ['number of gauges', 'duration', 'average intensity', 
                'max rolling intensity', 'days with no rain']
 
+# Set custom dendrogram colors
 set_link_color_palette(CUSTOM_COLORS)
+
+# Create clustermap
 g = sns.clustermap(
     df_scaled[FEATURE_COLS],
-    method='ward',
+    row_linkage=Z,              # IMPORTANT: reuse same linkage
+    col_cluster=False,
     cmap='coolwarm',
     figsize=(12, 12),
     cbar_pos=(1.4, .3, .02, .4),
     xticklabels=xticklabels,
-    yticklabels=['Event ' + str(i+1) for i in range(len(df_scaled))],
-    col_cluster=False
+    yticklabels=['Event ' + str(i + 1) for i in range(len(df_scaled))]
 )
 
-# Adjust dendrogram and labels
+# -------------------------------
+# Reordered labels
+# -------------------------------
 reordered = g.dendrogram_row.reordered_ind
-yticks = ['Event ' + str(i+1) for i in reordered]
-yticks_5 = ['' if i%5!=0 else yticks[i] for i in range(len(yticks))]
-g.ax_heatmap.set_yticklabels(yticks_5, fontsize=11)
-plt.savefig("results/dendogram.pdf")
+
+yticks = [
+    'Event ' + str(i + 1)
+    for i in reordered
+]
+
+yticks_5 = [
+    '' if i % 5 != 0 else yticks[i]
+    for i in range(len(yticks))
+]
+
+g.ax_heatmap.set_yticklabels(
+    yticks_5,
+    fontsize=11,
+    rotation=0
+)
+
+# -------------------------------
+# Manual layout adjustments
+# -------------------------------
+g.ax_row_dendrogram.set_position([0.1, 0.1, 0.2, 0.8])
+
+g.ax_heatmap.set_position([0.302, 0.1, 0.18, 0.8])
+
+# -------------------------------
+# Overlay dendrogram
+# -------------------------------
+ax_dendro = g.ax_row_dendrogram
+
+dendrogram(
+    Z,
+    ax=ax_dendro,
+    color_threshold=MAX_D,
+    orientation='left',
+    no_labels=True
+)
+
+ax_dendro.invert_yaxis()
+
+# -------------------------------
+# X labels formatting
+# -------------------------------
+g.ax_heatmap.set_xticklabels(
+    xticklabels,
+    fontsize=13,
+    rotation=90
+)
+
+# Optional:
+# remove y labels entirely
+# g.ax_heatmap.set_yticks([])
+# g.ax_heatmap.set_yticklabels([])
+
+plt.tight_layout()
+
+plt.savefig(
+    "results/dendrogram.pdf",
+    dpi=300,
+    bbox_inches='tight'
+)
+
 plt.show()
 
 # -------------------------------
