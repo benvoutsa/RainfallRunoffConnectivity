@@ -207,9 +207,9 @@ df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
 
 # df2 contais 'cluster', 'scfc_sync', 'scfc_seq'
 df2 = pd.DataFrame({
-    'cluster': df_scaled['cluster'],
-    'scfc_sync': df_scfcs["scfc_sync"],
-    'scfc_seq': df_scfcs["scfc_seq"]
+    'cluster': df_scaled['cluster'].values,
+    'scfc_sync': df_scfcs["scfc_sync"].values,
+    'scfc_seq': df_scfcs["scfc_seq"].values
 })
 
 df_scfc_melted =  df2.melt(id_vars=['cluster'], 
@@ -222,7 +222,7 @@ palette = {'scfc_sync': 'royalblue', 'scfc_seq': 'red'}
 print(df_scfc_melted)
 fig, ax = plt.subplots(figsize=(8, 4))
 
-sns.boxplot(data=df_scfc_melted, x='cluster', y='value', hue='feature', palette=palette, width=0.5, dodge=True, ax=ax)
+sns.boxplot(data=df_scfc_melted, x='cluster', y='value', hue='feature', hue_order = hue_order, palette=palette, width=0.5, dodge=True, ax=ax)
 
 for patch in ax.patches:
     patch.set_edgecolor('black')
