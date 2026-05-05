@@ -279,6 +279,7 @@ min_val, max_val = all_vals.min()-0.05, all_vals.max()+0.05
 
 cluster_labels = np.sort(np.unique(clusters))
 for i, cl in enumerate(cluster_labels):
+    print(i, cl)
     ax = axes[i]
     data = df2[df2['cluster'] == cl]
 
@@ -304,8 +305,8 @@ sm.set_array([])
 # ---- Colorbar axis ----
 cax = fig.add_axes([0.91, 0.30, 0.012, 0.62])
 
-cbar = fig.colorbar(sm, cax=cax, ticks=[i + 0.5 for i in range(len(clusters))])
-cbar.set_ticklabels([f"Cluster {c}" for c in clusters])
+cbar = fig.colorbar(sm, cax=cax, ticks=[i + 0.5 for i in range(len(cluster_labels))])
+cbar.set_ticklabels([f"Cluster {c}" for c in cluster_labels])
   
 plt.tight_layout(rect=[0, 0, 0.9, 1])
 plt.savefig("results/scfc_scatter_in_clusters.pdf")
