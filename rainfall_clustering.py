@@ -140,23 +140,49 @@ plt.ylabel("Silhouette Score")
 plt.title("Silhouette Scores for Different Numbers of Clusters")
 plt.show()
 
-optimal_clusters = np.argmax(scores) + 2
+optimal_clusters = np.argmax(scores)
 print("Optimal number of clusters:", optimal_clusters)
 
 # -------------------------------
-#  Boxplots of Scaled Features by Cluster
+# Boxplots of Scaled Features by Cluster
 # -------------------------------
-colors = ['red', 'forestgreen', 'dodgerblue']
-df_melted = df_scaled.melt(id_vars='cluster', 
-                           value_vars=['numberofgauges','durationmin','averageintensity'],
-                           var_name='feature', value_name='value')
 
-plt.figure(figsize=(8,4))
-sns.boxplot(data=df_melted, x='cluster', y='value', hue='feature', palette=colors)
-plt.ylabel('Scaled Rainfall Features')
-plt.xlabel('Cluster')
-plt.legend(title='Feature')
-plt.savefig("results/rainfall_boxplots_in_clusters.pdf")
+BOXPLOT_FEATURES = ['numberofgauges', 'durationmin','averageintensity']
+BOXPLOT_LABELS = ['number of gauges', 'duration', 'average intensity']
+
+BOX_COLORS = ['red', 'forestgreen', 'dodgerblue']
+
+# Melt dataframe for seaborn
+df_melted = df_scaled.melt(id_vars='cluster', value_vars=BOXPLOT_FEATURES, var_name='feature', value_name='value')
+
+# Replace internal names with pretty labels
+label_map = dict(zip(BOXPLOT_FEATURES, BOXPLOT_LABELS))
+df_melted['feature'] = df_melted['feature'].map(label_map)
+
+# Create figure
+fig, ax = plt.subplots(figsize=(8, 4))
+
+sns.boxplot(data=df_melted, x='cluster', y='value', hue='feature', palette=BOX_COLORS, width=0.6, dodge=True, ax=ax)
+
+# Improve box appearance
+for patch in ax.patches:
+    patch.set_edgecolor('black')
+    patch.set_linewidth(1.2)
+
+# Improve whiskers/lines
+for line in ax.lines:
+    line.set_color('black')
+    line.set_linewidth(1.2)
+
+# Labels
+ax.set_ylabel('Scaled Rainfall Features', fontsize=13)
+ax.set_xlabel('Rainfall Cluster', fontsize=13, labelpad=20)
+
+# Legend
+ax.legend(title='', fontsize=11, ncol=3, loc='upper center',bbox_to_anchor=(0.5, -0.08))
+plt.tight_layout()
+plt.savefig("results/rainfall_boxplots_in_clusters.pdf", dpi=300, bbox_inches='tight')
+
 plt.show()
 
 # -------------------------------
@@ -167,11 +193,45 @@ formula = 'Q("numberofgauges") + Q("durationmin") + Q("averageintensity") + ' \
 manova = MANOVA.from_formula(formula, data=df_scaled)
 print(manova.mv_test())
 
+
 # -------------------------------
-#  SC/FC Scatter Plots by Cluster
+# SC-FC Boxplots by Cluster
+# -------------------------------
+
+SCFC_BOX_COLORS = ['royalblue', 'red']
+
+df_scfc_melted = pd.DataFrame({'cluster': df_scaled['cluster'], 'scfc_sync': df_scfcs['scfc_sync'], 
+                               'scfc_seq': df_scfcs['scfc_seq']}).melt(id_vars='cluster', 
+                            value_vars=['scfc_sync', 'scfc_seq'], var_name='feature', value_name='value')
+
+df_scfc_melted['feature'] = df_scfc_melted['feature'].map({'scfc_sync': r'SC/FC$_{sync}$', 'scfc_seq': r'SC/FC$_{seq}$'})
+
+fig, ax = plt.subplots(figsize=(8, 4))
+
+sns.boxplot(data=df_scfc_melted, x='cluster', y='value', hue='feature', palette=SCFC_BOX_COLORS, width=0.5, dodge=True, ax=ax)
+
+for patch in ax.patches: 
+  patch.set_edgecolor('black')
+  patch.set_linewidth(1.2)
+  
+for line in ax.lines: 
+  line.set_color('black')
+  line.set_linewidth(1.2)
+
+ax.set_ylabel('SC/FC', fontsize=13)
+ax.set_xlabel('Rainfall Cluster', fontsize=13, labelpad=25)
+ax.set_ylim(-0.27, 0.8)
+
+ax.legend(title='', fontsize=12, ncol=2, loc='upper center', bbox_to_anchor=(0.5, -0.07))
+
+plt.tight_layout()
+plt.savefig("results/scfc_boxplots_in_clusters.pdf", dpi=300, bbox_inches='tight')
+plt.show()
+
+# -------------------------------
+#  SC-FC Scatter Plots by Cluster
 # -------------------------------
 df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
-
 print(len(df_scaled), len(df_scfcs))
 print(df_scaled.index.equals(df_scfcs.index))
 
