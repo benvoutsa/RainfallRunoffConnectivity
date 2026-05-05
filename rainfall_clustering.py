@@ -202,33 +202,44 @@ df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
 print(len(df_scaled), len(df_scfcs))
 print(df_scaled.index.equals(df_scfcs.index))
 
-SCFC_BOX_COLORS = ['royalblue', 'red']
-df_scfc_melted = pd.DataFrame({'cluster': df_scaled['cluster'], 'scfc_sync': df_scfcs['scfc_sync'], 
-                               'scfc_seq': df_scfcs['scfc_seq']}).melt(id_vars='cluster', 
-                            value_vars=['scfc_sync', 'scfc_seq'], var_name='feature', value_name='value')
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-df_scfc_melted['feature'] = df_scfc_melted['feature'].map({'scfc_sync': r'SC/FC$_{sync}$', 'scfc_seq': r'SC/FC$_{seq}$'})
+df_scfc_melted = df_scfc_melted.copy()
+
+df_scfc_melted['feature'] = df_scfc_melted['feature'].astype(str).str.strip()
+hue_order = ['scfc_sync', 'scfc_seq']
+palette = {'scfc_sync': 'royalblue', 'scfc_seq': 'red'}
 
 fig, ax = plt.subplots(figsize=(8, 4))
 
-sns.boxplot(data=df_scfc_melted, x='cluster', y='value', hue='feature', palette=SCFC_BOX_COLORS, width=0.5, dodge=True, ax=ax)
+sns.boxplot(data=df_scfc_melted, x='cluster', y='value', hue='feature', hue_order=hue_order, palette=palette, width=0.5, dodge=True, ax=ax)
 
-for patch in ax.patches: 
-  patch.set_edgecolor('black')
-  patch.set_linewidth(1.2)
-  
-for line in ax.lines: 
-  line.set_color('black')
-  line.set_linewidth(1.2)
+for patch in ax.patches:
+    patch.set_edgecolor('black')
+    patch.set_linewidth(1.2)
 
-ax.set_ylabel('SC/FC', fontsize=13)
-ax.set_xlabel('Rainfall Cluster', fontsize=13, labelpad=25)
+for line in ax.lines:
+    line.set_color("black")
+    line.set_linewidth(1.2)
+
+ax.set_ylabel('SC-FC', fontsize=13)
+ax.set_xlabel('rainfall cluster', labelpad=32, fontsize=13)
+
+legend_labels = ['(SC-FC)$_{sync}$', '(SC-FC)$_{seq}$']
+
+ax.legend(
+    handles=[plt.Line2D([0], [0], color=palette[k], lw=6) for k in hue_order],
+    labels=legend_labels,
+    loc='upper center',
+    bbox_to_anchor=(0.5, -0.07),
+    fontsize=12,
+    ncol=2
+)
+
 ax.set_ylim(-0.27, 0.8)
 
-ax.legend(title='', fontsize=12, ncol=2, loc='upper center', bbox_to_anchor=(0.5, -0.07))
-
 plt.tight_layout()
-plt.savefig("results/scfc_boxplots_in_clusters.pdf", dpi=300, bbox_inches='tight')
 plt.show()
 
 # -------------------------------
