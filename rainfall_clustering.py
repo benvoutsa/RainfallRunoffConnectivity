@@ -121,11 +121,7 @@ g.ax_heatmap.set_xticklabels(
 
 plt.tight_layout()
 
-plt.savefig(
-    "results/dendrogram.pdf",
-    dpi=300,
-    bbox_inches='tight'
-)
+plt.savefig("results/dendrogram.pdf", dpi=300,bbox_inches='tight')
 
 plt.show()
 
@@ -180,8 +176,8 @@ for line in ax.lines:
     line.set_linewidth(1.2)
 
 # Labels
-ax.set_ylabel('Scaled Rainfall Features', fontsize=13)
-ax.set_xlabel('Rainfall Cluster', fontsize=13, labelpad=20)
+ax.set_ylabel('scaled rainfall features', fontsize=13)
+ax.set_xlabel('rainfall cluster', fontsize=13, labelpad=22)
 
 # Legend
 ax.legend(title='', fontsize=11, ncol=3, loc='upper center',bbox_to_anchor=(0.5, -0.08))
@@ -249,6 +245,7 @@ ax.legend(
 ax.set_ylim(-0.27, 0.8)
 
 plt.tight_layout()
+plt.savefig("results/scfc_boxplots_in_clusters.pdf")
 plt.show()
 
 # -------------------------------
@@ -343,6 +340,5 @@ cbar.set_ticks(np.arange(n_clusters))
 cbar.set_ticklabels([f'Cluster {c}' for c in cluster_nums])
 cbar.ax.tick_params(labelsize=12)
 plt.tight_layout(rect=[0, 0, 0.9, 1])
-plt.show()
-
 plt.savefig("results/scfc_scatter_in_clusters.pdf")
+plt.show()
