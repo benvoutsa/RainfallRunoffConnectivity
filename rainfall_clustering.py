@@ -36,7 +36,7 @@ df_scaled.head()
 Z = linkage(data_scaled, method='ward', metric="euclidean")
 clusters = fcluster(Z, MAX_D, criterion='distance')
 print(len(clusters))
-print("len(df_scaled)")
+print(len(df_scaled))
 df_scaled['cluster'] = clusters
 print(f"Number of clusters after cut (height {MAX_D}): {len(set(clusters))}")
 
