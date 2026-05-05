@@ -311,7 +311,7 @@ for ax, cl in zip(axes, cluster_nums):
 
     ax.grid(True)
 
-    if i == 0:
+    if cl == 1:
         ax.set_ylabel('(SC-FC)$_{seq}$', fontsize=14)
 
     ax.tick_params(labelsize=12)
