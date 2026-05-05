@@ -201,7 +201,7 @@ print(manova.mv_test())
 # SC-FC Boxplots by Cluster
 # -------------------------------
 df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
-print(df_scfcs)
+#print(df_scfcs)
 
 # df2 contais 'cluster', 'scfc_sync', 'scfc_seq'
 df2 = pd.DataFrame({
@@ -213,11 +213,11 @@ df2 = pd.DataFrame({
 df_scfc_melted =  df2.melt(id_vars=['cluster'], 
                     value_vars=['scfc_sync', 'scfc_seq'],
                     var_name='feature', value_name='value')
-
+print(df_scfc_melted)
 df_scfc_melted['feature'] = df_scfc_melted['feature'].astype(str).str.strip()
 hue_order = ['scfc_sync', 'scfc_seq']
 palette = {'scfc_sync': 'royalblue', 'scfc_seq': 'red'}
-
+print(df_scfc_melted)
 fig, ax = plt.subplots(figsize=(8, 4))
 
 sns.boxplot(data=df_scfc_melted, x='cluster', y='value', hue='feature', hue_order=hue_order, palette=palette, width=0.5, dodge=True, ax=ax)
