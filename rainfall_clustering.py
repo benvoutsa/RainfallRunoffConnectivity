@@ -35,7 +35,7 @@ df_scaled.head()
 # -------------------------------
 Z = linkage(data_scaled, method='ward', metric="euclidean")
 clusters = fcluster(Z, MAX_D, criterion='distance')
-print(clusters)
+#print(clusters)
 df_scaled['cluster'] = clusters
 print(f"Number of clusters after cut (height {MAX_D}): {len(set(clusters))}")
 
@@ -254,9 +254,8 @@ df2 = pd.DataFrame({
     'scfc_seq': df_scfcs["scfc_seq"]
 })
 
-clusters = sorted(df2['cluster'].unique())
-print(clusters)
-n_clusters = len(clusters)
+
+n_clusters = len(set(clusters))
 cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 
 print(n_clusters)
