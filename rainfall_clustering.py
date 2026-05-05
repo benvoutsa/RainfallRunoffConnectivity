@@ -269,6 +269,7 @@ if n_clusters == 1:
   
 # Map cluster label → color
 cluster_color_map = dict(zip(clusters, cluster_colors))
+print(cluster_color_map)
 
 # -----------------------------
 # Axis limits (shared scaling)
@@ -281,6 +282,8 @@ min_val, max_val = all_vals.min() - buffer, all_vals.max() + buffer
 # Scatter plots per cluster
 # -----------------------------
 for ax, cl in zip(axes, cluster_labels):
+    print(ax, cl)
+    print(cluster_color_mapp[cl])
     data = df2[df2['cluster'] == cl]
 
     ax.scatter(
