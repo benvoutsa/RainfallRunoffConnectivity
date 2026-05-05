@@ -261,7 +261,7 @@ cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 
 print(n_clusters)
 
-fig, axes = plt.subplots(0, n_clusters-1, figsize=(14,2), sharex=True, sharey=True)
+fig, axes = plt.subplots(1, n_clusters, figsize=(14,2), sharex=True, sharey=True)
 cluster_colors = CUSTOM_COLORS
 
 if n_clusters == 1:
@@ -280,7 +280,7 @@ min_val, max_val = all_vals.min() - buffer, all_vals.max() + buffer
 # -----------------------------
 # Scatter plots per cluster
 # -----------------------------
-for i, cl in enumerate(clusters):
+for ax, cl in zip(axes, cluster_labels):
     ax = axes[i]
     data = df2[df2['cluster'] == cl]
 
