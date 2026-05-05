@@ -36,6 +36,7 @@ df_scaled.head()
 Z = linkage(data_scaled, method='ward', metric="euclidean")
 clusters = fcluster(Z, MAX_D, criterion='distance')
 df_scaled['cluster'] = clusters
+print(f"Number of clusters after cut (height {MAX_D}): {len(set(clusters))}")
 
 # -------------------------------
 # Dendrogram / Clustermap
@@ -141,8 +142,8 @@ plt.ylabel("Silhouette Score")
 plt.title("Silhouette Scores for Different Numbers of Clusters")
 plt.show()
 
-optimal_clusters = range_clusters[np.argmax(silhouette_scores)]
-print(f"Optimal number of clusters based on silhouette score: {optimal_clusters}")
+#optimal_clusters = range_clusters[np.argmax(silhouette_scores)]
+#print(f"Optimal number of clusters based on silhouette score: {optimal_clusters}")
 
 # -------------------------------
 # Boxplots of Scaled Features by Cluster
