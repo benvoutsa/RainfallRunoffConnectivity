@@ -134,7 +134,7 @@ for k in range(2, 11):
     silhouette_scores.append(silhouette_score(data_scaled, cluster_labels))
 
 plt.figure(figsize=(8,5))
-plt.plot(range(2, 11), scores, marker='o', linestyle='--')
+plt.plot(range(2, 11), silhouette_scores, marker='o', linestyle='--')
 plt.xlabel("Number of Clusters")
 plt.ylabel("Silhouette Score")
 plt.title("Silhouette Scores for Different Numbers of Clusters")
