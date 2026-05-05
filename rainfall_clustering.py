@@ -259,7 +259,7 @@ cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 
 print(n_clusters)
 
-fig, axes = plt.subplots(1, n_clusters, figsize=(14,2), sharex=True, sharey=True)
+fig, axes = plt.subplots(1, n_clusters, figsize=(12,2), sharex=True, sharey=True)
 cluster_colors = CUSTOM_COLORS
 print(cluster_colors)
 
@@ -321,8 +321,8 @@ fig.supxlabel('(SC-FC)$_{sync}$', fontsize=14)
 # -----------------------------
 cmap = ListedColormap(cluster_colors[:n_clusters])
 
-# IMPORTANT:
-# centers each cluster at integer positions: 0,1,2,...
+
+# centers each cluster at integer positions
 bounds = np.arange(n_clusters + 1) - 0.5
 norm = BoundaryNorm(bounds, cmap.N)
 
@@ -332,7 +332,7 @@ sm.set_array([])
 # space for colorbar
 fig.subplots_adjust(right=0.85)
 
-cbar_ax = fig.add_axes([0.92, 0.25, 0.012, 0.65])
+cbar_ax = fig.add_axes([0.92, 0.28, 0.012, 0.65])
 
 cbar = fig.colorbar(sm, cax=cbar_ax, orientation='vertical')
 
