@@ -129,7 +129,8 @@ plt.show()
 # Silhouette Analysis
 # -------------------------------
 silhouette_scores = []
-for k in range(2, 11):
+range_clusters = range(2, 11)
+for k in range_clusters:
     cluster_labels = fcluster(Z, k, criterion='maxclust')
     silhouette_scores.append(silhouette_score(data_scaled, cluster_labels))
 
