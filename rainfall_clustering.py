@@ -255,6 +255,7 @@ df2 = pd.DataFrame({
 })
 
 clusters = sorted(df2['cluster'].unique())
+print(clusters)
 n_clusters = len(clusters)
 cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 
