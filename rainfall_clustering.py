@@ -202,10 +202,9 @@ df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
 print(len(df_scaled), len(df_scfcs))
 print(df_scaled.index.equals(df_scfcs.index))
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-df_scfc_melted = df_scfc_melted.copy()
+df_scfc_melted =  df_scfcs.melt(id_vars=['cluster'], 
+                    value_vars=['scfc_sync', 'scfc_seq'],
+                    var_name='feature', value_name='value')
 
 df_scfc_melted['feature'] = df_scfc_melted['feature'].astype(str).str.strip()
 hue_order = ['scfc_sync', 'scfc_seq']
