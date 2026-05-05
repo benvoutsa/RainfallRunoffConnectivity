@@ -257,6 +257,7 @@ plt.show()
 
 
 n_clusters = len(set(clusters))
+cluster_nums = np.sort(np.unique(clusters))
 cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 
 print(n_clusters)
@@ -269,9 +270,9 @@ if n_clusters == 1:
     axes = [axes]
   
 # Map cluster label → color
-cluster_color_map = dict(zip(cluster_labels, cluster_colors))
+cluster_color_map = dict(zip(cluster_nums, cluster_colors))
 print(cluster_color_map)
-print(cluster_labels)
+print(cluster_nums)
 # -----------------------------
 # Axis limits (shared scaling)
 # -----------------------------
@@ -282,7 +283,7 @@ min_val, max_val = all_vals.min() - buffer, all_vals.max() + buffer
 # -----------------------------
 # Scatter plots per cluster
 # -----------------------------
-for ax, cl in zip(axes, cluster_labels):
+for ax, cl in zip(axes, cluster_nums):
     print(ax, cl)
     print(cluster_color_map[cl])
     data = df2[df2['cluster'] == cl]
