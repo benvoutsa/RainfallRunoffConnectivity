@@ -277,7 +277,8 @@ min_val, max_val = all_vals.min()-0.05, all_vals.max()+0.05
 #     ax.set_xlabel('SC/FC_sync')
 #     ax.grid(True)
 
-for i, cl in enumerate(clusters):
+cluster_labels = np.sort(np.unique(clusters))
+for i, cl in enumerate(cluster_labels):
     ax = axes[i]
     data = df2[df2['cluster'] == cl]
 
