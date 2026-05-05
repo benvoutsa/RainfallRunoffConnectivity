@@ -338,8 +338,7 @@ cbar = fig.colorbar(sm, cax=cbar_ax, orientation='vertical')
 cbar.set_ticks(np.arange(n_clusters))
 cbar.set_ticklabels([f'Cluster {c}' for c in clusters])
 cbar.ax.tick_params(labelsize=12)
-
-  
 plt.tight_layout(rect=[0, 0, 0.9, 1])
-plt.savefig("results/scfc_scatter_in_clusters.pdf")
 plt.show()
+
+plt.savefig("results/scfc_scatter_in_clusters.pdf")
