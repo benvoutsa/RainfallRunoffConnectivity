@@ -38,7 +38,7 @@ clusters = fcluster(Z, MAX_D, criterion='distance')
 #print(len(clusters))
 #print(len(df_scaled))
 df_scaled['cluster'] = clusters
-print(df_scaled)
+#print(df_scaled)
 print(f"Number of clusters after cut (height {MAX_D}): {len(set(clusters))}")
 
 # -------------------------------
@@ -262,7 +262,7 @@ cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 print(n_clusters)
 
 fig, axes = plt.subplots(1, n_clusters, figsize=(14,2), sharex=True, sharey=True)
-if n_clusters==1: axes=[axes]
+#if n_clusters==1: axes=[axes]
 
 all_vals = pd.concat([df2['scfc_sync'], df2['scfc_seq']])
 min_val, max_val = all_vals.min()-0.05, all_vals.max()+0.05
@@ -277,7 +277,7 @@ min_val, max_val = all_vals.min()-0.05, all_vals.max()+0.05
 #     if i==0: ax.set_ylabel('SC/FC_seq')
 #     ax.set_xlabel('SC/FC_sync')
 #     ax.grid(True)
-
+print(df2)
 cluster_labels = np.sort(np.unique(clusters))
 for i, cl in enumerate(cluster_labels):
     #print(i, cl)
@@ -297,17 +297,17 @@ for i, cl in enumerate(cluster_labels):
         ax.set_ylabel(r'(SC-FC)$_{seq}$', fontsize=14)
     ax.grid(True)
 
-# add colorbar
-cmap = mpl.colors.ListedColormap(CUSTOM_COLORS[:n_clusters])
-norm = mpl.colors.BoundaryNorm(range(len(cluster_labels) + 1),cmap.N)
+# # add colorbar
+# cmap = mpl.colors.ListedColormap(CUSTOM_COLORS[:n_clusters])
+# norm = mpl.colors.BoundaryNorm(range(len(cluster_labels) + 1),cmap.N)
 
-sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
-sm.set_array([])
-# ---- Colorbar axis ----
-cax = fig.add_axes([0.91, 0.30, 0.012, 0.62])
+# sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+# sm.set_array([])
+# # ---- Colorbar axis ----
+# cax = fig.add_axes([0.91, 0.30, 0.012, 0.62])
 
-cbar = fig.colorbar(sm, cax=cax, ticks=[i + 0.5 for i in range(len(cluster_labels))])
-cbar.set_ticklabels([f"Cluster {c}" for c in cluster_labels])
+# cbar = fig.colorbar(sm, cax=cax, ticks=[i + 0.5 for i in range(len(cluster_labels))])
+# cbar.set_ticklabels([f"Cluster {c}" for c in cluster_labels])
   
 plt.tight_layout(rect=[0, 0, 0.9, 1])
 plt.savefig("results/scfc_scatter_in_clusters.pdf")
