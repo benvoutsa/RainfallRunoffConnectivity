@@ -340,7 +340,7 @@ cbar_ax = fig.add_axes([0.88, 0.15, 0.02, 0.7])
 cbar = fig.colorbar(sm, cax=cbar_ax, orientation='vertical')
 
 cbar.set_ticks(np.arange(n_clusters))
-cbar.set_ticklabels([f'Cluster {c}' for c in clusters])
+cbar.set_ticklabels([f'Cluster {c}' for c in cluster_nums])
 cbar.ax.tick_params(labelsize=12)
 plt.tight_layout(rect=[0, 0, 0.9, 1])
 plt.show()
