@@ -200,8 +200,8 @@ print(manova.mv_test())
 
 SCFC_BOX_COLORS = ['royalblue', 'red']
 
-df_scfc_melted = pd.DataFrame({'cluster': df_scaled['cluster'], 'scfc_sync': df_scfcs['scfc_sync'], 
-                               'scfc_seq': df_scfcs['scfc_seq']}).melt(id_vars='cluster', 
+df_scfc_melted = pd.DataFrame({'cluster': df_scaled['cluster'], 'scfc_sync': df_scfcs_all['scfc_sync'], 
+                               'scfc_seq': df_scfcs_all['scfc_seq']}).melt(id_vars='cluster', 
                             value_vars=['scfc_sync', 'scfc_seq'], var_name='feature', value_name='value')
 
 df_scfc_melted['feature'] = df_scfc_melted['feature'].map({'scfc_sync': r'SC/FC$_{sync}$', 'scfc_seq': r'SC/FC$_{seq}$'})
@@ -231,15 +231,15 @@ plt.show()
 # -------------------------------
 #  SC-FC Scatter Plots by Cluster
 # -------------------------------
-df_scfcs = pd.read_csv(SCFCS_FILE, index_col=0)
-print(len(df_scaled), len(df_scfcs))
-print(df_scaled.index.equals(df_scfcs.index))
+df_scfcs_all = pd.read_csv(SCFCS_FILE, index_col=0)
+print(len(df_scaled), len(df_scfcs_all))
+print(df_scaled.index.equals(df_scfcs_all.index))
 
 # df2 contais 'cluster', 'scfc_sync', 'scfc_seq'
 df2 = pd.DataFrame({
     'cluster': df_scaled['cluster'],
-    'scfc_sync': df_scfcs["scfc_sync"],
-    'scfc_seq': df_scfcs["scfc_seq"]
+    'scfc_sync': df_scfcs_all["scfc_sync"],
+    'scfc_seq': df_scfcs_all["scfc_seq"]
 })
 
 clusters = sorted(df2['cluster'].unique())
