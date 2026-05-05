@@ -262,7 +262,7 @@ cluster_map = dict(zip(clusters, CUSTOM_COLORS[:n_clusters]))
 print(n_clusters)
 
 fig, axes = plt.subplots(1, n_clusters, figsize=(14,2), sharex=True, sharey=True)
-cluster_colors = custom_colors  # must have length >= n_clusters
+cluster_colors = CUSTOM_COLORS
 
 if n_clusters == 1:
     axes = [axes]
