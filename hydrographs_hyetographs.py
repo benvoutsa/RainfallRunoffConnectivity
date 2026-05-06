@@ -230,10 +230,10 @@ for i, (e1, e2) in enumerate(event_pairs):
 
      
     # Extract the numeric part of the string
-    if e1.split("_")[1] > 178:
-        e1 = f"event_{e1.split("_")[1] + 1}"
-    if e2.split("_")[1] > 178:
-        e2 = f"event_{e2.split("_")[1] + 1}"
+    if int(e1.split("_")[1]) > 178:
+        e1 = f"event_{int(e1.split("_")[1]) + 1}"
+    if int(e2.split("_")[1]) > 178:
+        e2 = f"event_{int(e2.split("_")[1]) + 1}"
         
     # ============================================================
     # figure: 1 row, 2 columns
