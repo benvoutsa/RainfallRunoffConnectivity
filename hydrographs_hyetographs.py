@@ -222,22 +222,17 @@ event_pairs = [
     ("event_45", "event_201"),
 ]
 
-def adjust_event_label(label):
-    # Extract the numeric part of the string
-    prefix, num = label.split('_')
-    num = int(num)
-    # Reduce numbers from 'event_178' onwards
-    if num > 178:
-        return f"{prefix}_{num - 1}"
-    return label
-
-rainfall_events['event_label'] = rainfall_events['event_label'].apply(adjust_event_label)
 
 output_dir = "results"
 os.makedirs(output_dir, exist_ok=True)
 
 for i, (e1, e2) in enumerate(event_pairs):
 
+    if e1 > 178:
+        e1 = e1+1
+    if e2 > 178:
+        e2 = e2 + 1
+        
     # ============================================================
     # figure: 1 row, 2 columns
     # ============================================================
