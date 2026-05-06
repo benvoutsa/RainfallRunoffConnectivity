@@ -222,6 +222,16 @@ event_pairs = [
     ("event_45", "event_201"),
 ]
 
+def adjust_event_label(label):
+    # Extract the numeric part of the string
+    prefix, num = label.split('_')
+    num = int(num)
+    # Reduce numbers from 'event_178' onwards
+    if num > 178:
+        return f"{prefix}_{num - 1}"
+    return label
+
+rainfall_events['event_label'] = rainfall_events['event_label'].apply(adjust_event_label)
 
 output_dir = "results"
 os.makedirs(output_dir, exist_ok=True)
@@ -231,12 +241,7 @@ for i, (e1, e2) in enumerate(event_pairs):
     # ============================================================
     # figure: 1 row, 2 columns
     # ============================================================
-    fig, axes = plt.subplots(
-        1,
-        2,
-        figsize=(14, 5),
-        sharey=False
-    )
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=False)
 
     ax1, ax2 = axes
 
@@ -248,14 +253,7 @@ for i, (e1, e2) in enumerate(event_pairs):
     # ============================================================
     runoff1 = get_runoff_event(runoff_trees, e1)
 
-    plot_event(
-        ax1,
-        ax1_rain,
-        e1,
-        rainfall_events,
-        runoff1,
-        color_map
-    )
+    plot_event(ax1,ax1_rain,e1, rainfall_events, runoff1,color_map)
 
     ax1.set_title(e1, fontsize=13)
 
@@ -268,15 +266,11 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         runoff1_max = max([
             float(cfs_to_m3(data).max().values)
-            for data in runoff1.data_vars.values()
-        ])
+            for data in runoff1.data_vars.values()])
 
     runoff1_padding = runoff1_max * 0.20
 
-    ax1.set_ylim(
-        0,
-        runoff1_max + runoff1_padding
-    )
+    ax1.set_ylim(0, runoff1_max + runoff1_padding)
 
     ax1.margins(y=0)
 
@@ -306,14 +300,7 @@ for i, (e1, e2) in enumerate(event_pairs):
     # ============================================================
     runoff2 = get_runoff_event(runoff_trees, e2)
 
-    plot_event(
-        ax2,
-        ax2_rain,
-        e2,
-        rainfall_events,
-        runoff2,
-        color_map
-    )
+    plot_event(ax2,ax2_rain,e2,rainfall_events, runoff2,color_map)
 
     ax2.set_title(e2, fontsize=13)
 
@@ -331,10 +318,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
     runoff2_padding = runoff2_max * 0.20
 
-    ax2.set_ylim(
-        0,
-        runoff2_max + runoff2_padding
-    )
+    ax2.set_ylim(0,runoff2_max + runoff2_padding)
 
     ax2.margins(y=0)
 
@@ -347,15 +331,11 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         rain2_max = max([
             float(data.max().values)
-            for data in ds_rain2.data_vars.values()
-        ])
+            for data in ds_rain2.data_vars.values()])
 
         rain2_padding = rain2_max * 0.40
 
-        ax2_rain.set_ylim(
-            rain2_max + rain2_padding,
-            0
-        )
+        ax2_rain.set_ylim(rain2_max + rain2_padding,0)
 
         ax2_rain.margins(y=0)
 
@@ -366,10 +346,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         ax.set_xlabel("Time", fontsize=11)
 
-        ax.tick_params(
-            axis="both",
-            labelsize=10
-        )
+        ax.tick_params(axis="both",labelsize=10)
 
         ax.set_ylabel(
             "Runoff (m³/s)",
@@ -489,7 +466,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
             fig.text(
                 bbox1.x1,
-                bbox1.y0 - 0.8,
+                bbox1.y0 - 0.4,
                 date1,
                 ha="right",
                 va="top",
@@ -512,7 +489,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
             fig.text(
                 bbox2.x1,
-                bbox2.y0 - 0.8,
+                bbox2.y0 - 0.4,
                 date2,
                 ha="right",
                 va="top",
