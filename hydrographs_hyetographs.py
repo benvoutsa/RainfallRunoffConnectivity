@@ -228,10 +228,12 @@ os.makedirs(output_dir, exist_ok=True)
 
 for i, (e1, e2) in enumerate(event_pairs):
 
-    if e1 > 178:
-        e1 = e1+1
-    if e2 > 178:
-        e2 = e2 + 1
+     
+    # Extract the numeric part of the string
+    if e1.split("_")[1] > 178:
+        e1 = f"event_{e1.split("_")[1] + 1}"
+    if e2.split("_")[1] > 178:
+        e2 = f"event_{e2.split("_")[1] + 1}"
         
     # ============================================================
     # figure: 1 row, 2 columns
