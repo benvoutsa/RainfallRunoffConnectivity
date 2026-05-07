@@ -80,20 +80,56 @@ ds_rainfall_events = build_rainfall_events(runoff_trees, df_rainfall, rainfall_d
 # Feature extraction
 # -------------------------------
 
+# number_of_gauges = []
+# days_without_rain = []
+# i = -1
+# for key in tree_keys:
+#     i += 1
+#     df = ds_rainfall_events[key].to_pandas()
+#     number_of_gauges.append(len(df.columns))
+#     print(df.columns)
+#     threshold = rainfall_dates[rainfall_dates['event_label'] == key].start_time.item() 
+#     #t_minus1 = (df[(df['Real_Time'] <= threshold) & \
+#     #(df['Gage'].isin(np.unique(df['Gage'])))][-20:].iloc[-2].Real_Time)
+#     #time_delta = threshold - t_minus1
+#     #print(i, key, threshold, t_minus1)
+#     #days_without_rain.append(round(time_delta / pd.Timedelta(hours=1)))
+
 number_of_gauges = []
 days_without_rain = []
-i = -1
+
+previous_end = None
+
+tree_keys = sorted(
+    tree_keys,
+    key=lambda k: pd.Timestamp(ds_rainfall_events[k].time.values[0])
+)
+
 for key in tree_keys:
-    i += 1
-    df = ds_rainfall_events[key].to_pandas()
+
+    ds_event = ds_rainfall_events[key]
+    df = ds_event.to_pandas()
+
+    # Number of gauges
     number_of_gauges.append(len(df.columns))
-    print(df.columns)
-    threshold = rainfall_dates[rainfall_dates['event_label'] == key].start_time.item() 
-    #t_minus1 = (df[(df['Real_Time'] <= threshold) & \
-    #(df['Gage'].isin(np.unique(df['Gage'])))][-20:].iloc[-2].Real_Time)
-    #time_delta = threshold - t_minus1
-    #print(i, key, threshold, t_minus1)
-    #days_without_rain.append(round(time_delta / pd.Timedelta(hours=1)))
+
+    # Current event start time
+    current_start = pd.Timestamp(ds_event.time.values[0])
+
+    # First event
+    if previous_end is None:
+        days_without_rain.append(np.nan)
+
+    else:
+        dry_days = round(
+            (current_start - previous_end) / pd.Timedelta(days=1),
+            2
+        )
+
+        days_without_rain.append(dry_days)
+
+    # Save current event end time
+    previous_end = pd.Timestamp(ds_event.time.values[-1])
 
     
 print(days_without_rain)
