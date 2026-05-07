@@ -9,7 +9,7 @@ import datatree as dtree
 import xarray as xr
 
 from rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, build_rainfall_windows, extract_event_rainfall,\
-    trim_zero_rainfall, downsample_rainfall_events, load_flume_raingauge_mapping
+    build_rainfall_events, trim_zero_rainfall, downsample_rainfall_events, load_flume_raingauge_mapping
 
 
 from runoff_functions import load_runoff_trees, load_runoff_dates
