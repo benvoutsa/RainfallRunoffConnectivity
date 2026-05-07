@@ -93,7 +93,7 @@ for key in tree_keys:
     (df_rainfall['Gage'].isin(np.unique(df_rainfall['Gage'])))][-20:].iloc[-2].Real_Time)
     time_delta = threshold - t_minus1
     #print(i, key, threshold, t_minus1)
-    days_without_rain.append(round(time_delta / pd.Timedelta(hours=1)))
+    days_without_rain.append(round(time_delta / pd.Timedelta(days=1)))
 
     
 print(days_without_rain)
