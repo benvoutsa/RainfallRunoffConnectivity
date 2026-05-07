@@ -225,9 +225,9 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         ax_fc.set_title(f"{event_label} - FC_seq", fontsize=12)
 
-        ax_fc.set_xticks(np.arange(len(flume_labels))); ax_fc.set_yticks(np.arange(len(flume_labels)))
+        #ax_fc.set_xticks(np.arange(len(flume_labels))); ax_fc.set_yticks(np.arange(len(flume_labels)))
 
-        ax_fc.set_xticklabels(flume_labels, rotation=90, fontsize=7); ax_fc.set_yticklabels(flume_labels, fontsize=7)
+        #ax_fc.set_xticklabels(flume_labels, rotation=90, fontsize=7); ax_fc.set_yticklabels(flume_labels, fontsize=7)
 
         ax_fc.xaxis.set_ticks_position("bottom"); ax_fc.invert_yaxis()
 
