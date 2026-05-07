@@ -83,7 +83,7 @@ dayswithoutrain = []
 
 for key in tree_keys:
     df = ds_rainfall_events[key].to_pandas()
-    number_of_gauges.append(df.columns)
+    number_of_gauges.append(len(df.columns))
 
 print(number_of_gauges)
 
