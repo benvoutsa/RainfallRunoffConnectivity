@@ -337,7 +337,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
     cax1 = fig.add_axes([
         bbox1.x0 + 0.03,
-        bbox1.y0 - 0.10,
+        bbox1.y0 - 0.14,
         bbox1.width - 0.06,
         0.025
     ])
@@ -376,7 +376,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
     cax2 = fig.add_axes([
         bbox2.x0 + 0.03,
-        bbox2.y0 - 0.10,
+        bbox2.y0 - 0.14,
         bbox2.width - 0.06,
         0.025
     ])
@@ -419,7 +419,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
             fig.text(
                 bbox1.x1,
-                bbox1.y0 - 0.4,
+                bbox1.y0 - 0.1,
                 date1,
                 ha="right",
                 va="top",
@@ -442,7 +442,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
             fig.text(
                 bbox2.x1,
-                bbox2.y0 - 0.4,
+                bbox2.y0 - 0.1,
                 date2,
                 ha="right",
                 va="top",
