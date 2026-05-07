@@ -215,10 +215,10 @@ for i, (e1, e2) in enumerate(event_pairs):
         ax_hydro.set_xlabel("Time"); ax_hydro.set_ylabel("Runoff (m³/s)"); ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
         df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
-        print(df_event.head())
-        print(runoff_ds.to_dataframe().reindex(columns=flume_labels).head())
+        #print(df_event.head())
         
         fc_sim = df_event.corr().fillna(0).to_numpy()
+        preint(fc_sim)
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
         
         im = ax_fc.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
