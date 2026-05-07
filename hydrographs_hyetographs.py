@@ -235,7 +235,7 @@ for i, (e1, e2) in enumerate(event_pairs):
     plt.tight_layout()
 
     outpath = os.path.join(output_dir, f"event_pair_{i+1}.pdf")
-
+    plt.show()
     plt.savefig(outpath, bbox_inches="tight"); plt.close(fig)
 
     print(f"Saved: {outpath}")
