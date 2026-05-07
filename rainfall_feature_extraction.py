@@ -88,9 +88,9 @@ for key in tree_keys:
     df = ds_rainfall_events[key].to_pandas()
     number_of_gauges.append(len(df.columns))
 
-    threshold = rainfall_dates[rainfall_dates['event_label'] == key].start_time.item() #rainfall_dfs_clean[key].Real_Time.min()
-    t_minus1 = (df_rainfall_clean[(df_rainfall_clean['Real_Time'] <= threshold) & \
-    (df_rainfall_clean['Gage'].isin(np.unique(rainfall_dfs_clean[key]['Gage'])))][-20:].iloc[-2].Real_Time)
+    threshold = rainfall_dates[rainfall_dates['event_label'] == key].start_time.item() 
+    t_minus1 = (df[(df['Real_Time'] <= threshold) & \
+    (df['Gage'].isin(np.unique(df['Gage'])))][-20:].iloc[-2].Real_Time)
     time_delta = threshold - t_minus1
     #print(i, key, threshold, t_minus1)
     days_without_rain.append(round(time_delta / pd.Timedelta(hours=1)))
