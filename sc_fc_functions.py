@@ -10,7 +10,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 FLUME_COORDS_FILE = DATA_DIR / "flume_coordinates.csv"
 FLUME_AREA_FILE = DATA_DIR / "Flume_watersheds.csv"
 EDGE_LIST_FILE = DATA_DIR / "edgelist.csv"
-SC_SEQ_FILE = DATA_DIR / "adj_seq.csv"
+SC_SEQ_FILE = DATA_DIR / "df_seq_extended.csv"
 
 DISTANCE_SCALE_KM = 1000
 
@@ -58,16 +58,16 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     df_sc_sim['weight_dist'] = [1 / np.round(dist / DISTANCE_SCALE_KM, 2).item() for dist in distances]
 
     # Contributing area weights
-    contr_area_weights = []
-    for i, row in df_sc_sim.iterrows():
-        area1 = df_contributing_area[df_contributing_area["Flume"] == row['flume_1']]["Contributing_area_km2"].iloc[0]
-        area2 = df_contributing_area[df_contributing_area["Flume"] == row['flume_2']]["Contributing_area_km2"].iloc[0]
-        contr_area_weights.append(min(area1, area2) / max(area1, area2))
-    df_sc_sim['weight_contr_area'] = contr_area_weights
+    # contr_area_weights = []
+    # for i, row in df_sc_sim.iterrows():
+    #     area1 = df_contributing_area[df_contributing_area["Flume"] == row['flume_1']]["Contributing_area_km2"].iloc[0]
+    #     area2 = df_contributing_area[df_contributing_area["Flume"] == row['flume_2']]["Contributing_area_km2"].iloc[0]
+    #     contr_area_weights.append(min(area1, area2) / max(area1, area2))
+    # df_sc_sim['weight_contr_area'] = contr_area_weights
 
-    # Combined weight
-    df_sc_sim['weight'] = 0.5 * df_sc_sim['weight_dist'] + \
-                          0.5 * df_sc_sim['weight_contr_area']
+    # Combined weight (the final results include only the inverse Euclidean distance)
+    df_sc_sim['weight'] = 0.5 * df_sc_sim['weight_dist'] #+ \
+                          #0.5 * df_sc_sim['weight_contr_area']
 
     # Create adjacency matrix
     flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
