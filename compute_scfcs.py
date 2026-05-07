@@ -23,7 +23,7 @@ RUNOFF_FILES = [
     DATA_DIR / "runoff/runoff_2014_2024.nc"
 ]
 
-OUTPUT_FILE = RESULTS_DIR / "scfc_results.csv"
+OUTPUT_FILE = RESULTS_DIR / "scfc_results_updated.csv"
 
 def main():
     all_results = []
