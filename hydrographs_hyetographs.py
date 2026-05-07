@@ -217,7 +217,13 @@ for i, (e1, e2) in enumerate(event_pairs):
         df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
         #print(df_event.head())
         
-        fc_sim = df_event.corr().fillna(0).to_numpy()
+        df_complete = pd.DataFrame(columns=flumes_ordered_by_contr_area_str)
+        common_columns = df_complete.columns.intersection(df_event.columns)
+    
+        # Map the common columns to the "patent" DataFrame
+        df_complete[common_columns] = df_event[common_columns]
+
+        fc_sim = df_complete.corr().fillna(0).to_numpy()
         print(fc_sim)
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
         
@@ -225,9 +231,8 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         ax_fc.set_title(f"{event_label} - FC_seq", fontsize=12)
 
-        #ax_fc.set_xticks(np.arange(len(flume_labels))); ax_fc.set_yticks(np.arange(len(flume_labels)))
-
-        #ax_fc.set_xticklabels(flume_labels, rotation=90, fontsize=7); ax_fc.set_yticklabels(flume_labels, fontsize=7)
+        ax_fc.set_xticks(np.arange(len(flume_labels))); ax_fc.set_yticks(np.arange(len(flume_labels)))
+        ax_fc.set_xticklabels(flume_labels, rotation=90, fontsize=7); ax_fc.set_yticklabels(flume_labels, fontsize=7)
 
         ax_fc.xaxis.set_ticks_position("bottom"); ax_fc.invert_yaxis()
 
