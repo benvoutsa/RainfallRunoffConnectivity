@@ -8,7 +8,7 @@ import matplotlib.dates as mdates
 import datatree as dtree
 import xarray as xr
 
-from rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, build_rainfall_windows, extract_event_rainfall,
+from rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, build_rainfall_windows, extract_event_rainfall,\
     trim_zero_rainfall, downsample_rainfall_events, load_flume_raingauge_mapping
 
 
