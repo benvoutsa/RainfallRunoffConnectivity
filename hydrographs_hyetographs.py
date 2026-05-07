@@ -235,7 +235,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         print(df_complete)
         fc_sim = df_complete.corr().fillna(0).to_numpy()
         print(fc_sim)
-        fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
+        fc_seq = compute_fc_seq_for_event(df_event, flume_order, df_edges_seq)
         
         im = ax_fc.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
 
