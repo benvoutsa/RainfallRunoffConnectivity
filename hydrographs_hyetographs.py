@@ -17,6 +17,15 @@ from runoff_functions import load_runoff_trees, load_runoff_dates
 
 from sc_fc_functions import load_flume_coordinates, load_contributing_areas, load_edge_list, compute_sc_sim, compute_fc_seq_for_event
 
+import yaml
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+flume_order = config["flume_order"]
+
+print(flume_order)
+
 # ------------------------------------------------------------
 # PATHS
 # ------------------------------------------------------------
@@ -216,7 +225,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
         #print(df_event.head())
-        
+        flume_labels = [f"flume_{i}" for i in flume_order]
         df_complete = pd.DataFrame(columns=flume_labels)
         common_columns = df_complete.columns.intersection(df_event.columns)
         print(df_complete)
