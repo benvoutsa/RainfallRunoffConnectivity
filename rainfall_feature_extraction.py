@@ -33,6 +33,8 @@ OUTPUT_FEATURES_FILE = "data/df_rainfall_features_test.csv"
 RUNOFF_EVENT_FILES = ["data/runoff_events_2000_2006.nc", "data/runoff_events_2007_2013.nc", "data/runoff_events_2014_2024.nc"]
 RUNOFF_DATES_FILES = ["data/dates_of_runoff_events_2000_2006.csv", "data/dates_of_runoff_events_2007_2013.csv", "data/dates_of_runoff_events_2014_2024.csv"]
 
+RAINFALL_EVENT_FILES = ["data/rainfall/rainfall_events_2000_2006.nc", "data/rainfall/rainfall_events_2007_2013.nc", "data/rainfall/rainfall_events_2014_2024.nc"]
+
 # -------------------------------
 #  config variables
 #--------------------------------
@@ -79,13 +81,24 @@ ds_rainfall_events = build_rainfall_events(runoff_trees, df_rainfall, rainfall_d
 # -------------------------------
 
 number_of_gauges = []
-dayswithoutrain = []
-
+days_without_rain = []
+i = -1
 for key in tree_keys:
+    i += 1
     df = ds_rainfall_events[key].to_pandas()
     number_of_gauges.append(len(df.columns))
 
-print(number_of_gauges)
+    threshold = rainfall_dates[rainfall_dates['event_label'] == key].start_time.item() #rainfall_dfs_clean[key].Real_Time.min()
+    t_minus1 = (df_rainfall_clean[(df_rainfall_clean['Real_Time'] <= threshold) & \
+    (df_rainfall_clean['Gage'].isin(np.unique(rainfall_dfs_clean[key]['Gage'])))][-20:].iloc[-2].Real_Time)
+    time_delta = threshold - t_minus1
+    #print(i, key, threshold, t_minus1)
+    days_without_rain.append(round(time_delta / pd.Timedelta(hours=1)))
+
+    
+print(days_without_rain)
+#rainfall_trees = load_runoff_trees(RAINFALL_EVENT_FILES)
+#event_labels = get_all_event_labels(rainfall_trees)
 
 
 df_rainfall_features = pd.DataFrame(columns=['numberofgauges', 'durationmin', 'averageintensity', 'maxrollingintensity'])
