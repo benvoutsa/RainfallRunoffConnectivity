@@ -22,7 +22,7 @@ import yaml
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
-flume_order = config["flume_order"]
+flume_order = config["runoff"]["flume_order"]
 
 print(flume_order)
 
