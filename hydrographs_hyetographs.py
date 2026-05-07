@@ -205,21 +205,17 @@ for i, (e1, e2) in enumerate(event_pairs):
         plot_event(ax_hydro, ax_rain, event_label, rainfall_events, runoff_ds, color_map)
 
         ax_hydro.set_title(event_label, fontsize=13)
-
         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
-
         ax_hydro.set_ylim(0, runoff_max * 1.2)
 
         if event_label in rainfall_events:
-
             rain_max = max([float(data.max().values) for data in rainfall_events[event_label].data_vars.values()])
-
             ax_rain.set_ylim(rain_max * 1.4, 0)
 
         ax_hydro.set_xlabel("Time"); ax_hydro.set_ylabel("Runoff (m³/s)"); ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
-        df_event = runoff_ds.to_dataframe().reindex(columns=flume_labels)
-
+        df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
+        print(df_event.head())
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
 
         im = ax_fc.matshow(fc_seq, vmin=-1, vmax=1, cmap="coolwarm_r")
