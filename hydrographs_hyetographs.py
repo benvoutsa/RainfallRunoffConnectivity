@@ -219,10 +219,11 @@ for i, (e1, e2) in enumerate(event_pairs):
         
         df_complete = pd.DataFrame(columns=flume_labels)
         common_columns = df_complete.columns.intersection(df_event.columns)
-    
+        print(df_complete)
+        print(common_columns)
         # Map the common columns to the "patent" DataFrame
         df_complete[common_columns] = df_event[common_columns]
-
+        print(df_complete)
         fc_sim = df_complete.corr().fillna(0).to_numpy()
         print(fc_sim)
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
