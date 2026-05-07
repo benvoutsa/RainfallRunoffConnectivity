@@ -224,7 +224,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         ax_hydro.set_xlabel("Time"); ax_hydro.set_ylabel("Runoff (m³/s)"); ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
         df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
-        #print(df_event.head())
+        print(df_event.head())
         flume_labels = [f"flume_{i}" for i in flume_order]
         df_complete = pd.DataFrame(columns=flume_labels)
         common_columns = df_complete.columns.intersection(df_event.columns)
