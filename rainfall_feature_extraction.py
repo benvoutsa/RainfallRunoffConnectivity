@@ -78,63 +78,54 @@ ds_rainfall_events = build_rainfall_events(runoff_trees, df_rainfall, rainfall_d
 # Feature extraction
 # -------------------------------
 
-df_rainfall_features = pd.DataFrame(columns=[
-    'number of gauges', 'duration', 'average intensity (mm/hr)', 'max window intensity (mm/hr)'
-])
-
-print("Rainfall events available:")
-print(list(ds_rainfall_events.keys()))
-
-missing_keys = [k for k in tree_keys if k not in ds_rainfall_events]
-print(f"Events in tree_keys but missing rainfall data: {missing_keys}")
-
 number_of_gauges = []
+dayswithoutrain = []
+
+for key in tree_keys:
+    number_of_gauges.append(ds_rainfall_events[key].columns)
+
+print(number_of_gauges)
+
+
+df_rainfall_features = pd.DataFrame(columns=['numberofgauges', 'durationmin', 'averageintensity', 'maxrollingintensity'])
+
 event_durations = []
 average_intensities = []
 max_average_window_intensities = []
 
-for key in tree_keys: 
-
-    if key not in ds_rainfall_events:
-        print(f"Skipping {key}, no rainfall data")
-        continue
-        
-    ds_event = ds_rainfall_events[key]
-    df_event = ds_event.to_dataframe()
+# for label in event_labels:
+#     if label == 'event_179':
+#         continue
+#     xr_event = rainfall_tree[label]
+#     ds_event = xr_event.to_dataset()
     
-    event_gauge_list = df_event.columns
-    event_gauge_nums = [int(''.join(filter(str.isdigit, s))) for s in event_gauge_list if any(c.isdigit() for c in s)]
-
-    avg_intensity = df_event.mean().mean()
-    time_window = select_time_window_size(df_event)
-
-    if df_event.shape[0] < time_window:
-        print(f"Skipping {key}, too short for rolling window")
-        continue
     
-    #print(f"Event {key}, duration: {df_event.shape[0]}, time_window: {time_window}")
-    #print("Rolling window slices:", [df_event.iloc[i*time_window:(i+1)*time_window].mean().mean() for i in range(int(df_event.shape[0]/time_window)-1)])
+#     df_event = ds_event.to_dataframe()
+#     event_gauge_list = df_event.columns
+#     event_gauge_nums = [int(''.join(filter(str.isdigit, s))) for s in event_gauge_list if any(char.isdigit() for char in s)]    
+    
+#     avg_intensity = df_event.mean().mean()
+#     time_window = select_time_window_size(df_event)
+#     max_window_intensity = max_average_intensity_within_time_window(df_event, time_window)
+    
+#     event_durations.append(len(ds_event.time))
+#     average_intensities.append(round(avg_intensity, 2))
+#     max_average_window_intensities.append(max_window_intensity)
 
-    max_window_intensity = max_average_intensity_within_time_window(df_event, time_window)
+#     flume_areas = []
+#     for gauge_num in event_gauge_nums:
+#         flume_areas.append(find_keys_by_value(flume_raingauges_dict, gauge_num))
+    
+#     event_flumes = np.unique(sum(flume_areas, []))   
+#     number_of_gauges.append(len(event_gauge_list))
+    
+# df_rainfall_features['duration'] = event_durations
+# df_rainfall_features['average intensity (mm/hr)'] = average_intensities
+# df_rainfall_features['max window intensity (mm/hr)'] = max_average_window_intensities
 
-    event_durations.append(len(ds_event.time))
-    average_intensities.append(round(avg_intensity, 2))
-    max_average_window_intensities.append(max_window_intensity)
-
-    # Number of gauges per event
-    event_flumes = np.unique([flume for gauge_num in event_gauge_nums
-                              for flume in find_keys_by_value(flume_raingauges_dict, gauge_num)])
-    number_of_gauges.append(len(event_flumes))
-
-# Assign features to DataFrame
-df_rainfall_features['duration'] = event_durations
-df_rainfall_features['average intensity (mm/hr)'] = average_intensities
-df_rainfall_features['max window intensity (mm/hr)'] = max_average_window_intensities
-df_rainfall_features['number of gauges'] = number_of_gauges
-
-# Save to CSV
-df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
-print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+# # Save to CSV
+# df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
+# print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
 
 
 
