@@ -217,7 +217,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
         #print(df_event.head())
         
-        df_complete = pd.DataFrame(columns=flumes_ordered_by_contr_area_str)
+        df_complete = pd.DataFrame(columns=flume_labels)
         common_columns = df_complete.columns.intersection(df_event.columns)
     
         # Map the common columns to the "patent" DataFrame
