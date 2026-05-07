@@ -8,19 +8,11 @@ import matplotlib.dates as mdates
 import datatree as dtree
 import xarray as xr
 
-from rainfall_functions import (
-    load_rainfall_csvs,
-    prepare_rainfall_dataframe,
-    build_rainfall_windows,
-    extract_event_rainfall,
-    trim_zero_rainfall,
-    downsample_rainfall_events,
-)
+from rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, build_rainfall_windows, extract_event_rainfall,
+    trim_zero_rainfall, downsample_rainfall_events, load_flume_raingauge_mapping
 
-from runoff_functions import (
-    load_runoff_trees,
-    load_runoff_dates,
-)
+
+from runoff_functions import load_runoff_trees, load_runoff_dates
 
 
 # ------------------------------------------------------------
@@ -28,17 +20,13 @@ from runoff_functions import (
 # ------------------------------------------------------------
 BASE_DIR = "data"
 
-RUNOFF_FILES = [
-    os.path.join(BASE_DIR, "runoff_events_2000_2006.nc"),
+RUNOFF_FILES = [os.path.join(BASE_DIR, "runoff_events_2000_2006.nc"),
     os.path.join(BASE_DIR, "runoff_events_2007_2013.nc"),
-    os.path.join(BASE_DIR, "runoff_events_2014_2024.nc"),
-]
+    os.path.join(BASE_DIR, "runoff_events_2014_2024.nc")]
 
-RUNOFF_DATE_FILES = [
-    os.path.join(BASE_DIR, "dates_of_runoff_events_2000_2006.csv"),
+RUNOFF_DATE_FILES = [os.path.join(BASE_DIR, "dates_of_runoff_events_2000_2006.csv"),
     os.path.join(BASE_DIR, "dates_of_runoff_events_2007_2013.csv"),
-    os.path.join(BASE_DIR, "dates_of_runoff_events_2014_2024.csv"),
-]
+    os.path.join(BASE_DIR, "dates_of_runoff_events_2014_2024.csv")]
 
 FLUME_RAINGAUGES_PATH = os.path.join(BASE_DIR, "flume_raingauges.csv")
 FLUME_WATERSHEDS_PATH = os.path.join(BASE_DIR, "flume_watersheds.csv")
@@ -82,7 +70,7 @@ def build_color_map(flume_master_df):
 
 
 # ------------------------------------------------------------
-# LOAD + MERGE FLUME DATA (KEY FIX)
+# load and merge flume data
 # ------------------------------------------------------------
 def load_flume_master():
 
@@ -114,40 +102,7 @@ def load_flume_master():
 
 
 # ------------------------------------------------------------
-# RAINFALL EVENTS
-# ------------------------------------------------------------
-def build_rainfall_events(runoff_dates, df_rainfall):
-
-    rainfall_windows = build_rainfall_windows(runoff_dates, buffer_hours=2)
-
-    rainfall_events = {}
-
-    for _, row in rainfall_windows.iterrows():
-
-        ds = extract_event_rainfall(
-            df_rainfall=df_rainfall,
-            event_row=row,
-            gauges=df_rainfall["Gage"].unique()
-        )
-
-        if ds is None:
-            continue
-
-        ds_trimmed = trim_zero_rainfall(ds)
-
-        if ds_trimmed is not None and len(ds_trimmed.data_vars) > 0:
-            ds = ds_trimmed
-        # else: keep original ds
-
-        ds = downsample_rainfall_events(ds, timestep=4)
-
-        rainfall_events[row["event_label"]] = ds
-
-    return rainfall_events
-
-
-# ------------------------------------------------------------
-# PLOTTING
+# plotting
 # ------------------------------------------------------------
 def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map):
 
@@ -213,14 +168,15 @@ df_rainfall = df_rainfall.dropna(subset=["Gage"])
 flume_master = load_flume_master()
 color_map, cmap, norm = build_color_map(flume_master)
 
-rainfall_events = build_rainfall_events(runoff_dates, df_rainfall)
+# map raingauges to corresponding flumes
+flume_raingauges = load_flume_raingauge_mapping(FLUME_RAINGAUGES_PATH)
+
+rainfall_events = build_rainfall_events(runoff_trees, df_rainfall, runoff_dates, flume_raingauges)
 
 
-event_pairs = [
-    ("event_8", "event_9"),
+event_pairs = [("event_8", "event_9"),
     ("event_14", "event_119"),
-    ("event_45", "event_201"),
-]
+    ("event_45", "event_201")]
 
 
 output_dir = "results"
@@ -381,7 +337,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
     cax1 = fig.add_axes([
         bbox1.x0 + 0.03,
-        bbox1.y0 - 0.14,
+        bbox1.y0 - 0.10,
         bbox1.width - 0.06,
         0.025
     ])
@@ -420,7 +376,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
     cax2 = fig.add_axes([
         bbox2.x0 + 0.03,
-        bbox2.y0 - 0.14,
+        bbox2.y0 - 0.10,
         bbox2.width - 0.06,
         0.025
     ])
