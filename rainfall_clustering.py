@@ -13,7 +13,7 @@ from matplotlib.cm import ScalarMappable
 # -------------------------------
 # Paths and settings
 # -------------------------------
-DATA_FILE = "data/df_rainfall_features.csv"  # adjust path
+DATA_FILE = "data/rainfall/rainfall_features.csv"  # adjust path
 SCFCS_FILE = "data/df_scfcs_all.csv"
 OUTPUT_DIR = "results"
 FEATURE_COLS = ['numberofgauges', 'durationmin', 'averageintensity', 
