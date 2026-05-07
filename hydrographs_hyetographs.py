@@ -419,7 +419,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
             fig.text(
                 bbox1.x1,
-                bbox1.y0 - 0.1,
+                bbox1.y0 - 0.05,
                 date1,
                 ha="right",
                 va="top",
@@ -442,7 +442,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
             fig.text(
                 bbox2.x1,
-                bbox2.y0 - 0.1,
+                bbox2.y0 - 0.05,
                 date2,
                 ha="right",
                 va="top",
