@@ -216,9 +216,12 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
         print(df_event.head())
+        print(runoff_ds.to_dataframe().reindex(columns=flume_labels).head())
+        
+        fc_sim = df_event.corr().fillna(0).to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
-
-        im = ax_fc.matshow(fc_seq, vmin=-1, vmax=1, cmap="coolwarm_r")
+        
+        im = ax_fc.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
 
         ax_fc.set_title(f"{event_label} - FC_seq", fontsize=12)
 
@@ -235,7 +238,7 @@ for i, (e1, e2) in enumerate(event_pairs):
     plt.tight_layout()
 
     outpath = os.path.join(output_dir, f"event_pair_{i+1}.pdf")
-
+    plt.show()
     plt.savefig(outpath, bbox_inches="tight"); plt.close(fig)
 
     print(f"Saved: {outpath}")
