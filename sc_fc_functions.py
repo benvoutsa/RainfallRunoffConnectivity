@@ -79,13 +79,14 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     df_sc_sim['flume_1'] = df_sc_sim['flume_1'].astype(int).astype(str)
     df_sc_sim['flume_2'] = df_sc_sim['flume_2'].astype(int).astype(str)
     print(df_sc_sim)
-    print("flume_order: ", flume_order)
+    flume_order_rev = flume_order[::-1]
+    print("flume_order_rev: ", flume_order_rev)
     # Create adjacency matrix
     #flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
-    flume_indices = {flume: idx for idx, flume in enumerate(flume_order)}
+    flume_indices = {flume: idx for idx, flume in enumerate(flume_order_rev)}
     print("flume_indices: ", flume_indices)
     #{flume: idx for idx, flume in enumerate(flumes)}
-    adj_matrix = np.zeros((len(flume_indices), len(flume_indices)))
+    adj_matrix = np.zeros((len(flume_order_rev), len(flume_order_rev)))
 
     for _, row in df_sc_sim.iterrows():
         i = flume_indices[row['flume_1']]
@@ -99,7 +100,7 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     print(adj_matrix)
     plt.imshow(adj_matrix, cmap="binary")
     plt.show()
-    return adj_matrix, flumes
+    return adj_matrix, flume_order_rev #flumes
 
 
 # --------------------------- FC matrix function ----------------------
