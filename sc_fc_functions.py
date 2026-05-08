@@ -78,13 +78,13 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
                           #0.5 * df_sc_sim['weight_contr_area']
     df_sc_sim['flume_1'] = df_sc_sim['flume_1'].astype(int).astype(str)
     df_sc_sim['flume_2'] = df_sc_sim['flume_2'].astype(int).astype(str)
-    print(df_sc_sim)
+    #print(df_sc_sim)
     flume_order_rev = flume_order[::-1]
     print("flume_order_rev: ", flume_order_rev)
     # Create adjacency matrix
     #flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
     flume_indices = {flume: idx for idx, flume in enumerate(flume_order_rev)}
-    print("flume_indices: ", flume_indices)
+    #print("flume_indices: ", flume_indices)
     #{flume: idx for idx, flume in enumerate(flumes)}
     adj_matrix = np.zeros((len(flume_order_rev), len(flume_order_rev)))
 
@@ -187,10 +187,10 @@ def run_scfc_analysis(runoff_file: Path):
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
         scfc_seq_val = scfc_correlation(df_sc_seq.values, fc_seq)
-        print(scfc_sim, scfc_seq_val)
+        #print(scfc_sim, scfc_seq_val)
 
         scfc_results["event"].append(node.name)
         scfc_results["scfc_sync"].append(scfc_sim)
         scfc_results["scfc_seq"].append(scfc_seq_val)
-
+    print(fc_sim)
     return pd.DataFrame(scfc_results).fillna(0)
