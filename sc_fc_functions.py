@@ -94,8 +94,8 @@ def compute_fc_seq_for_event(df_complete, flume_labels, df_edges_seq):
     fc_seq = np.zeros((n_flumes, n_flumes))
 
     for idx in range(len(df_edges_seq)):
-        flume1 = f"flume_{df_edges_seq['flume 1'].iloc[idx]}"
-        flume2 = f"flume_{df_edges_seq['flume 2'].iloc[idx]}"
+        flume1 = df_edges_seq['flume 1'].iloc[idx]
+        flume2 = df_edges_seq['flume 2'].iloc[idx]
 
         if flume1 in flume_labels and flume2 in flume_labels:
             i1 = flume_labels.index(flume1)
