@@ -66,7 +66,7 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     # df_sc_sim['weight_contr_area'] = contr_area_weights
 
     # Combined weight (the final results include only the inverse Euclidean distance)
-    df_sc_sim['weight'] = 0.5 * df_sc_sim['weight_dist'] #+ \
+    df_sc_sim['weight'] = df_sc_sim['weight_dist'] #+ \
                           #0.5 * df_sc_sim['weight_contr_area']
 
     # Create adjacency matrix
@@ -166,11 +166,11 @@ def run_scfc_analysis(runoff_file: Path):
     
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
-        scfc_seq_val = scfc_correlation(df_sc_seq, fc_seq)
+        scfc_seq_val = scfc_correlation(df_sc_seq.values, fc_seq)
         print(scfc_sim, scfc_seq_val)
 
         scfc_results["event"].append(node.name)
-        scfc_results["scfc_sim"].append(scfc_sim)
+        scfc_results["scfc_sync"].append(scfc_sim)
         scfc_results["scfc_seq"].append(scfc_seq_val)
 
     return pd.DataFrame(scfc_results).fillna(0)
