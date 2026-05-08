@@ -165,7 +165,7 @@ def run_scfc_analysis(runoff_file: Path):
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
         scfc_seq_val = scfc_correlation(df_sc_seq, fc_seq)
-        print(scfc_sim, scfc_seq)
+        print(scfc_sim, scfc_seq_val)
 
         scfc_results["event"].append(node.name)
         scfc_results["scfc_sim"].append(scfc_sim)
