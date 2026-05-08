@@ -165,10 +165,10 @@ def run_scfc_analysis(runoff_file: Path):
     adj_sim, flume_labels = compute_sc_sim(df_coords, df_areas)
     #flume_labels = [f"flume_{i}" for i in flume_nums]
     print("adj sim")
-    print(adj_sim)
+    #print(adj_sim)
     print("---------------------------------------")
     scfc_results = {"event": [], "scfc_sync": [], "scfc_seq": []}
-    print(flume_labels)
+    #print(flume_labels)
     for node in runoff_tree.descendants:
         xr_event = runoff_tree[node.name]
         ds_event = xr_event.to_dataset()
@@ -177,11 +177,14 @@ def run_scfc_analysis(runoff_file: Path):
         #print(df_tmp.columns)
         #common_columns = df_event.columns.intersection(df_tmp.columns)
         #df_event[common_columns] = df_tmp[common_columns]
+        print(ds_event.to_dataframe().columns)
+        print(flume_labels)
+
         df_event = ds_event.to_dataframe().reindex(columns=flume_labels)
         
         # Functional connectivity
         fc_sim = df_event.corr().reindex(index=flume_labels, columns=flume_labels).fillna(0)
-        print(fc_sim)
+        #print(fc_sim)
         fc_sim = fc_sim.to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
 
