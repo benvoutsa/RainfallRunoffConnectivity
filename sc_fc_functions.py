@@ -76,20 +76,10 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     # Combined weight (the final results include only the inverse Euclidean distance)
     df_sc_sim['weight'] = df_sc_sim['weight_dist'] #+ \
                           #0.5 * df_sc_sim['weight_contr_area']
-    
-    #df_sc_sim['flume_1'] = df_sc_sim['flume_1'].astype(int).astype(str)
-    #df_sc_sim['flume_2'] = df_sc_sim['flume_2'].astype(int).astype(str)
-    #print(df_sc_sim)
-    df_sc_sim['flume_1'] = df_sc_sim['flume_1'].apply(lambda x: f"flume_{x}")
-    df_sc_sim['flume_2'] = df_sc_sim['flume_2'].apply(lambda x: f"flume_{x}")
 
     flume_order_rev = flume_order[::-1]
-    #print("flume_order_rev: ", flume_order_rev)
+
     # Create adjacency matrix
-    #flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
-    #flume_indices = {flume: idx for idx, flume in enumerate(flume_order_rev)}
-    #print("flume_indices: ", flume_indices)
-    #{flume: idx for idx, flume in enumerate(flumes)}
     flume_labels = [f"flume_{i}" for i in flume_order_rev] 
     flume_indices = {flume: idx for idx, flume in enumerate(flume_labels)}
     adj_matrix = np.zeros((len(flume_labels), len(flume_labels)))
@@ -99,13 +89,8 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
         j = flume_indices[row['flume_2']]
         adj_matrix[i, j] = row['weight']
 
-    #df_sc_sim['flume_1'] = df_sc_sim['flume_1'].astype(int)
-    #df_sc_sim['flume_2'] = df_sc_sim['flume_2'].astype(int)
-
     adj_matrix = pd.DataFrame(adj_matrix, index=flume_labels, columns=flume_labels)
-    #print(adj_matrix)
-    #plt.imshow(adj_matrix, cmap="binary")
-    #plt.show()
+    
     return adj_matrix, flume_labels
 
 
@@ -167,53 +152,26 @@ def run_scfc_analysis(runoff_file: Path):
 
     # Structural adjacency
     adj_sim, flume_labels = compute_sc_sim(df_coords, df_areas)
-    #flume_labels = [f"flume_{i}" for i in flume_nums]
-    #print("adj sim")
-    #print(adj_sim)
-    print("---------------------------------------")
+    
     scfc_results = {"event": [], "scfc_sync": [], "scfc_seq": []}
-    #print(flume_labels)
     for node in runoff_tree.descendants:
         xr_event = runoff_tree[node.name]
         ds_event = xr_event.to_dataset()
-        #df_event = pd.DataFrame(columns=flume_labels)
-        #df_tmp = ds_event.to_dataframe()
-        #print(df_tmp.columns)
-        #common_columns = df_event.columns.intersection(df_tmp.columns)
-        #df_event[common_columns] = df_tmp[common_columns]
-        #print(ds_event.to_dataframe().columns)
-        #print(flume_labels)
 
         df_event = ds_event.to_dataframe().reindex(columns=flume_labels)
         
         # Functional connectivity
         fc_sim = df_event.corr().reindex(index=flume_labels, columns=flume_labels).fillna(0)
-        #print(fc_sim)
         fc_sim = fc_sim.to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
-        #print(fc_seq)
-
-        # print("fc sim")
-        # print(fc_sim)
-        # print("---------------------------------------")
-
-        # print("fc seq")
-        # print(fc_seq)
-        # print("---------------------------------------")
-    
+        
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
-        #print(df_sc_seq.values)
         scfc_seq_val = scfc_correlation(df_sc_seq.values, fc_seq)
         scfc_seq_val = scfc_seq_val*(len(xr_event.data_vars)/len(flume_labels))
-        #print(scfc_sim, scfc_seq_val)
 
         scfc_results["event"].append(node.name)
         scfc_results["scfc_sync"].append(scfc_sim)
         scfc_results["scfc_seq"].append(scfc_seq_val)
-    #print(fc_sim)
-    #plt.imshow(fc_sim, cmap="coolwarm")
-    #plt.show()
-    #print(scfc_results["scfc_sync"])
-    print(scfc_results["scfc_seq"])
+
     return pd.DataFrame(scfc_results).fillna(0)
