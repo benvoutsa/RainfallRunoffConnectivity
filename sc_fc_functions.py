@@ -5,6 +5,8 @@ from itertools import permutations
 from pathlib import Path
 import matplotlib.pyplot as plt
 
+import yaml
+
 PROJECT_ROOT = Path(".")
 DATA_DIR = PROJECT_ROOT / "data"
 
@@ -14,6 +16,11 @@ EDGE_LIST_FILE = DATA_DIR / "df_sc_seq_extended.csv"
 SC_SEQ_FILE = DATA_DIR / "adj_seq.csv"
 
 DISTANCE_SCALE_KM = 1000
+
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+flume_order = config["flume_order"]
 
 # ------------------ load data ------------------------------------
 
@@ -71,16 +78,17 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
                           #0.5 * df_sc_sim['weight_contr_area']
 
     # Create adjacency matrix
-    flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
-    flume_indices = {flume: idx for idx, flume in enumerate(flumes)}
-    adj_matrix = np.zeros((len(flumes), len(flumes)))
+    #flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
+    flume_indices = {flume: idx for idx, flume in enumerate(flume_order)}
+    #{flume: idx for idx, flume in enumerate(flumes)}
+    adj_matrix = np.zeros((len(flume_indices), len(flume_indices)))
 
     for _, row in df_sc_sim.iterrows():
         i = flume_indices[row['flume_1']]
         j = flume_indices[row['flume_2']]
         adj_matrix[i, j] = row['weight']
 
-    adj_matrix = pd.DataFrame(adj_matrix, index=flumes, columns=flumes)
+    adj_matrix = pd.DataFrame(adj_matrix, index=flume_indices, columns=flume_indices)
     print(adj_matrix)
     plt.imshow(adj_matrix, cmap="binary")
     plt.show()
