@@ -85,8 +85,8 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     adj_matrix = np.zeros((len(flume_labels), len(flume_labels)))
 
     for _, row in df_sc_sim.iterrows():
-        i = flume_indices[f"flume_{row['flume_1']}"]
-        j = flume_indices[f"flume_{row['flume_2']}"]
+        i = flume_indices[f"flume_{int(row['flume_1'])}"]
+        j = flume_indices[f"flume_{int(row['flume_2'])}"]
         adj_matrix[i, j] = row['weight']
 
     adj_matrix = pd.DataFrame(adj_matrix, index=flume_labels, columns=flume_labels)
