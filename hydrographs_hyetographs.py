@@ -223,18 +223,18 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         ax_hydro.set_xlabel("Time"); ax_hydro.set_ylabel("Runoff (m³/s)"); ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
-        df_event = runoff_ds.to_dataframe()#.reindex(columns=flume_labels)
-        print(df_event.head())
-        flume_labels = [f"flume_{i}" for i in flume_order]
-        df_complete = pd.DataFrame(columns=flume_labels)
-        common_columns = df_complete.columns.intersection(df_event.columns)
-        print(df_complete)
-        print(common_columns)
-        # Map the common columns to the "patent" DataFrame
-        df_complete[common_columns] = df_event[common_columns]
-        print(df_complete)
+        df_event = runoff_ds.to_dataframe().reindex(columns=flume_labels)
+        # print(df_event.head())
+        # flume_labels = [f"flume_{i}" for i in flume_order]
+        # df_complete = pd.DataFrame(columns=flume_labels)
+        # common_columns = df_complete.columns.intersection(df_event.columns)
+        # print(df_complete)
+        # print(common_columns)
+        # # Map the common columns to the "patent" DataFrame
+        # df_complete[common_columns] = df_event[common_columns]
+        # print(df_complete)
         fc_sim = df_complete.corr().fillna(0).to_numpy()
-        print(fc_sim)
+        #print(fc_sim)
         fc_seq = compute_fc_seq_for_event(df_event, flume_order, df_edges_seq)
         
         im = ax_fc.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
