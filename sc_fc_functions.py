@@ -214,5 +214,5 @@ def run_scfc_analysis(runoff_file: Path):
     #plt.imshow(fc_sim, cmap="coolwarm")
     #plt.show()
     #print(scfc_results["scfc_sync"])
-    #print(scfc_results["scfc_seq"])
+    print(scfc_results["scfc_seq"])
     return pd.DataFrame(scfc_results).fillna(0)
