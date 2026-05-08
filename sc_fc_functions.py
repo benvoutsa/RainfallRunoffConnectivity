@@ -141,7 +141,7 @@ def run_scfc_analysis(runoff_file: Path):
     print("adj sim")
     print(adj_sim)
     print("---------------------------------------")
-    scfc_results = {"event": [], "scfc_sim": [], "scfc_seq": []}
+    scfc_results = {"event": [], "scfc_sync": [], "scfc_seq": []}
     print(flume_labels)
     for node in runoff_tree.descendants:
         xr_event = runoff_tree[node.name]
