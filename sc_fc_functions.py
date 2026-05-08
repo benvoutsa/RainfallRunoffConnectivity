@@ -104,8 +104,8 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
 
     adj_matrix = pd.DataFrame(adj_matrix, index=flume_labels, columns=flume_labels)
     #print(adj_matrix)
-    plt.imshow(adj_matrix, cmap="binary")
-    plt.show()
+    #plt.imshow(adj_matrix, cmap="binary")
+    #plt.show()
     return adj_matrix, flume_labels
 
 
