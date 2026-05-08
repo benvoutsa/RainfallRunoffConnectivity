@@ -154,13 +154,13 @@ def run_scfc_analysis(runoff_file: Path):
         fc_sim = df_event.corr().fillna(0).to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
 
-        print("fc sim")
-        print(fc_sim)
-        print("---------------------------------------")
+        # print("fc sim")
+        # print(fc_sim)
+        # print("---------------------------------------")
 
-        print("fc seq")
-        print(fc_seq)
-        print("---------------------------------------")
+        # print("fc seq")
+        # print(fc_seq)
+        # print("---------------------------------------")
     
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
