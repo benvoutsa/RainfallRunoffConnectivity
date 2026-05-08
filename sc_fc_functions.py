@@ -187,6 +187,7 @@ def run_scfc_analysis(runoff_file: Path):
         #print(fc_sim)
         fc_sim = fc_sim.to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
+        print(fc_seq)
 
         # print("fc sim")
         # print(fc_sim)
