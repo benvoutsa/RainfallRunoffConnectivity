@@ -80,6 +80,9 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
         adj_matrix[i, j] = row['weight']
 
     adj_matrix = pd.DataFrame(adj_matrix, index=flumes, columns=flumes)
+    print(adj_matrix)
+    plt.imshow(adj_matrix, cmap="binary")
+    plt.show()
     return adj_matrix, flumes
 
 
