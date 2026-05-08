@@ -80,8 +80,8 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     #df_sc_sim['flume_1'] = df_sc_sim['flume_1'].astype(int).astype(str)
     #df_sc_sim['flume_2'] = df_sc_sim['flume_2'].astype(int).astype(str)
     #print(df_sc_sim)
-    df_sc_sim['flume_1'] = df_sc_sim['flume_1'].apply(lambda x: f"flume_{x}")
-    df_sc_sim['flume_2'] = df_sc_sim['flume_2'].apply(lambda x: f"flume_{x}")
+    #df_sc_sim['flume_1'] = df_sc_sim['flume_1'].apply(lambda x: f"flume_{x}")
+    #df_sc_sim['flume_2'] = df_sc_sim['flume_2'].apply(lambda x: f"flume_{x}")
 
     flume_order_rev = flume_order[::-1]
     print("flume_order_rev: ", flume_order_rev)
