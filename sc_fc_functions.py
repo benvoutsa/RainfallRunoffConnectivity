@@ -205,6 +205,7 @@ def run_scfc_analysis(runoff_file: Path):
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
         #print(df_sc_seq.values)
         scfc_seq_val = scfc_correlation(df_sc_seq.values, fc_seq)
+        scfc_seq_val = scfc_seq_val*(len(xr_event.data_vars)/len(flume_labels))
         #print(scfc_sim, scfc_seq_val)
 
         scfc_results["event"].append(node.name)
