@@ -134,6 +134,7 @@ def compute_fc_seq_for_event(df_complete, flume_labels, df_edges_seq):
                     runoff_flume2 = df_complete[flume2].iloc[t_delay:T]
                     corr_val = np.corrcoef(runoff_flume1, runoff_flume2)[0, 1]
                     fc_seq[i1, i2] = np.round(corr_val, 2)
+                    print(corr_val, np.round(corr_val, 2))
 
     return np.nan_to_num(fc_seq)
 
@@ -187,7 +188,7 @@ def run_scfc_analysis(runoff_file: Path):
         #print(fc_sim)
         fc_sim = fc_sim.to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
-        print(fc_seq)
+        #print(fc_seq)
 
         # print("fc sim")
         # print(fc_sim)
