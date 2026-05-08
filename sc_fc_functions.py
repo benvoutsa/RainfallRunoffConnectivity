@@ -141,12 +141,13 @@ def run_scfc_analysis(runoff_file: Path):
     print(adj_sim)
     print("---------------------------------------")
     scfc_results = {"event": [], "scfc_sim": [], "scfc_seq": []}
-
+    print(flume_labels)
     for node in runoff_tree.descendants:
         xr_event = runoff_tree[node.name]
         ds_event = xr_event.to_dataset()
         df_event = pd.DataFrame(columns=flume_labels)
         df_tmp = ds_event.to_dataframe()
+        print(df_tmp.columns)
         common_columns = df_event.columns.intersection(df_tmp.columns)
         df_event[common_columns] = df_tmp[common_columns]
 
