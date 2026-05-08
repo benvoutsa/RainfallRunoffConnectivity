@@ -136,7 +136,8 @@ def run_scfc_analysis(runoff_file: Path):
     runoff_tree = load_runoff_events(runoff_file)
 
     # Structural adjacency
-    adj_sim, flume_labels = compute_sc_sim(df_coords, df_areas)
+    adj_sim, flume_nums = compute_sc_sim(df_coords, df_areas)
+    flume_labels = [f"flume_{i}" for i in flume_nums]
     print("adj sim")
     print(adj_sim)
     print("---------------------------------------")
