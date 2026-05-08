@@ -28,7 +28,7 @@ OUTPUT_FILE = RESULTS_DIR / "scfc_results_updated.csv"
 def main():
     all_results = []
 
-    for runoff_file in RUNOFF_FILES[0]:
+    for runoff_file in RUNOFF_FILES:
         print(f"Processing {runoff_file} ...")
         df_results = run_scfc_analysis(runoff_file)
         all_results.append(df_results)
