@@ -76,10 +76,12 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     # Combined weight (the final results include only the inverse Euclidean distance)
     df_sc_sim['weight'] = df_sc_sim['weight_dist'] #+ \
                           #0.5 * df_sc_sim['weight_contr_area']
-
+    print(df_sc_sim)
+    print("flume_order: ", flume_order)
     # Create adjacency matrix
     #flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
     flume_indices = {flume: idx for idx, flume in enumerate(flume_order)}
+    print("flume_indices: ", flume_indices)
     #{flume: idx for idx, flume in enumerate(flumes)}
     adj_matrix = np.zeros((len(flume_indices), len(flume_indices)))
 
