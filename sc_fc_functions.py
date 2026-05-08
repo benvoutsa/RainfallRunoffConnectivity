@@ -173,7 +173,9 @@ def run_scfc_analysis(runoff_file: Path):
         df_event[common_columns] = df_tmp[common_columns]
 
         # Functional connectivity
-        fc_sim = df_event.corr().fillna(0).to_numpy()
+        fc_sim = df_event.corr().fillna(0)
+        print(fc_sim)
+        fc_sim = fc_sim.to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
 
         # print("fc sim")
