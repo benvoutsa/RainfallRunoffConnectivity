@@ -83,10 +83,12 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     print("flume_order_rev: ", flume_order_rev)
     # Create adjacency matrix
     #flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
-    flume_indices = {flume: idx for idx, flume in enumerate(flume_order_rev)}
+    #flume_indices = {flume: idx for idx, flume in enumerate(flume_order_rev)}
     #print("flume_indices: ", flume_indices)
     #{flume: idx for idx, flume in enumerate(flumes)}
-    adj_matrix = np.zeros((len(flume_order_rev), len(flume_order_rev)))
+    flume_labels = [f"flume_{i}" for i in flume_order_rev] 
+    flume_indices = {flume: idx for idx, flume in enumerate(flume_labels)}
+    adj_matrix = np.zeros((len(flume_labels), len(flume_labels)))
 
     for _, row in df_sc_sim.iterrows():
         i = flume_indices[row['flume_1']]
@@ -100,7 +102,7 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     print(adj_matrix)
     plt.imshow(adj_matrix, cmap="binary")
     plt.show()
-    return adj_matrix, flume_order_rev #flumes
+    return adj_matrix, flume_labels
 
 
 # --------------------------- FC matrix function ----------------------
@@ -166,14 +168,15 @@ def run_scfc_analysis(runoff_file: Path):
     for node in runoff_tree.descendants:
         xr_event = runoff_tree[node.name]
         ds_event = xr_event.to_dataset()
-        df_event = pd.DataFrame(columns=flume_labels)
-        df_tmp = ds_event.to_dataframe()
+        #df_event = pd.DataFrame(columns=flume_labels)
+        #df_tmp = ds_event.to_dataframe()
         #print(df_tmp.columns)
-        common_columns = df_event.columns.intersection(df_tmp.columns)
-        df_event[common_columns] = df_tmp[common_columns]
-
+        #common_columns = df_event.columns.intersection(df_tmp.columns)
+        #df_event[common_columns] = df_tmp[common_columns]
+        df_event = ds_event.to_dataframe().reindex(columns=flume_labels)
+        
         # Functional connectivity
-        fc_sim = df_event.corr().fillna(0)
+        fc_sim = df_event.corr().reindex(index=flume_labels, columns=flume_labels).fillna(0)
         print(fc_sim)
         fc_sim = fc_sim.to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
