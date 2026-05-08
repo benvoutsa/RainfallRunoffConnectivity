@@ -148,7 +148,7 @@ def run_scfc_analysis(runoff_file: Path):
         ds_event = xr_event.to_dataset()
         df_event = pd.DataFrame(columns=flume_labels)
         df_tmp = ds_event.to_dataframe()
-        print(df_tmp.columns)
+        #print(df_tmp.columns)
         common_columns = df_event.columns.intersection(df_tmp.columns)
         df_event[common_columns] = df_tmp[common_columns]
 
