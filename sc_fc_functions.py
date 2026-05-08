@@ -3,6 +3,7 @@ import pandas as pd
 import datatree as dtree
 from itertools import permutations
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 PROJECT_ROOT = Path(".")
 DATA_DIR = PROJECT_ROOT / "data"
