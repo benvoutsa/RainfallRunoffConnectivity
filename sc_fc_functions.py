@@ -118,15 +118,16 @@ def compute_fc_seq_for_event(df_complete, flume_labels, df_edges_seq):
     T = len(df_complete)
     n_flumes = len(flume_labels)
     fc_seq = np.zeros((n_flumes, n_flumes))
-
+    print(df_complete)
     for idx in range(len(df_edges_seq)):
         flume1 = df_edges_seq['flume 1'].iloc[idx]
         flume2 = df_edges_seq['flume 2'].iloc[idx]
-
+        print(flume1, flume2)
         if flume1 in flume_labels and flume2 in flume_labels:
             i1 = flume_labels.index(flume1)
             i2 = flume_labels.index(flume2)
-
+            print(i1, i2)
+              
             if not (np.isnan(df_complete[flume1].iloc[0]) or np.isnan(df_complete[flume2].iloc[0])):
                 t_delay = int(round(df_edges_seq['time-delay mins'].iloc[idx], 0))
                 if T > t_delay:
@@ -201,7 +202,7 @@ def run_scfc_analysis(runoff_file: Path):
     
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
-        print(df_sc_seq.values)
+        #print(df_sc_seq.values)
         scfc_seq_val = scfc_correlation(df_sc_seq.values, fc_seq)
         #print(scfc_sim, scfc_seq_val)
 
@@ -212,5 +213,5 @@ def run_scfc_analysis(runoff_file: Path):
     #plt.imshow(fc_sim, cmap="coolwarm")
     #plt.show()
     #print(scfc_results["scfc_sync"])
-    print(scfc_results["scfc_seq"])
+    #print(scfc_results["scfc_seq"])
     return pd.DataFrame(scfc_results).fillna(0)
