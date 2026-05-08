@@ -137,7 +137,9 @@ def run_scfc_analysis(runoff_file: Path):
 
     # Structural adjacency
     adj_sim, flume_labels = compute_sc_sim(df_coords, df_areas)
-
+    print("adj sim")
+    print(adj_sim)
+    print("---------------------------------------")
     scfc_results = {"event": [], "scfc_sim": [], "scfc_seq": []}
 
     for node in runoff_tree.descendants:
@@ -152,9 +154,18 @@ def run_scfc_analysis(runoff_file: Path):
         fc_sim = df_event.corr().fillna(0).to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
 
+        print("fc sim")
+        print(fc_sim)
+        print("---------------------------------------")
+
+        print("fc seq")
+        print(fc_seq)
+        print("---------------------------------------")
+    
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
-        scfc_seq_val = scfc_correlation(df_sc_seq.fillna(0), fc_seq)
+        scfc_seq_val = scfc_correlation(df_sc_seq, fc_seq)
+        print(scfc_sim, scfc_seq)
 
         scfc_results["event"].append(node.name)
         scfc_results["scfc_sim"].append(scfc_sim)
