@@ -84,7 +84,7 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     df_sc_sim['flume_2'] = df_sc_sim['flume_2'].apply(lambda x: f"flume_{x}")
 
     flume_order_rev = flume_order[::-1]
-    print("flume_order_rev: ", flume_order_rev)
+    #print("flume_order_rev: ", flume_order_rev)
     # Create adjacency matrix
     #flumes = sorted(set(df_sc_sim['flume_1']).union(df_sc_sim['flume_2']))
     #flume_indices = {flume: idx for idx, flume in enumerate(flume_order_rev)}
@@ -103,7 +103,7 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
     #df_sc_sim['flume_2'] = df_sc_sim['flume_2'].astype(int)
 
     adj_matrix = pd.DataFrame(adj_matrix, index=flume_labels, columns=flume_labels)
-    print(adj_matrix)
+    #print(adj_matrix)
     plt.imshow(adj_matrix, cmap="binary")
     plt.show()
     return adj_matrix, flume_labels
@@ -135,6 +135,7 @@ def compute_fc_seq_for_event(df_complete, flume_labels, df_edges_seq):
                     corr_val = np.corrcoef(runoff_flume1, runoff_flume2)[0, 1]
                     fc_seq[i1, i2] = np.round(corr_val, 2)
                     print(corr_val, np.round(corr_val, 2))
+                    print("\n")
 
     return np.nan_to_num(fc_seq)
 
@@ -165,7 +166,7 @@ def run_scfc_analysis(runoff_file: Path):
     # Structural adjacency
     adj_sim, flume_labels = compute_sc_sim(df_coords, df_areas)
     #flume_labels = [f"flume_{i}" for i in flume_nums]
-    print("adj sim")
+    #print("adj sim")
     #print(adj_sim)
     print("---------------------------------------")
     scfc_results = {"event": [], "scfc_sync": [], "scfc_seq": []}
@@ -178,8 +179,8 @@ def run_scfc_analysis(runoff_file: Path):
         #print(df_tmp.columns)
         #common_columns = df_event.columns.intersection(df_tmp.columns)
         #df_event[common_columns] = df_tmp[common_columns]
-        print(ds_event.to_dataframe().columns)
-        print(flume_labels)
+        #print(ds_event.to_dataframe().columns)
+        #print(flume_labels)
 
         df_event = ds_event.to_dataframe().reindex(columns=flume_labels)
         
@@ -200,6 +201,7 @@ def run_scfc_analysis(runoff_file: Path):
     
         # Correlations
         scfc_sim = scfc_correlation(adj_sim, fc_sim)
+        print(df_sc_seq.values)
         scfc_seq_val = scfc_correlation(df_sc_seq.values, fc_seq)
         #print(scfc_sim, scfc_seq_val)
 
@@ -209,6 +211,6 @@ def run_scfc_analysis(runoff_file: Path):
     #print(fc_sim)
     #plt.imshow(fc_sim, cmap="coolwarm")
     #plt.show()
-    print(scfc_results["scfc_sync"])
+    #print(scfc_results["scfc_sync"])
     print(scfc_results["scfc_seq"])
     return pd.DataFrame(scfc_results).fillna(0)
