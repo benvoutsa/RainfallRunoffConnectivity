@@ -10,6 +10,9 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import datatree as dtree
 import xarray as xr
+import sys
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from codes.data_preprocessing_and_illustration.rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, build_rainfall_windows, extract_event_rainfall,\
     build_rainfall_events, trim_zero_rainfall, downsample_rainfall_events, load_flume_raingauge_mapping
