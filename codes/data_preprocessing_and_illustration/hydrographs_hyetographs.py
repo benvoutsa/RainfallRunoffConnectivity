@@ -20,12 +20,6 @@ from sc_fc_functions import load_flume_coordinates, load_contributing_areas, loa
 
 import yaml
 
-CONFIG_FILE = PROJECT_ROOT / "config.yaml"
-with open(CONFIG_FILE, "r") as f:
-    config = yaml.safe_load(f)
-
-flume_order = config["flume_order"]
-
 
 # ------------------------------------------------------------
 # paths
@@ -44,6 +38,12 @@ RUNOFF_DATE_FILES = [os.path.join(BASE_DIR, "dates_of_runoff_events_2000_2006.cs
 
 FLUME_RAINGAUGES_PATH = os.path.join(BASE_DIR, "flume_raingauges.csv")
 FLUME_WATERSHEDS_PATH = os.path.join(BASE_DIR, "flume_watersheds.csv")
+
+CONFIG_FILE = PROJECT_ROOT / "config.yaml"
+with open(CONFIG_FILE, "r") as f:
+    config = yaml.safe_load(f)
+
+flume_order = config["flume_order"]
 
 df_coords = load_flume_coordinates()
 df_areas = load_contributing_areas()
