@@ -220,11 +220,11 @@ for i, (e1, e2) in enumerate(event_pairs):
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
         
+        fig.tight_layout(rect=[0, 0.05, 1, 1])
+        
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.06, bbox.width - 0.05, 0.012])
+        cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.04, bbox.width - 0.05, 0.012])
         cbar = fig.colorbar(sm, cax=cax, orientation="horizontal", fraction=0.05, pad=0.12)
-        #colorbar_ax = fig.add_axes([0.22, 0.01, 0.7, 0.02])  # [left, bottom, width, height]
-        #colorbar = fig.colorbar(sm, cax=colorbar_ax, orientation="horizontal", pad=0.4)
         
         # Format colorbar ticks to display only the min and max values
         df_area_values = df_areas['Contributing_area_km2'].values
@@ -236,7 +236,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
         # write the date under hydrograph
-        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.01, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
+        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.008, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
 
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
@@ -282,7 +282,6 @@ for i, (e1, e2) in enumerate(event_pairs):
         cax2 = div2.append_axes("right", size="5%", pad=0.05)
         fig.colorbar(im2, cax=cax2)
 
-    fig.tight_layout(rect=[0, 0.05, 1, 1])
     outpath = os.path.join(output_dir, f"hydrographs_and_fc_eventpair_{i+1}.pdf")
     plt.savefig(outpath, bbox_inches="tight")
     plt.show()
