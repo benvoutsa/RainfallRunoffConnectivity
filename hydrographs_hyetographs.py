@@ -244,8 +244,8 @@ for i, (e1, e2) in enumerate(event_pairs):
         # ------------------------------------------------------------
         df_event = runoff_ds.to_dataframe().reindex(columns=flume_labels)
 
-        fc_sim = df_event.corr().fillna(0).to_numpy()
-        fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
+        fc_sim = df_event.corr().fillna(0).to_numpy().copy()
+        fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq).copy()
 
         np.fill_diagonal(fc_sim, 0)
         np.fill_diagonal(fc_seq, 0)
