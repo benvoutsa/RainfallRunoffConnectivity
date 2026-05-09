@@ -18,7 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
-CONFIG_FILE = BASE_DIR / "config.yaml"
+CONFIG_FILE = PROJECT_ROOT / "config.yaml"
 with open(CONFIG_FILE, "r") as f:
     config = yaml.safe_load(f)
 
