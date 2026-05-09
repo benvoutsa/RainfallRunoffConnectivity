@@ -228,13 +228,13 @@ for i, (e1, e2) in enumerate(event_pairs):
         sm.set_array([])
         
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.14, bbox.width - 0.06, 0.025])
+        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.04, bbox.width - 0.06, 0.025])
         cbar = fig.colorbar(sm, cax=cax, orientation="horizontal")
         cbar.set_label("Contributing Area (km²)")
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
         # write the date under hydrograph
-        fig.text(bbox.x1, bbox.y0 - 0.075, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
+        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.001, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
 
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
