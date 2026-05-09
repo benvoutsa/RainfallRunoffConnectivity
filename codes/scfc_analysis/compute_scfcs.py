@@ -4,17 +4,12 @@ SC–FC analysis
 
 import pandas as pd
 import numpy as np
+import yaml
 from pathlib import Path
 
 from sc_fc_functions import *
 
-#from sc_fc_functions import load_flume_coordinates, load_contributing_areas, load_edge_list, load_sc_seq, load_runoff_events
-#from sc_fc_functions import compute_sc_sim, load_sc_seq
-
-import yaml
-
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f)
+# --------------------------------------------------------------
 
 flume_order = config["flume_order"]
 
@@ -23,6 +18,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
+CONFIG_FILE = BASE_DIR / "config.yaml"
+with open(CONFIG_FILE, "r") as f:
+    config = yaml.safe_load(f)
 
 RUNOFF_FILES = [
     DATA_DIR / "runoff_events_2000_2006.nc",
