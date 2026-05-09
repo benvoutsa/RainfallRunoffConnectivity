@@ -18,7 +18,8 @@ with open("config.yaml", "r") as f:
 
 flume_order = config["flume_order"]
 
-PROJECT_ROOT = Path(".")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
 DATA_DIR = PROJECT_ROOT / "data"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
