@@ -134,7 +134,6 @@ def plot_sc_matrices(sc_sim, sc_seq, labels=None, flume_order=None, figsize=(6, 
     """
     
     fig, axes = plt.subplots(2, 1, figsize=figsize)
-
     cmap = "Greys"
 
     matrices = [sc_sim, sc_seq]
@@ -156,13 +155,15 @@ def plot_sc_matrices(sc_sim, sc_seq, labels=None, flume_order=None, figsize=(6, 
             ax.set_yticklabels(flume_order, fontsize=7)
         elif labels is not None:
             ax.set_xticklabels(labels, rotation=90, fontsize=7)
-            ax.set_yticklabels(labels, fontsize=7)
+            ax.set_yticklabels(labels[::-1], fontsize=7)
         else:
             ax.set_xticklabels(np.arange(n), rotation=90, fontsize=7)
             ax.set_yticklabels(np.arange(n), fontsize=7)
 
         ax.xaxis.set_ticks_position("bottom")
-
+        ax.set_xlabel("flume label")
+        ax.set_ylabel("flume label")
+        
         # colorbar
         cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
         cbar.ax.tick_params(labelsize=7)
