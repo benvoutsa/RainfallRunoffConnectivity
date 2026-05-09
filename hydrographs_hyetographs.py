@@ -233,7 +233,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         cbar.set_ticks(tick_positions)
         cbar.set_ticklabels([f"{v:.2f}" for v in tick_positions])
     
-        cbar.set_label("contributing area (km²)",, labelpad=0.8)
+        cbar.set_label("contributing area (km²)", labelpad=0.8)
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
         # write the date under hydrograph
