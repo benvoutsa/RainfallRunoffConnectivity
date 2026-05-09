@@ -18,7 +18,7 @@ from pathlib import Path
 # Project paths (portable)
 # ---------------------------------------------------------------------
 
-PROJECT_ROOT = Path(".")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 DATA_DIR = PROJECT_ROOT / "data"
 FIG_DIR = PROJECT_ROOT / "results"
