@@ -90,7 +90,8 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
         adj_matrix[i, j] = row['weight']
 
     adj_matrix = pd.DataFrame(adj_matrix, index=flume_labels, columns=flume_labels)
-    
+    plt.masthow(adj_matrix, cmap=biary)
+    plt.show()
     return adj_matrix, flume_labels
 
 
