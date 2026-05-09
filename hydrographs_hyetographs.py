@@ -28,7 +28,7 @@ flume_order = config["flume_order"]
 print(flume_order)
 
 # ------------------------------------------------------------
-# PATHS
+# paths
 # ------------------------------------------------------------
 BASE_DIR = "data"
 
@@ -47,9 +47,7 @@ df_coords = load_flume_coordinates()
 df_areas = load_contributing_areas()
 df_edges_seq = load_edge_list()
 
-# ------------------------------------------------------------
-# UTILS
-# ------------------------------------------------------------
+
 def cfs_to_m3(cfs):
     return cfs * 0.0283168
 
@@ -62,16 +60,12 @@ def get_runoff_event(tree_list, event_label):
 
 
 # ------------------------------------------------------------
-# FIXED COLOR MAP (uses contributing area)
+# color map (uses contributing area)
 # ------------------------------------------------------------
 def build_color_map(flume_master_df):
 
     df = flume_master_df[["Flume", "Contributing_area_km2"]].drop_duplicates()
-
-    df["Contributing_area_km2"] = pd.to_numeric(
-        df["Contributing_area_km2"],
-        errors="coerce"
-    )
+    df["Contributing_area_km2"] = pd.to_numeric(df["Contributing_area_km2"], errors="coerce")
 
     values = df["Contributing_area_km2"].values
     flumes = df["Flume"].values
@@ -89,26 +83,14 @@ def build_color_map(flume_master_df):
 # ------------------------------------------------------------
 def load_flume_master():
 
-    flume_raingauges = pd.read_csv(
-        FLUME_RAINGAUGES_PATH,
-        sep=r"\s+|\t+|,",
-        engine="python"
-    )
+    flume_raingauges = pd.read_csv(FLUME_RAINGAUGES_PATH, sep=r"\s+|\t+|,", engine="python")
 
-    flume_watersheds = pd.read_csv(
-        FLUME_WATERSHEDS_PATH,
-        sep=r"\s+|\t+|,",
-        engine="python"
-    )
+    flume_watersheds = pd.read_csv(FLUME_WATERSHEDS_PATH, sep=r"\s+|\t+|,", engine="python")
 
     flume_raingauges.columns = flume_raingauges.columns.str.strip()
     flume_watersheds.columns = flume_watersheds.columns.str.strip()
 
-    flume_master = flume_raingauges.merge(
-        flume_watersheds,
-        on="Flume",
-        how="left"
-    )
+    flume_master = flume_raingauges.merge(flume_watersheds, on="Flume", how="left")
 
     if "Contributing_area_km2" not in flume_master.columns:
         raise ValueError("Missing Contributing_area_km2 after merge")
@@ -130,10 +112,7 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
     
         ax_rain.invert_yaxis()
     
-        rain_max = max(
-            float(data.max().values)
-            for data in ds_rain.data_vars.values()
-        )
+        rain_max = max(float(data.max().values) for data in ds_rain.data_vars.values())
     
         padding = rain_max * 0.1
     
@@ -159,19 +138,14 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
         runoff = cfs_to_m3(flume_data)
         runoff = runoff.where(runoff > 0)
 
-        ax.plot(
-            runoff.time,
-            runoff.values,
-            color=color_map.get(flume_id, "black"),
-            linewidth=1
-        )
+        ax.plot(runoff.time, runoff.values, color=color_map.get(flume_id, "black"), linewidth=1)
 
     ax.set_ylabel("Runoff (m³/s)")
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
 
 
 # ------------------------------------------------------------
-# MAIN SCRIPT
+# main script
 # ------------------------------------------------------------
 runoff_trees = load_runoff_trees(RUNOFF_FILES)
 runoff_dates = load_runoff_dates(RUNOFF_DATE_FILES)
@@ -210,16 +184,16 @@ for i, (e1, e2) in enumerate(event_pairs):
     # ------------------------------------------------------------
     # figure + grid
     # ------------------------------------------------------------
-    fig = plt.figure(figsize=(22, 10))
+    fig = plt.figure(figsize=(18, 7))
     gs = gridspec.GridSpec(2, 4, figure=fig)
 
     event_list = [e1, e2]
 
     for col_idx, event_label in enumerate(event_list):
 
-        # ============================================================
-        # HYDROGRAPH ROW (row 0, spans 2 columns each)
-        # ============================================================
+        # ------------------------------------------------------------
+        # hydrographs - hyetographs 
+        # ------------------------------------------------------------
         if col_idx == 0:
             ax_hydro = fig.add_subplot(gs[0, 0:2])
         else:
@@ -232,36 +206,24 @@ for i, (e1, e2) in enumerate(event_pairs):
         if runoff_ds is None:
             continue
 
-        plot_event(
-            ax_hydro,
-            ax_rain,
-            event_label,
-            rainfall_events,
-            runoff_ds,
-            color_map
-        )
+        plot_event(ax_hydro, ax_rain, event_label, rainfall_events, runoff_ds, color_map)
 
         ax_hydro.set_title(event_label, fontsize=13)
         ax_hydro.set_xlabel("Time")
         ax_hydro.set_ylabel("Runoff (m³/s)")
         ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
-        runoff_max = max([
-            float(cfs_to_m3(data).max().values)
-            for data in runoff_ds.data_vars.values()
-        ])
+        runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
         ax_hydro.set_ylim(0, runoff_max * 1.2)
 
         if event_label in rainfall_events:
-            rain_max = max([
-                float(data.max().values)
-                for data in rainfall_events[event_label].data_vars.values()
-            ])
+            rain_max = max([float(data.max().values)
+                for data in rainfall_events[event_label].data_vars.values()])
             ax_rain.set_ylim(rain_max * 1.4, 0)
 
-        # ============================================================
-        # FC MATRICES ROW (row 1, 2 columns per event)
-        # ============================================================
+        # ------------------------------------------------------------
+        # FC matrices
+        # ------------------------------------------------------------
         ax_fc_sim = fig.add_subplot(gs[1, col_idx * 2])
         ax_fc_seq = fig.add_subplot(gs[1, col_idx * 2 + 1])
 
@@ -273,34 +235,20 @@ for i, (e1, e2) in enumerate(event_pairs):
         fc_sim = df_event.corr().fillna(0).to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
 
-        # ------------------------------------------------------------
-        # FC SIM
-        # ------------------------------------------------------------
         im1 = ax_fc_sim.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
-        ax_fc_sim.set_title("fC$_{sync}$", fontsize=10, fontweight = "bold")
+        ax_fc_sim.set_title("FC$_{sync}$", fontsize=10, fontweight = "bold", loc = "left")
 
-        # ------------------------------------------------------------
-        # FC SEQ
-        # ------------------------------------------------------------
         im2 = ax_fc_seq.matshow(fc_seq,  vmin=-1, vmax=1, cmap="coolwarm_r")
-        ax_fc_seq.set_title("fc_${seq}$", fontsize=10, fontweight = "bold")
+        ax_fc_seq.set_title("FC_${seq}$", fontsize=10, fontweight = "bold", loc = "left")
 
-        # ------------------------------------------------------------
-        # axis formatting
-        # ------------------------------------------------------------
         for ax in [ax_fc_sim, ax_fc_seq]:
             ax.set_xticks(np.arange(len(flume_labels)))
             ax.set_yticks(np.arange(len(flume_labels)))
             ax.set_xticklabels(flume_order[::-1], rotation=90, fontsize=6)
             ax.set_yticklabels(flume_order, fontsize=6)
             ax.xaxis.set_ticks_position("bottom")
-            ax.invert_yaxis()
 
-        # ------------------------------------------------------------
-        # colorbars
-        # ------------------------------------------------------------
-        from mpl_toolkits.axes_grid1 import make_axes_locatable
-
+    # colorbars
         div1 = make_axes_locatable(ax_fc_sim)
         cax1 = div1.append_axes("right", size="5%", pad=0.05)
         fig.colorbar(im1, cax=cax1)
@@ -309,12 +257,9 @@ for i, (e1, e2) in enumerate(event_pairs):
         cax2 = div2.append_axes("right", size="5%", pad=0.05)
         fig.colorbar(im2, cax=cax2)
 
-    # ------------------------------------------------------------
-    # finalize
-    # ------------------------------------------------------------
     plt.tight_layout()
 
-    outpath = os.path.join(output_dir, f"event_pair_{i+1}.pdf")
+    outpath = os.path.join(output_dir, f"hydrographs_and_fc_eventpair_{i+1}.pdf")
     plt.savefig(outpath, bbox_inches="tight")
     plt.show()
     plt.close(fig)
