@@ -194,7 +194,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         if col_idx == 0:
             ax_hydro = fig.add_subplot(gs[0, 0:2])
             # show runoff only
-            ax_hydro.set_ylabel("Runoff (m$^3$/s)")
+            ax_hydro.set_ylabel("Runoff rate (m$^3$/s)")
             ax_hydro.yaxis.label.set_visible(True)
 
             ax_rain = ax_hydro.twinx()
