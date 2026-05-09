@@ -40,6 +40,7 @@ FLUME_RAINGAUGES_PATH = os.path.join(BASE_DIR, "flume_raingauges.csv")
 FLUME_WATERSHEDS_PATH = os.path.join(BASE_DIR, "flume_watersheds.csv")
 
 CONFIG_FILE = PROJECT_ROOT / "config.yaml"
+
 with open(CONFIG_FILE, "r") as f:
     config = yaml.safe_load(f)
 
