@@ -25,7 +25,6 @@ with open("config.yaml", "r") as f:
 
 flume_order = config["flume_order"]
 
-print(flume_order)
 
 # ------------------------------------------------------------
 # paths
