@@ -216,19 +216,12 @@ for i, (e1, e2) in enumerate(event_pairs):
         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
         ax_hydro.set_ylim(0, runoff_max * 1.5)
 
-        # sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-        # sm.set_array([])
-        
-        # cbar = fig.colorbar(sm, ax=ax_hydro,orientation="horizontal", fraction=0.05, pad=0.12)
-        # bbox = ax_hydro.get_position()
-        # cax = fig.add_axes([ bbox.x0 + 0.03, bbox.y0 - 0.14, bbox.width - 0.06, 0.025 ])
-        # cbar.set_label("Contributing Area (km²)")
         
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
         
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.1, bbox.width - 0.05, 0.012])
+        cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.06, bbox.width - 0.05, 0.012])
         cbar = fig.colorbar(sm, cax=cax, orientation="horizontal", fraction=0.05, pad=0.12)
         #colorbar_ax = fig.add_axes([0.22, 0.01, 0.7, 0.02])  # [left, bottom, width, height]
         #colorbar = fig.colorbar(sm, cax=colorbar_ax, orientation="horizontal", pad=0.4)
@@ -243,7 +236,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
         # write the date under hydrograph
-        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.003, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
+        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.006, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
 
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
