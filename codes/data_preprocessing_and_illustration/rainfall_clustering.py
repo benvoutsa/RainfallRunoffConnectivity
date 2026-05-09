@@ -13,9 +13,11 @@ from matplotlib.cm import ScalarMappable
 # -------------------------------
 # Paths and settings
 # -------------------------------
-DATA_FILE = "data/rainfall/rainfall_features.csv"  # adjust path
-SCFCS_FILE = "data/df_scfcs_all.csv"
-OUTPUT_DIR = "results"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+DATA_FILE = PROJECT_ROOT / "data" / "rainfall" / "rainfall_features.csv" 
+SCFCS_FILE = PROJECT_ROOT / "data" / "df_scfcs_all.csv"
+OUTPUT_DIR = PROJECT_ROOT / "results"
 FEATURE_COLS = ['numberofgauges', 'durationmin', 'averageintensity', 
                 'maxrollingintensity', 'dayswithoutrain']
 CUSTOM_COLORS = ['crimson', 'green', 'blueviolet', 'goldenrod']
