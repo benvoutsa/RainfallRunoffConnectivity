@@ -5,11 +5,15 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import datatree as dtree
+from pathlib import Path
 from datetime import timedelta
 
 import yaml
 
-with open("config.yaml", "r") as f:
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+CONFIG_FILE = PROJECT_ROOT / "config.yaml"
+with open(CONFIG_FILE, "r") as f:
     config = yaml.safe_load(f)
     
 MIN_RUNOFF_CFS = config["min_runoff_cfs"]
