@@ -223,6 +223,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         bbox = ax_hydro.get_position()
         cax = fig.add_axes([ bbox.x0 + 0.03, bbox.y0 - 0.14, bbox.width - 0.06, 0.025 ])
         cbar.set_label("Contributing Area (km²)")
+        fig.text(bbox.x, bbox.y0 - 0.05, bbox.y0 - 0.08, date, ha="right", va="top")
 
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
@@ -242,6 +243,9 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         fc_sim = df_event.corr().fillna(0).to_numpy()
         fc_seq = compute_fc_seq_for_event(df_event, flume_labels, df_edges_seq)
+
+        np.fill_diagonal(fc_sim, 0)
+        np.fill_diagonal(fc_seq, 0)
 
         im1 = ax_fc_sim.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
         ax_fc_sim.set_title("FC$_{sync}$", fontsize=10, fontweight = "bold", loc = "left")
