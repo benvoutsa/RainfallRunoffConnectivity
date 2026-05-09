@@ -206,7 +206,8 @@ for i, (e1, e2) in enumerate(event_pairs):
         
         # ax_rain.tick_params(axis='y', colors='blue', labelright=True)
         # ax_rain.spines['right'].set_visible(True)
-        # runoff_ds = get_runoff_event(runoff_trees, event_label)
+        
+        runoff_ds = get_runoff_event(runoff_trees, event_label)
 
         if runoff_ds is None:
             continue
