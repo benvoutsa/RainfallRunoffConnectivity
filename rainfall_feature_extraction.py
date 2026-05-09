@@ -107,39 +107,39 @@ event_durations = []
 average_intensities = []
 max_average_window_intensities = []
 
-# for label in event_labels:
-#     if label == 'event_179':
-#         continue
-#     xr_event = rainfall_tree[label]
-#     ds_event = xr_event.to_dataset()
+for label in event_labels:
+    if label == 'event_179':
+        continue
+    xr_event = rainfall_tree[label]
+    ds_event = xr_event.to_dataset()
     
     
-#     df_event = ds_event.to_dataframe()
-#     event_gauge_list = df_event.columns
-#     event_gauge_nums = [int(''.join(filter(str.isdigit, s))) for s in event_gauge_list if any(char.isdigit() for char in s)]    
+    df_event = ds_event.to_dataframe()
+    event_gauge_list = df_event.columns
+    event_gauge_nums = [int(''.join(filter(str.isdigit, s))) for s in event_gauge_list if any(char.isdigit() for char in s)]    
     
-#     avg_intensity = df_event.mean().mean()
-#     time_window = select_time_window_size(df_event)
-#     max_window_intensity = max_average_intensity_within_time_window(df_event, time_window)
+    avg_intensity = df_event.mean().mean()
+    time_window = select_time_window_size(df_event)
+    max_window_intensity = max_average_intensity_within_time_window(df_event, time_window)
     
-#     event_durations.append(len(ds_event.time))
-#     average_intensities.append(round(avg_intensity, 2))
-#     max_average_window_intensities.append(max_window_intensity)
+    event_durations.append(len(ds_event.time))
+    average_intensities.append(round(avg_intensity, 2))
+    max_average_window_intensities.append(max_window_intensity)
 
-#     flume_areas = []
-#     for gauge_num in event_gauge_nums:
-#         flume_areas.append(find_keys_by_value(flume_raingauges_dict, gauge_num))
+    flume_areas = []
+    for gauge_num in event_gauge_nums:
+        flume_areas.append(find_keys_by_value(flume_raingauges_dict, gauge_num))
     
-#     event_flumes = np.unique(sum(flume_areas, []))   
-#     number_of_gauges.append(len(event_gauge_list))
+    event_flumes = np.unique(sum(flume_areas, []))   
+    number_of_gauges.append(len(event_gauge_list))
     
-# df_rainfall_features['duration'] = event_durations
-# df_rainfall_features['average intensity (mm/hr)'] = average_intensities
-# df_rainfall_features['max window intensity (mm/hr)'] = max_average_window_intensities
+df_rainfall_features['duration'] = event_durations
+df_rainfall_features['average intensity (mm/hr)'] = average_intensities
+df_rainfall_features['max window intensity (mm/hr)'] = max_average_window_intensities
 
-# # Save to CSV
-# df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
-# print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
+# Save to CSV
+df_rainfall_features.to_csv(OUTPUT_FEATURES_FILE, index=False)
+print(f"Rainfall features saved to {OUTPUT_FEATURES_FILE}")
 
 
 
