@@ -109,9 +109,10 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
         ds_rain = rainfall_events[event_label]
 
         for _, data in ds_rain.data_vars.items():
-            data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5, add_labels=False)
+            data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5)
 
         ax_rain.invert_yaxis()
+        ax_rain.set_ylabel("")
 
         rain_max = max(float(data.max().values) for data in ds_rain.data_vars.values())
 
