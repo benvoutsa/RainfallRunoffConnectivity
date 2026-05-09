@@ -208,7 +208,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         plot_event(ax_hydro, ax_rain, event_label, rainfall_events, runoff_ds, color_map)
 
-        ax_hydro.set_title(event_label, fontsize=13)
+        ax_hydro.set_title(" ", fontsize=13)
         ax_hydro.set_xlabel("Time")
         ax_hydro.set_ylabel("Runoff (m³/s)")
         ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
