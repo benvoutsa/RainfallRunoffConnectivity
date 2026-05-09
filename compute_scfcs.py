@@ -17,7 +17,7 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 flume_order = config["flume_order"]
-flume_labels = [f"flume_{i}" for int(i) in flume_order]
+flume_labels = [f"flume_{i}" for i in flume_order]
 
 PROJECT_ROOT = Path(".")
 DATA_DIR = PROJECT_ROOT / "data"
