@@ -112,7 +112,7 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
             data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5)
 
         ax_rain.invert_yaxis()
-        ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+        ax_rain.set_ylabel("Rainfall rate (mm/hr)", color="blue")
 
         rain_max = max(float(data.max().values) for data in ds_rain.data_vars.values())
 
@@ -207,7 +207,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         elif col_idx == 1:
             ax_hydro = fig.add_subplot(gs[0, 2:4])
             ax_rain = ax_hydro.twinx()
-            ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+            ax_rain.set_ylabel("Rainfall rate(mm/hr)", color="blue")
             # show rainfall only
             ax_hydro.set_ylabel("")
             ax_hydro.yaxis.label.set_visible(False)
@@ -219,7 +219,6 @@ for i, (e1, e2) in enumerate(event_pairs):
         
             ax_rain.tick_params(axis='y', colors='blue', labelright=True)
             ax_rain.spines['right'].set_visible(True)
-    
     
         
         runoff_ds = get_runoff_event(runoff_trees, event_label)
@@ -235,7 +234,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
         ax_hydro.set_ylim(0, runoff_max * 1.5)
 
-        
+        # add colorbar based on contributing areas
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
         
@@ -290,7 +289,7 @@ for i, (e1, e2) in enumerate(event_pairs):
             ax.set_yticklabels(flume_order, fontsize=6)
             ax.xaxis.set_ticks_position("bottom")
 
-    # colorbars
+    # colorbars for FC matrices
         div1 = make_axes_locatable(ax_fc_sim)
         cax1 = div1.append_axes("right", size="5%", pad=0.05)
         cbar1x = fig.colorbar(im1, cax=cax1)
