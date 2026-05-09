@@ -320,7 +320,6 @@ for i, (e1, e2) in enumerate(event_pairs):
     plt.close(fig)
 
     print(f"Saved: {outpath}")
-🧠
 
 # for i, (e1, e2) in enumerate(event_pairs):
 
