@@ -105,23 +105,20 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
 
     # ---------- rainfall ----------
     if event_label in rainfall_events:
+
         ds_rain = rainfall_events[event_label]
-    
+
         for _, data in ds_rain.data_vars.items():
             data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5)
-    
+
         ax_rain.invert_yaxis()
-    
+
         rain_max = max(float(data.max().values) for data in ds_rain.data_vars.values())
+
         padding = rain_max * 0.1
-    
+
         ax_rain.set_ylim(rain_max + padding, 0)
         ax_rain.margins(y=0)
-
-        ax_rain.set_ylabel("")                     
-        ax_rain.yaxis.label.set_visible(False)    
-
-        ax_rain.tick_params(axis="y", colors="blue", labelright=True)
 
     # ---------- runoff ----------
     if runoff_tree is None:
@@ -130,6 +127,7 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
     for flume_name, flume_data in runoff_tree.data_vars.items():
 
         nums = re.findall(r"\d+", flume_name)
+
         if not nums:
             continue
 
@@ -141,8 +139,6 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
         ax.plot(runoff.time, runoff.values, color=color_map.get(flume_id, "black"), linewidth=1)
 
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
-
-
 # ------------------------------------------------------------
 # main script
 # ------------------------------------------------------------
