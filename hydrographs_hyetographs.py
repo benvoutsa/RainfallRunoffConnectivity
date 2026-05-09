@@ -202,7 +202,7 @@ for i, (e1, e2) in enumerate(event_pairs):
             ax_hydro = fig.add_subplot(gs[0, 2:4])
 
         ax_rain = ax_hydro.twinx()
-        if col_indx == 1:
+        if col_idx == 1:
             ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
         runoff_ds = get_runoff_event(runoff_trees, event_label)
