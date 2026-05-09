@@ -185,7 +185,7 @@ for i, (e1, e2) in enumerate(event_pairs):
     # figure + grid
     # ------------------------------------------------------------
     fig = plt.figure(figsize=(22, 14))
-    #fig.tight_layout(rect=[0, 0.05, 1, 1])
+    fig.tight_layout(rect=[0, 0.05, 1, 1])
     gs = gridspec.GridSpec(2, 4, figure=fig)
 
     event_list = [e1, e2]
