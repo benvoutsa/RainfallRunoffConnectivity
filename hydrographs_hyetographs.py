@@ -228,7 +228,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         sm.set_array([])
         
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.1, bbox.width - 0.15, 0.025])
+        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.1, bbox.width - 0.05, 0.012])
         cbar = fig.colorbar(sm, cax=cax, orientation="horizontal", fraction=0.05, pad=0.12)
         #colorbar_ax = fig.add_axes([0.22, 0.01, 0.7, 0.02])  # [left, bottom, width, height]
         #colorbar = fig.colorbar(sm, cax=colorbar_ax, orientation="horizontal", pad=0.4)
