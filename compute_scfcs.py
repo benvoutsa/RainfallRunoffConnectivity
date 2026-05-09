@@ -17,7 +17,6 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 flume_order = config["flume_order"]
-flume_labels = [f"flume_{i}" for i in flume_order]
 
 PROJECT_ROOT = Path(".")
 DATA_DIR = PROJECT_ROOT / "data"
@@ -32,7 +31,7 @@ RUNOFF_FILES = [
 
 df_flume_coordinates = load_flume_coordinates()
 df_contributing_area = load_contributing_areas()
-SC_SIM = compute_sc_sim(df_flume_coordinates, df_contributing_area)
+SC_SIM, flume_labels = compute_sc_sim(df_flume_coordinates, df_contributing_area)
 SC_SEQ = load_sc_seq()
 
 OUTPUT_FILE = RESULTS_DIR / "scfc_results_updated.csv"
