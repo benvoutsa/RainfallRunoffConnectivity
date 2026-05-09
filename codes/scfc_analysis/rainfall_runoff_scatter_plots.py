@@ -22,9 +22,11 @@ from matplotlib.colors import Normalize
 # -----------------------------------------------------------------------------
 # Paths and settings
 # -----------------------------------------------------------------------------
-DATA_FILE = "data/df_scfcs_all.csv"
-OUTPUT_DIR = "results"
-FIGURE_NAME = "rainfall_runoff_scatterplots.pdf"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+DATA_FILE = PROJECT_ROOT / "data" / "df_scfcs_all.csv"
+OUTPUT_DIR = PROJECT_ROOT / "results"
+FIGURE_NAME = PROJECT_ROOT / "rainfall_runoff_scatterplots.pdf"
 
 # Create results directory if it does not exist
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -159,11 +161,8 @@ sc3 = ax3.scatter(df_scfcs["average_rainfall"], df_scfcs["scfc_diff"],
     edgecolor="black", linewidth=0.5)
 
 ax3.axhline(0, color="magenta", linestyle="--", linewidth=2)
-
 ax3.set_xlabel("average rainfall (mm)", fontsize=15)
-
 ax3.set_ylabel(r"(SC-FC)$_{seq}$ - (SC-FC)$_{sync}$", fontsize=15)
-
 ax3.set_ylim(-0.6, 0.5)
 ax3.tick_params(axis="both", labelsize=13)
 
@@ -174,17 +173,7 @@ ax3.set_title("(c)", loc="left", fontsize=16, fontweight="normal")
 # -----------------------------------------------------------------------------
 legend_values = [100000, 200000, 400000, 600000, 800000]
 
-legend_handles = [
-    plt.scatter(
-        [], [],
-        s=val * 0.0008,
-        color=cmap(norm(val)),
-        alpha=0.7,
-        edgecolors="black",
-        label=f"{int(val):,}"
-    )
-    for val in legend_values
-]
+legend_handles = [plt.scatter([], [], s=val * 0.0008, color=cmap(norm(val)), alpha=0.7, edgecolors="black", label=f"{int(val):,}") for val in legend_values]
 
 ax3.legend(
     handles=legend_handles,
@@ -204,18 +193,7 @@ ax3.legend(
     ncol=1
 )
 
-# -----------------------------------------------------------------------------
-# Layout
-# -----------------------------------------------------------------------------
 plt.tight_layout(rect=[0, 0, 0.88, 1])
-
-# -----------------------------------------------------------------------------
-# Save figure
-# -----------------------------------------------------------------------------
 plt.savefig(os.path.join(OUTPUT_DIR, FIGURE_NAME),
     dpi=300,bbox_inches="tight")
-
-# -----------------------------------------------------------------------------
-# Show figure
-# -----------------------------------------------------------------------------
 plt.show()
