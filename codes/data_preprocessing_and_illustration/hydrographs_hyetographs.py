@@ -16,7 +16,7 @@ from rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, b
 
 
 from runoff_functions import load_runoff_trees, load_runoff_dates
-from sc_fc_functions import load_flume_coordinates, load_contributing_areas, load_edge_list, compute_sc_sim, compute_fc_seq_for_event
+from scfc_analysis.sc_fc_functions import load_flume_coordinates, load_contributing_areas, load_edge_list, compute_sc_sim, compute_fc_seq_for_event
 
 import yaml
 
