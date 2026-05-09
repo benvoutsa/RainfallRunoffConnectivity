@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.gridspec as gridspec
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import datatree as dtree
@@ -198,65 +199,190 @@ output_dir = "results"; os.makedirs(output_dir, exist_ok=True)
 
 for i, (e1, e2) in enumerate(event_pairs):
 
-    if int(e1.split("_")[1]) > 178: e1 = f"event_{int(e1.split('_')[1]) + 1}"
-    if int(e2.split("_")[1]) > 178: e2 = f"event_{int(e2.split('_')[1]) + 1}"
+    # ------------------------------------------------------------
+    # fix event numbering
+    # ------------------------------------------------------------
+    if int(e1.split("_")[1]) > 178:
+        e1 = f"event_{int(e1.split('_')[1]) + 1}"
+    if int(e2.split("_")[1]) > 178:
+        e2 = f"event_{int(e2.split('_')[1]) + 1}"
 
-    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    # ------------------------------------------------------------
+    # figure + grid
+    # ------------------------------------------------------------
+    fig = plt.figure(figsize=(22, 10))
+    gs = gridspec.GridSpec(2, 4, figure=fig)
 
-    for col_idx, event_label in enumerate([e1, e2]):
+    event_list = [e1, e2]
 
-        ax_hydro = axes[0, col_idx]; ax_fc = axes[1, col_idx]; ax_rain = ax_hydro.twinx()
+    for col_idx, event_label in enumerate(event_list):
+
+        # ============================================================
+        # HYDROGRAPH ROW (row 0, spans 2 columns each)
+        # ============================================================
+        if col_idx == 0:
+            ax_hydro = fig.add_subplot(gs[0, 0:2])
+        else:
+            ax_hydro = fig.add_subplot(gs[0, 2:4])
+
+        ax_rain = ax_hydro.twinx()
 
         runoff_ds = get_runoff_event(runoff_trees, event_label)
 
-        if runoff_ds is None: continue
+        if runoff_ds is None:
+            continue
 
-        plot_event(ax_hydro, ax_rain, event_label, rainfall_events, runoff_ds, color_map)
+        plot_event(
+            ax_hydro,
+            ax_rain,
+            event_label,
+            rainfall_events,
+            runoff_ds,
+            color_map
+        )
 
         ax_hydro.set_title(event_label, fontsize=13)
-        runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
+        ax_hydro.set_xlabel("Time")
+        ax_hydro.set_ylabel("Runoff (m³/s)")
+        ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+
+        runoff_max = max([
+            float(cfs_to_m3(data).max().values)
+            for data in runoff_ds.data_vars.values()
+        ])
         ax_hydro.set_ylim(0, runoff_max * 1.2)
 
         if event_label in rainfall_events:
-            rain_max = max([float(data.max().values) for data in rainfall_events[event_label].data_vars.values()])
+            rain_max = max([
+                float(data.max().values)
+                for data in rainfall_events[event_label].data_vars.values()
+            ])
             ax_rain.set_ylim(rain_max * 1.4, 0)
 
-        ax_hydro.set_xlabel("Time"); ax_hydro.set_ylabel("Runoff (m³/s)"); ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+        # ============================================================
+        # FC MATRICES ROW (row 1, 2 columns per event)
+        # ============================================================
+        ax_fc_sim = fig.add_subplot(gs[1, col_idx * 2])
+        ax_fc_seq = fig.add_subplot(gs[1, col_idx * 2 + 1])
 
+        # ------------------------------------------------------------
+        # compute FC matrices
+        # ------------------------------------------------------------
         df_event = runoff_ds.to_dataframe().reindex(columns=flume_labels)
-        # print(df_event.head())
-        # flume_labels = [f"flume_{i}" for i in flume_order]
-        # df_complete = pd.DataFrame(columns=flume_labels)
-        # common_columns = df_complete.columns.intersection(df_event.columns)
-        # print(df_complete)
-        # print(common_columns)
-        # # Map the common columns to the "patent" DataFrame
-        # df_complete[common_columns] = df_event[common_columns]
-        # print(df_complete)
+
         fc_sim = df_event.corr().fillna(0).to_numpy()
-        #print(fc_sim)
         fc_seq = compute_fc_seq_for_event(df_event, flume_order, df_edges_seq)
-        
-        im = ax_fc.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
 
-        ax_fc.set_title(f"{event_label} - FC_seq", fontsize=12)
+        # ------------------------------------------------------------
+        # FC SIM
+        # ------------------------------------------------------------
+        im1 = ax_fc_sim.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
+        ax_fc_sim.set_title(f"{event_label} - FC_sim", fontsize=10)
 
-        ax_fc.set_xticks(np.arange(len(flume_labels))); ax_fc.set_yticks(np.arange(len(flume_labels)))
-        ax_fc.set_xticklabels(flume_labels, rotation=90, fontsize=7); ax_fc.set_yticklabels(flume_labels, fontsize=7)
+        # ------------------------------------------------------------
+        # FC SEQ
+        # ------------------------------------------------------------
+        im2 = ax_fc_seq.matshow(fc_seq, cmap="viridis")
+        ax_fc_seq.set_title(f"{event_label} - FC_seq", fontsize=10)
 
-        ax_fc.xaxis.set_ticks_position("bottom"); ax_fc.invert_yaxis()
+        # ------------------------------------------------------------
+        # axis formatting
+        # ------------------------------------------------------------
+        for ax in [ax_fc_sim, ax_fc_seq]:
+            ax.set_xticks(np.arange(len(flume_labels)))
+            ax.set_yticks(np.arange(len(flume_labels)))
+            ax.set_xticklabels(flume_labels, rotation=90, fontsize=6)
+            ax.set_yticklabels(flume_labels, fontsize=6)
+            ax.xaxis.set_ticks_position("bottom")
+            ax.invert_yaxis()
 
-        divider = make_axes_locatable(ax_fc); cax = divider.append_axes("right", size="5%", pad=0.15)
+        # ------------------------------------------------------------
+        # colorbars
+        # ------------------------------------------------------------
+        from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-        cbar = fig.colorbar(im, cax=cax); cbar.set_ticks([-1, -0.5, 0, 0.5, 1])
+        div1 = make_axes_locatable(ax_fc_sim)
+        cax1 = div1.append_axes("right", size="5%", pad=0.05)
+        fig.colorbar(im1, cax=cax1)
 
+        div2 = make_axes_locatable(ax_fc_seq)
+        cax2 = div2.append_axes("right", size="5%", pad=0.05)
+        fig.colorbar(im2, cax=cax2)
+
+    # ------------------------------------------------------------
+    # finalize
+    # ------------------------------------------------------------
     plt.tight_layout()
 
     outpath = os.path.join(output_dir, f"event_pair_{i+1}.pdf")
+    plt.savefig(outpath, bbox_inches="tight")
     plt.show()
-    plt.savefig(outpath, bbox_inches="tight"); plt.close(fig)
+    plt.close(fig)
 
     print(f"Saved: {outpath}")
+🧠
+
+# for i, (e1, e2) in enumerate(event_pairs):
+
+#     if int(e1.split("_")[1]) > 178: e1 = f"event_{int(e1.split('_')[1]) + 1}"
+#     if int(e2.split("_")[1]) > 178: e2 = f"event_{int(e2.split('_')[1]) + 1}"
+
+#     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+#     for col_idx, event_label in enumerate([e1, e2]):
+
+#         ax_hydro = axes[0, col_idx]; ax_fc = axes[1, col_idx]; ax_rain = ax_hydro.twinx()
+
+#         runoff_ds = get_runoff_event(runoff_trees, event_label)
+
+#         if runoff_ds is None: continue
+
+#         plot_event(ax_hydro, ax_rain, event_label, rainfall_events, runoff_ds, color_map)
+
+#         ax_hydro.set_title(event_label, fontsize=13)
+#         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
+#         ax_hydro.set_ylim(0, runoff_max * 1.2)
+
+#         if event_label in rainfall_events:
+#             rain_max = max([float(data.max().values) for data in rainfall_events[event_label].data_vars.values()])
+#             ax_rain.set_ylim(rain_max * 1.4, 0)
+
+#         ax_hydro.set_xlabel("Time"); ax_hydro.set_ylabel("Runoff (m³/s)"); ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+
+#         df_event = runoff_ds.to_dataframe().reindex(columns=flume_labels)
+#         # print(df_event.head())
+#         # flume_labels = [f"flume_{i}" for i in flume_order]
+#         # df_complete = pd.DataFrame(columns=flume_labels)
+#         # common_columns = df_complete.columns.intersection(df_event.columns)
+#         # print(df_complete)
+#         # print(common_columns)
+#         # # Map the common columns to the "patent" DataFrame
+#         # df_complete[common_columns] = df_event[common_columns]
+#         # print(df_complete)
+#         fc_sim = df_event.corr().fillna(0).to_numpy()
+#         #print(fc_sim)
+#         fc_seq = compute_fc_seq_for_event(df_event, flume_order, df_edges_seq)
+        
+#         im = ax_fc.matshow(fc_sim, vmin=-1, vmax=1, cmap="coolwarm_r")
+
+#         ax_fc.set_title(f"{event_label} - FC_seq", fontsize=12)
+
+#         ax_fc.set_xticks(np.arange(len(flume_labels))); ax_fc.set_yticks(np.arange(len(flume_labels)))
+#         ax_fc.set_xticklabels(flume_labels, rotation=90, fontsize=7); ax_fc.set_yticklabels(flume_labels, fontsize=7)
+
+#         ax_fc.xaxis.set_ticks_position("bottom"); ax_fc.invert_yaxis()
+
+#         divider = make_axes_locatable(ax_fc); cax = divider.append_axes("right", size="5%", pad=0.15)
+
+#         cbar = fig.colorbar(im, cax=cax); cbar.set_ticks([-1, -0.5, 0, 0.5, 1])
+
+#     plt.tight_layout()
+
+#     outpath = os.path.join(output_dir, f"event_pair_{i+1}.pdf")
+#     plt.show()
+#     plt.savefig(outpath, bbox_inches="tight"); plt.close(fig)
+
+#     print(f"Saved: {outpath}")
 
 
 # output_dir = "results"
