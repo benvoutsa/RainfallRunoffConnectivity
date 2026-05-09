@@ -236,7 +236,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
         # write the date under hydrograph
-        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.006, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
+        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.01, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
 
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
@@ -282,8 +282,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         cax2 = div2.append_axes("right", size="5%", pad=0.05)
         fig.colorbar(im2, cax=cax2)
 
-    plt.tight_layout()
-
+    fig.tight_layout(rect=[0, 0.05, 1, 1])
     outpath = os.path.join(output_dir, f"hydrographs_and_fc_eventpair_{i+1}.pdf")
     plt.savefig(outpath, bbox_inches="tight")
     plt.show()
