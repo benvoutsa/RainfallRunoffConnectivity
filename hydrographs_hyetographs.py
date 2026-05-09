@@ -216,12 +216,20 @@ for i, (e1, e2) in enumerate(event_pairs):
         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
         ax_hydro.set_ylim(0, runoff_max * 1.5)
 
+        # sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+        # sm.set_array([])
+        
+        # cbar = fig.colorbar(sm, ax=ax_hydro,orientation="horizontal", fraction=0.05, pad=0.12)
+        # bbox = ax_hydro.get_position()
+        # cax = fig.add_axes([ bbox.x0 + 0.03, bbox.y0 - 0.14, bbox.width - 0.06, 0.025 ])
+        # cbar.set_label("Contributing Area (km²)")
+        
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
         
-        cbar = fig.colorbar(sm, ax=ax_hydro,orientation="horizontal", fraction=0.05, pad=0.12)
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([ bbox.x0 + 0.03, bbox.y0 - 0.14, bbox.width - 0.06, 0.025 ])
+        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.14, bbox.width - 0.06, 0.025])
+        cbar = fig.colorbar(sm, cax=cax, orientation="horizontal")
         cbar.set_label("Contributing Area (km²)")
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
