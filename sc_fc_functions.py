@@ -90,8 +90,7 @@ def compute_sc_sim(df_flume_coordinates, df_contributing_area):
         adj_matrix[i, j] = row['weight']
 
     adj_matrix = pd.DataFrame(adj_matrix, index=flume_labels, columns=flume_labels)
-    plt.masthow(adj_matrix, cmap=biary)
-    plt.show()
+ 
     return adj_matrix, flume_labels
 
 
@@ -142,7 +141,7 @@ def plot_sc_matrices(sc_sim, sc_seq, labels=None, flume_order=None, figsize=(6, 
 
     for ax, mat, title in zip(axes, matrices, titles):
 
-        im = ax.matshow(mat, cmap=cmap, vmin=0, vmax=1)
+        im = ax.matshow(mat, cmap=cmap)
 
         ax.set_title(title, loc="left", fontweight="bold", fontsize=11)
 
