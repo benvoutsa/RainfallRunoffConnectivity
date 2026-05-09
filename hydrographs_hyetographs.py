@@ -223,7 +223,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         sm.set_array([])
         
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.08, bbox.width - 0.05, 0.012])
+        cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.02, bbox.width - 0.05, 0.012])
         cbar = fig.colorbar(sm, cax=cax, orientation="horizontal", fraction=0.05, pad=0.05)
         
         # Format colorbar ticks to display only the min and max values
@@ -236,7 +236,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
         # write the date under hydrograph
-        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.04, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
+        fig.text(bbox.x1 + 0.01, bbox.y0 - 0.025, full_date, ha="right", va="top", fontsize=11, color="black", fontweight="bold")
 
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
