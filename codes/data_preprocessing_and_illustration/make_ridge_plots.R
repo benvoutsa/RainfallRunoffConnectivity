@@ -1,6 +1,7 @@
 # make_ridge_plots.R
 # -------------------------------
 # Load libraries
+library(here)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -15,9 +16,8 @@ source("ridge_plots_lib.R")  # load functions
 # -------------------------------
 # Define relative paths
 # -------------------------------
-data_path <- file.path("data", "df_scfcs_all.csv")
-                       #"df_scfcs_clusters_and_runoff.csv")
-config_path <- "config.yaml"
+data_path <- here::here("data", "df_scfcs_all.csv")
+config_path <- here::here("config.yaml")
 
 # -------------------------------
 # Read config.yaml
