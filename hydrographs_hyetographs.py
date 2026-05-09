@@ -216,6 +216,13 @@ for i, (e1, e2) in enumerate(event_pairs):
         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
         ax_hydro.set_ylim(0, runoff_max * 1.5)
 
+        sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+        sm.set_array([])
+        
+        cbar = fig.colorbar(sm, ax=ax_hydro,orientation="horizontal", fraction=0.05, pad=0.12)
+        
+        cbar.set_label("Contributing Area (km²)")
+
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
                 for data in rainfall_events[event_label].data_vars.values()])
