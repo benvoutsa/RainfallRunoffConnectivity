@@ -2,6 +2,7 @@ import os
 import re
 import numpy as np
 import pandas as pd
+from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.gridspec as gridspec
@@ -15,12 +16,12 @@ from rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, b
 
 
 from runoff_functions import load_runoff_trees, load_runoff_dates
-
 from sc_fc_functions import load_flume_coordinates, load_contributing_areas, load_edge_list, compute_sc_sim, compute_fc_seq_for_event
 
 import yaml
 
-with open("config.yaml", "r") as f:
+CONFIG_FILE = PROJECT_ROOT / "config.yaml"
+with open(CONFIG_FILE, "r") as f:
     config = yaml.safe_load(f)
 
 flume_order = config["flume_order"]
@@ -29,7 +30,9 @@ flume_order = config["flume_order"]
 # ------------------------------------------------------------
 # paths
 # ------------------------------------------------------------
-BASE_DIR = "data"
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+BASE_DIR = PROJECT_ROOT / "data"
 
 RUNOFF_FILES = [os.path.join(BASE_DIR, "runoff_events_2000_2006.nc"),
     os.path.join(BASE_DIR, "runoff_events_2007_2013.nc"),
