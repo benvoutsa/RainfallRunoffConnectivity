@@ -35,10 +35,12 @@ SC_SIM, flume_labels = compute_sc_sim(df_flume_coordinates, df_contributing_area
 SC_SEQ = load_sc_seq()
 
 OUTPUT_FILE = RESULTS_DIR / "scfc_results_updated.csv"
+OUTPUT_FIGURE = RESULTS_DIR / "sc_matrices.pdf"
 
 def main():
 
-    plot_sc_matrices(SC_SIM, SC_SEQ, labels=flume_labels, flume_order=flume_order, figsize=(6, 10))
+    fig, axes = plot_sc_matrices(SC_SIM, SC_SEQ, labels=flume_labels, flume_order=flume_order, figsize=(6, 10))
+    plt.savefig(OUTPUT_FIGURE, bbox_inches="tight", dpi=300)
     
     all_results = []
 
