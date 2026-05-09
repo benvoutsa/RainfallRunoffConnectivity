@@ -197,13 +197,14 @@ for i, (e1, e2) in enumerate(event_pairs):
         # ------------------------------------------------------------
         if col_idx == 0:
             ax_hydro = fig.add_subplot(gs[0, 0:2])
+            ax_rain = ax_hydro.twinx()
             ax_hydro.set_ylabel("Runoff (m$^3$/s)")
+            ax_rain.set_ylabel(" ")
         else:
             ax_hydro = fig.add_subplot(gs[0, 2:4])
-
-        ax_rain = ax_hydro.twinx()
-        if col_idx == 1:
+            ax_rain = ax_hydro.twinx()
             ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+            ax_hydro.set_ylabel(" ")
 
         runoff_ds = get_runoff_event(runoff_trees, event_label)
 
@@ -223,7 +224,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         sm.set_array([])
         
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.02, bbox.width - 0.05, 0.012])
+        cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.045, bbox.width - 0.05, 0.012])
         cbar = fig.colorbar(sm, cax=cax, orientation="horizontal", fraction=0.05, pad=0.05)
         
         # Format colorbar ticks to display only the min and max values
