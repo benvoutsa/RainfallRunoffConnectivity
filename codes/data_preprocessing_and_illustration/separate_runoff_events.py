@@ -8,7 +8,7 @@ from pathlib import Path
 # Configurable paths
 # -------------------------------
 
-PROJECT_ROOT = Path(".")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 DATA_DIR = PROJECT_ROOT / "data" / "runoff"
 RESULTS_DIR = PROJECT_ROOT / "data" / "runoff"
