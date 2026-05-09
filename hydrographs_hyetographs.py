@@ -214,12 +214,12 @@ for i, (e1, e2) in enumerate(event_pairs):
         ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
-        ax_hydro.set_ylim(0, runoff_max * 1.2)
+        ax_hydro.set_ylim(0, runoff_max * 1.5)
 
         if event_label in rainfall_events:
             rain_max = max([float(data.max().values)
                 for data in rainfall_events[event_label].data_vars.values()])
-            ax_rain.set_ylim(rain_max * 1.4, 0)
+            ax_rain.set_ylim(rain_max * 1.5, 0)
 
         # ------------------------------------------------------------
         # FC matrices
@@ -239,7 +239,7 @@ for i, (e1, e2) in enumerate(event_pairs):
         ax_fc_sim.set_title("FC$_{sync}$", fontsize=10, fontweight = "bold", loc = "left")
 
         im2 = ax_fc_seq.matshow(fc_seq,  vmin=-1, vmax=1, cmap="coolwarm_r")
-        ax_fc_seq.set_title("FC_${seq}$", fontsize=10, fontweight = "bold", loc = "left")
+        ax_fc_seq.set_title("FC$_{seq}$", fontsize=10, fontweight = "bold", loc = "left")
 
         for ax in [ax_fc_sim, ax_fc_seq]:
             ax.set_xticks(np.arange(len(flume_labels)))
