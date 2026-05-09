@@ -228,9 +228,18 @@ for i, (e1, e2) in enumerate(event_pairs):
         sm.set_array([])
         
         bbox = ax_hydro.get_position()
-        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.04, bbox.width - 0.06, 0.025])
+        cax = fig.add_axes([bbox.x0 + 0.03, bbox.y0 - 0.1, bbox.width - 0.1, 0.025])
         cbar = fig.colorbar(sm, cax=cax, orientation="horizontal")
-        cbar.set_label("Contributing Area (km²)")
+        #colorbar_ax = fig.add_axes([0.22, 0.01, 0.7, 0.02])  # [left, bottom, width, height]
+        #colorbar = fig.colorbar(sm, cax=colorbar_ax, orientation="horizontal", pad=0.4)
+        
+        # Format colorbar ticks to display only the min and max values
+        df_area_values = df_areas['Contributing_area_km2'].values
+        tick_positions = [min(df_area_values), max(df_area_values)]  # Only include min and max values
+        cbar.set_ticks(tick_positions)
+        cbar.set_ticklabels([f"{v:.2f}" for v in tick_positions])
+    
+        cbar.set_label("contributing area (km²)")
         full_date = pd.to_datetime(runoff_ds.time.values[-1]).strftime("%d-%b-%Y")
 
         # write the date under hydrograph
