@@ -195,28 +195,17 @@ for i, (e1, e2) in enumerate(event_pairs):
         # ------------------------------------------------------------
         # hydrographs - hyetographs 
         # ------------------------------------------------------------
-        if col_idx == 0:
-            ax_hydro = fig.add_subplot(gs[0, 0:2])
-            ax_rain = ax_hydro.twinx()
-            ax_hydro.set_ylabel("Runoff (m$^3$/s)")
-            ax_rain.set_ylabel("")            
-            ax_rain.yaxis.label.set_visible(False)
-            ax_rain.tick_params(axis='y', left=False, labelleft=False)
-            ax_rain.spines['left'].set_visible(False)
-
-        else:
-            ax_hydro = fig.add_subplot(gs[0, 2:4])
-            ax_rain = ax_hydro.twinx()
+        ax_hydro = fig.add_subplot(gs[0, 0:2] if col_idx == 0 else gs[0, 2:4])
+        ax_rain = ax_hydro.twinx()
         
-            ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
-            ax_rain.spines['right'].set_visible(True)
-            ax_rain.tick_params(axis='y', colors='blue', labelright=True)
+        ax_hydro.set_ylabel("Runoff (m$^3$/s)")
+        ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
         
-            ax_hydro.set_ylabel("")
-            ax_hydro.yaxis.label.set_visible(False)
-            ax_hydro.tick_params(axis='y', left=False, labelleft=False)
-            ax_hydro.spines['left'].set_visible(False)
-
+        ax_hydro.tick_params(axis='y', left=False, labelleft=False)
+        ax_hydro.spines['left'].set_visible(False)
+        
+        ax_rain.tick_params(axis='y', colors='blue', labelright=True)
+        ax_rain.spines['right'].set_visible(True)
         runoff_ds = get_runoff_event(runoff_trees, event_label)
 
         if runoff_ds is None:
