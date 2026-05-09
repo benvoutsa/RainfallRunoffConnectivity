@@ -109,7 +109,7 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
         ds_rain = rainfall_events[event_label]
 
         for _, data in ds_rain.data_vars.items():
-            data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5)
+            data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5, add_labels=False)
 
         ax_rain.invert_yaxis()
 
