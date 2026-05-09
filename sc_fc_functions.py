@@ -172,6 +172,7 @@ def plot_sc_matrices(sc_sim, sc_seq, labels=None, flume_order=None, figsize=(6, 
         cbar.ax.tick_params(labelsize=7)
 
     plt.tight_layout()
+    plt.show()
     return fig, axes
 
 
