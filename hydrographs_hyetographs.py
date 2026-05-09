@@ -113,15 +113,15 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
         ax_rain.invert_yaxis()
     
         rain_max = max(float(data.max().values) for data in ds_rain.data_vars.values())
-    
         padding = rain_max * 0.1
     
         ax_rain.set_ylim(rain_max + padding, 0)
         ax_rain.margins(y=0)
-    
-        #ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
-        #ax_rain.tick_params(axis="y", colors="blue")
-    
+
+        ax_rain.set_ylabel("")                     
+        ax_rain.yaxis.label.set_visible(False)    
+
+        ax_rain.tick_params(axis="y", colors="blue", labelright=True)
 
     # ---------- runoff ----------
     if runoff_tree is None:
@@ -140,7 +140,6 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
 
         ax.plot(runoff.time, runoff.values, color=color_map.get(flume_id, "black"), linewidth=1)
 
-    #ax.set_ylabel("Runoff (m$^3$/s)")
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
 
 
@@ -190,22 +189,49 @@ for i, (e1, e2) in enumerate(event_pairs):
 
     event_list = [e1, e2]
 
+    # ------------------------------------------------------------
+    # hydrographs - hyetographs 
+    # ------------------------------------------------------------
     for col_idx, event_label in enumerate(event_list):
 
-        # ------------------------------------------------------------
-        # hydrographs - hyetographs 
-        # ------------------------------------------------------------
-        ax_hydro = fig.add_subplot(gs[0, 0:2] if col_idx == 0 else gs[0, 2:4])
-        ax_rain = ax_hydro.twinx()
+        if col_idx == 0:
+
+            # show runoff only
+            ax_hydro.set_ylabel("Runoff (m$^3$/s)")
+            ax_hydro.yaxis.label.set_visible(True)
         
-        ax_hydro.set_ylabel("Runoff (m$^3$/s)")
-        ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+            ax_rain.set_ylabel("")
+            ax_rain.yaxis.label.set_visible(False)
         
-        ax_hydro.tick_params(axis='y', left=False, labelleft=False)
-        ax_hydro.spines['left'].set_visible(False)
+            ax_rain.tick_params(axis='y', right=False, labelright=False)
+            ax_rain.spines['right'].set_visible(False)
         
-        ax_rain.tick_params(axis='y', colors='blue', labelright=True)
-        ax_rain.spines['right'].set_visible(True)
+        else:
+        
+            # show rainfall only
+            ax_hydro.set_ylabel("")
+            ax_hydro.yaxis.label.set_visible(False)
+        
+            ax_hydro.tick_params(axis='y', left=False, labelleft=False)
+            ax_hydro.spines['left'].set_visible(False)
+        
+            ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+            ax_rain.yaxis.label.set_visible(True)
+        
+            ax_rain.tick_params(axis='y', colors='blue', labelright=True)
+            ax_rain.spines['right'].set_visible(True)
+    
+        # ax_hydro = fig.add_subplot(gs[0, 0:2] if col_idx == 0 else gs[0, 2:4])
+        # ax_rain = ax_hydro.twinx()
+        
+        # ax_hydro.set_ylabel("Runoff (m$^3$/s)")
+        # ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
+        
+        # ax_hydro.tick_params(axis='y', left=False, labelleft=False)
+        # ax_hydro.spines['left'].set_visible(False)
+        
+        # ax_rain.tick_params(axis='y', colors='blue', labelright=True)
+        # ax_rain.spines['right'].set_visible(True)
         
         runoff_ds = get_runoff_event(runoff_trees, event_label)
 
