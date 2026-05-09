@@ -195,11 +195,12 @@ for i, (e1, e2) in enumerate(event_pairs):
     for col_idx, event_label in enumerate(event_list):
 
         if col_idx == 0:
-
+            ax_hydro = fig.add_subplot(gs[0, 0:2])
             # show runoff only
             ax_hydro.set_ylabel("Runoff (m$^3$/s)")
             ax_hydro.yaxis.label.set_visible(True)
-        
+
+            ax_rain = ax_hydro.twinx()
             ax_rain.set_ylabel("")
             ax_rain.yaxis.label.set_visible(False)
         
@@ -207,7 +208,8 @@ for i, (e1, e2) in enumerate(event_pairs):
             ax_rain.spines['right'].set_visible(False)
         
         else:
-        
+            ax_hydro = fig.add_subplot(gs[0, 2:4])
+            ax_rain = ax_hydro.twinx()
             # show rainfall only
             ax_hydro.set_ylabel("")
             ax_hydro.yaxis.label.set_visible(False)
