@@ -112,7 +112,7 @@ def plot_event(ax, ax_rain, event_label, rainfall_events, runoff_tree, color_map
             data.plot(ax=ax_rain, color="dodgerblue", alpha=0.5)
 
         ax_rain.invert_yaxis()
-        ax_rain.set_ylabel("")
+        ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
         rain_max = max(float(data.max().values) for data in ds_rain.data_vars.values())
 
@@ -220,17 +220,7 @@ for i, (e1, e2) in enumerate(event_pairs):
             ax_rain.tick_params(axis='y', colors='blue', labelright=True)
             ax_rain.spines['right'].set_visible(True)
     
-        # ax_hydro = fig.add_subplot(gs[0, 0:2] if col_idx == 0 else gs[0, 2:4])
-        # ax_rain = ax_hydro.twinx()
-        
-        # ax_hydro.set_ylabel("Runoff (m$^3$/s)")
-        # ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
-        
-        # ax_hydro.tick_params(axis='y', left=False, labelleft=False)
-        # ax_hydro.spines['left'].set_visible(False)
-        
-        # ax_rain.tick_params(axis='y', colors='blue', labelright=True)
-        # ax_rain.spines['right'].set_visible(True)
+    
         
         runoff_ds = get_runoff_event(runoff_trees, event_label)
 
