@@ -197,8 +197,10 @@ for i, (e1, e2) in enumerate(event_pairs):
         # ------------------------------------------------------------
         if col_idx == 0:
             ax_hydro = fig.add_subplot(gs[0, 0:2])
+            ax_hydro.set_ylabel("Runoff (m$^3$/s)")
         else:
             ax_hydro = fig.add_subplot(gs[0, 2:4])
+            ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
         ax_rain = ax_hydro.twinx()
 
@@ -211,8 +213,6 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         ax_hydro.set_title(" ", fontsize=13)
         ax_hydro.set_xlabel("Time")
-        ax_hydro.set_ylabel("Runoff (m³/s)")
-        ax_rain.set_ylabel("Rainfall (mm/hr)", color="blue")
 
         runoff_max = max([float(cfs_to_m3(data).max().values) for data in runoff_ds.data_vars.values()])
         ax_hydro.set_ylim(0, runoff_max * 1.5)
