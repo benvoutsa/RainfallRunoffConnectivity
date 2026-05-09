@@ -13,15 +13,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 from pygam import LinearGAM, s, te
-#from config import DATA_DIR, RESULTS_DIR
 import yaml
 from pathlib import Path
 
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+    
+DATA_DIR = PROJECT_ROOT / "data"
+RESULTS_DIR = PROJECT_ROOT / "results"
 
-DATA_DIR = Path(config["DATA_DIR"])
-RESULTS_DIR = Path(config["RESULTS_DIR"])
+CONFIG_FILE = PROJECT_ROOT / "config.yaml"
+with open(CONFIG_FILE, "r") as f:
+    config = yaml.safe_load(f)
 
 # --- Load SC–FC results ---
 df_scfcs_file = DATA_DIR / "df_scfcs_all.csv"
