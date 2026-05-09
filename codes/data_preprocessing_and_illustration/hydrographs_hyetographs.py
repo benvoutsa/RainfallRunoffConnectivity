@@ -11,12 +11,12 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import datatree as dtree
 import xarray as xr
 
-from rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, build_rainfall_windows, extract_event_rainfall,\
+from codes.data_preprocessing_and_illustration.rainfall_functions import load_rainfall_csvs, prepare_rainfall_dataframe, build_rainfall_windows, extract_event_rainfall,\
     build_rainfall_events, trim_zero_rainfall, downsample_rainfall_events, load_flume_raingauge_mapping
 
 
-from runoff_functions import load_runoff_trees, load_runoff_dates
-from scfc_analysis.sc_fc_functions import load_flume_coordinates, load_contributing_areas, load_edge_list, compute_sc_sim, compute_fc_seq_for_event
+from codes.data_preprocessing_and_illustration.runoff_functions import load_runoff_trees, load_runoff_dates
+from codes.scfc_analysis.sc_fc_functions import load_flume_coordinates, load_contributing_areas, load_edge_list, compute_sc_sim, compute_fc_seq_for_event
 
 import yaml
 
