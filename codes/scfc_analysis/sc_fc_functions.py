@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 
 import yaml
 
-PROJECT_ROOT = Path(".")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+    
 DATA_DIR = PROJECT_ROOT / "data"
 
 FLUME_COORDS_FILE = DATA_DIR / "flume_coordinates.csv"
@@ -17,7 +18,8 @@ SC_SEQ_FILE = DATA_DIR / "adj_seq.csv"
 
 DISTANCE_SCALE_KM = 1000
 
-with open("config.yaml", "r") as f:
+CONFIG_FILE = PROJECT_ROOT / "config.yaml"
+with open(CONFIG_FILE, "r") as f:
     config = yaml.safe_load(f)
 
 flume_order = config["flume_order"]
