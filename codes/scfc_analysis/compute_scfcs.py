@@ -42,16 +42,16 @@ def main():
     fig, axes = plot_sc_matrices(SC_SIM, SC_SEQ, labels=flume_labels, flume_order=flume_order, figsize=(6, 10))
     fig.savefig(OUTPUT_FIGURE, bbox_inches="tight", dpi=300)
     
-    # all_results = []
+    all_results = []
 
-    # for runoff_file in RUNOFF_FILES:
-    #     print(f"Processing {runoff_file} ...")
-    #     df_results = run_scfc_analysis(runoff_file)
-    #     all_results.append(df_results)
+    for runoff_file in RUNOFF_FILES:
+        print(f"Processing {runoff_file} ...")
+        df_results = run_scfc_analysis(runoff_file)
+        all_results.append(df_results)
 
-    # # Combine all results into one DataFrame
-    # df_all = pd.concat(all_results, ignore_index=True)
-    # df_all.to_csv(OUTPUT_FILE, index=False)
+    # Combine all results into one DataFrame
+    df_all = pd.concat(all_results, ignore_index=True)
+    df_all.to_csv(OUTPUT_FILE, index=False)
     print(f"All results saved to '{OUTPUT_FILE}'.")
 
 
