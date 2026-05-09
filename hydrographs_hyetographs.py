@@ -184,7 +184,8 @@ for i, (e1, e2) in enumerate(event_pairs):
     # ------------------------------------------------------------
     # figure + grid
     # ------------------------------------------------------------
-    fig = plt.figure(figsize=(18, 7))
+    fig = plt.figure(figsize=(18, 8))
+    fig.tight_layout(rect=[0, 0.05, 1, 1])
     gs = gridspec.GridSpec(2, 4, figure=fig)
 
     event_list = [e1, e2]
@@ -205,7 +206,7 @@ for i, (e1, e2) in enumerate(event_pairs):
 
         if runoff_ds is None:
             continue
-
+        
         plot_event(ax_hydro, ax_rain, event_label, rainfall_events, runoff_ds, color_map)
 
         ax_hydro.set_title(" ", fontsize=13)
@@ -219,8 +220,6 @@ for i, (e1, e2) in enumerate(event_pairs):
         
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
-        
-        fig.tight_layout(rect=[0, 0.05, 1, 1])
         
         bbox = ax_hydro.get_position()
         cax = fig.add_axes([bbox.x0 +  0.025, bbox.y0 - 0.04, bbox.width - 0.05, 0.012])
