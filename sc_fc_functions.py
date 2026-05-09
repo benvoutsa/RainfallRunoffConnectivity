@@ -127,6 +127,54 @@ def compute_fc_seq_for_event(df_complete, flume_labels, df_edges_seq):
     return np.nan_to_num(fc_seq)
 
 
+# ------------------ plot SC matrices ------------------------------
+
+
+def plot_sc_matrices(sc_sim, sc_seq, labels=None, flume_order=None, figsize=(6, 10)):
+
+    """
+    Simple SC matrix plotting (2 rows × 1 column) in grayscale.
+    
+    """
+    
+    fig, axes = plt.subplots(2, 1, figsize=figsize)
+
+    cmap = "Greys"
+
+    matrices = [sc_sim, sc_seq]
+    titles = ["SC$_{sync}$", "SC$_{seq}$"]
+
+    for ax, mat, title in zip(axes, matrices, titles):
+
+        im = ax.matshow(mat, cmap=cmap, vmin=0, vmax=1)
+
+        ax.set_title(title, loc="left", fontweight="bold", fontsize=11)
+
+        n = mat.shape[0]
+        ax.set_xticks(np.arange(n))
+        ax.set_yticks(np.arange(n))
+
+        # labels
+        if flume_order is not None:
+            ax.set_xticklabels(flume_order[::-1], rotation=90, fontsize=7)
+            ax.set_yticklabels(flume_order, fontsize=7)
+        elif labels is not None:
+            ax.set_xticklabels(labels, rotation=90, fontsize=7)
+            ax.set_yticklabels(labels, fontsize=7)
+        else:
+            ax.set_xticklabels(np.arange(n), rotation=90, fontsize=7)
+            ax.set_yticklabels(np.arange(n), fontsize=7)
+
+        ax.xaxis.set_ticks_position("bottom")
+
+        # colorbar
+        cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+        cbar.ax.tick_params(labelsize=7)
+
+    plt.tight_layout()
+    return fig, axes
+
+
 # ------------------ SC-FC helper functions -------------------------
 
 def remove_diagonal(A):
