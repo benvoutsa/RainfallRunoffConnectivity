@@ -275,11 +275,13 @@ for i, (e1, e2) in enumerate(event_pairs):
     # colorbars
         div1 = make_axes_locatable(ax_fc_sim)
         cax1 = div1.append_axes("right", size="5%", pad=0.05)
-        fig.colorbar(im1, cax=cax1)
+        cbar1x = fig.colorbar(im1, cax=cax1)
+        cbar1x.ax.tick_params(labelsize=8)
 
         div2 = make_axes_locatable(ax_fc_seq)
         cax2 = div2.append_axes("right", size="5%", pad=0.05)
-        fig.colorbar(im2, cax=cax2,  fontsize=6)
+        cbar2x = fig.colorbar(im2, cax=cax2)
+        cbar2x.ax.tick_params(labelsize=8)
 
     outpath = os.path.join(output_dir, f"hydrographs_and_fc_eventpair_{i+1}.pdf")
     plt.savefig(outpath, bbox_inches="tight")
